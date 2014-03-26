@@ -1,0 +1,29 @@
+use namespace="System"
+use namespace="System.Diagnostics"
+use namespace="System.IO"
+use import="Files"
+use import="BuildEnv"
+
+default BASE_DIR='${Directory.GetCurrentDirectory()}'
+default TARGET_DIR='${Path.Combine(BASE_DIR, "artifacts")}'
+default SRC_DIR='${Path.Combine(BASE_DIR, "src")}'
+default DROP_SHARE='${Environment.GetEnvironmentVariable("DROP_SHARE")}'
+default BUILD_DIR='${Path.Combine(TARGET_DIR, "build")}'
+default SANITY_CHECKER='${Path.Combine(SRC_DIR, "SanityCheck")}'
+
+use-standard-lifecycle
+
+#compile-sanity-check target='compile'
+  build projectFile='${Path.Combine(SANITY_CHECKER, "SanityCheck.csproj")}'
+
+#copy-bits target='package'
+  @{
+      if (String.IsNullOrEmpty(DROP_SHARE))
+      {
+        Log.Warn("DROP_SHARE environment varible is not set");
+        Environment.Exit(-1);
+        return;
+      }
+  }
+
+  exec program='${Path.Combine(SANITY_CHECKER, "bin", "Release", "SanityCheck.exe")}' commandline='${DROP_SHARE} ${BUILD_DIR}'
