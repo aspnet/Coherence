@@ -32,8 +32,10 @@ namespace SanityCheck
             };
 
             var projectsToSkip = new[] {
+                "CoreCLR", // We'll remove this in the future so we can see which packages need to update
                 "KRuntime",
-                "Coherence"
+                "Coherence",
+                "latest-dev"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
@@ -126,9 +128,9 @@ namespace SanityCheck
                             "k10" :
                             VersionUtility.GetShortFrameworkName(mismatch.TargetFramework)),
                             mismatch.Info.Package.Version);
-
-                        success = false;
                     }
+
+                    success = false;
                 }
             }
 
