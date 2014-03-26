@@ -33,12 +33,7 @@ namespace SanityCheck
 
             var packages = new Dictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
 
-            var projectsToAllowLooseDependencies = new[]{
-                "CoreCLR"
-            };
-
             var projectsToSkip = new[] {
-                "CoreCLR", // We'll remove this in the future so we can see which packages need to update
                 "KRuntime",
                 "Coherence",
                 "latest-dev"
@@ -67,9 +62,6 @@ namespace SanityCheck
                     continue;
                 }
 
-                bool allowLooseDependency = projectsToAllowLooseDependencies.Contains(projectFolder.Name,
-                                                                                      StringComparer.OrdinalIgnoreCase);
-
                 foreach (var packageInfo in build.EnumerateFiles("*.nupkg"))
                 {
                     Console.WriteLine("Processing " + packageInfo + "...");
@@ -80,8 +72,7 @@ namespace SanityCheck
                         packages[zipPackage.Id] = new PackageInfo
                         {
                             Package = zipPackage,
-                            PackagePath = packageInfo.FullName,
-                            AllowMismatchedDependency = allowLooseDependency
+                            PackagePath = packageInfo.FullName
                         };
                     });
                 }
@@ -120,13 +111,11 @@ namespace SanityCheck
 
             foreach (var packageInfo in universe.Values)
             {
-                var mismatches = packageInfo.DependencyMismatches.Where(d => !d.Info.AllowMismatchedDependency)
-                                                                 .ToList();
-                if (mismatches.Any())
+                if (packageInfo.DependencyMismatches.Any())
                 {
                     WriteError("{0} has mismatched dependencies:", packageInfo.Package.GetFullName());
 
-                    foreach (var mismatch in mismatches)
+                    foreach (var mismatch in packageInfo.DependencyMismatches)
                     {
                         WriteError("    Expected {0}({1}) but got {2}",
                             mismatch.Dependency,
@@ -215,9 +204,6 @@ namespace SanityCheck
 
         public class PackageInfo
         {
-            // Some packages we're not as strict about
-            public bool AllowMismatchedDependency { get; set; }
-
             // The actual package instance
             public IPackage Package { get; set; }
 
@@ -228,8 +214,7 @@ namespace SanityCheck
             {
                 get
                 {
-                    return DependencyMismatches.Count == 0 ||
-                           DependencyMismatches.All(d => d.Info.AllowMismatchedDependency);
+                    return DependencyMismatches.Count == 0;
                 }
             }
 
