@@ -92,10 +92,10 @@ namespace SanityCheck
 
                 Retry(() =>
                 {
-                    File.Copy(packageInfo.PackagePath, outputPath, overwrite: true);
+                    File.Copy(packageInfo.PackagePath, path, overwrite: true);
                 });
 
-                Console.WriteLine("Copied to {0}", outputPath);
+                Console.WriteLine("Copied to {0}", path);
             }
 
             return 0;
