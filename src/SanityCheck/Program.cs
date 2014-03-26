@@ -25,6 +25,12 @@ namespace SanityCheck
 
             var di = new DirectoryInfo(dropFolder);
 
+            if (!di.Exists)
+            {
+                WriteError("Drop share {0} does not exist", di.FullName);
+                return 1;
+            }
+
             var packages = new Dictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
 
             var projectsToAllowLooseDependencies = new[]{
