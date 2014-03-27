@@ -62,6 +62,8 @@ namespace SanityCheck
                     continue;
                 }
 
+                var isCoreCLR = projectFolder.Name.Equals("CoreCLR", StringComparison.OrdinalIgnoreCase);
+
                 foreach (var packageInfo in build.EnumerateFiles("*.nupkg"))
                 {
                     Console.WriteLine("Processing " + packageInfo + "...");
@@ -72,7 +74,8 @@ namespace SanityCheck
                         packages[zipPackage.Id] = new PackageInfo
                         {
                             Package = zipPackage,
-                            PackagePath = packageInfo.FullName
+                            PackagePath = packageInfo.FullName,
+                            IsCoreCLRPackage = isCoreCLR
                         };
                     });
                 }
@@ -85,7 +88,7 @@ namespace SanityCheck
 
             Directory.CreateDirectory(outputPath);
 
-            foreach (var packageInfo in packages.Values.Where(pi => pi.Success))
+            foreach (var packageInfo in packages.Values)
             {
                 var path = Path.Combine(outputPath, Path.GetFileName(packageInfo.PackagePath));
 
@@ -104,6 +107,11 @@ namespace SanityCheck
         {
             foreach (var packageInfo in universe.Values)
             {
+                if (packageInfo.IsCoreCLRPackage)
+                {
+                    continue;
+                }
+
                 Visit(packageInfo, universe);
             }
 
@@ -204,6 +212,8 @@ namespace SanityCheck
 
         public class PackageInfo
         {
+            public bool IsCoreCLRPackage { get; set; }
+
             // The actual package instance
             public IPackage Package { get; set; }
 
