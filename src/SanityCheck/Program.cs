@@ -38,7 +38,8 @@ namespace SanityCheck
                 "Coherence",
                 "latest-dev",
                 "xunit",
-                "Entropy"
+                "Entropy",
+                "latest-packages"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
