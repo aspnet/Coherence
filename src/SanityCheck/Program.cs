@@ -35,7 +35,6 @@ namespace SanityCheck
 
             var projectsToSkip = new[] {
                 "MusicStore",
-                "KRuntime",
                 "Coherence",
                 "latest-dev",
                 "xunit"
