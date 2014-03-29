@@ -37,7 +37,8 @@ namespace SanityCheck
                 "MusicStore",
                 "KRuntime",
                 "Coherence",
-                "latest-dev"
+                "latest-dev",
+                "xunit"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
