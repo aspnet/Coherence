@@ -34,6 +34,7 @@ namespace SanityCheck
             var packages = new Dictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
 
             var projectsToSkip = new[] {
+                "MusicStore",
                 "KRuntime",
                 "Coherence",
                 "latest-dev"
