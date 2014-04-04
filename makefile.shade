@@ -1,6 +1,7 @@
 use namespace="System"
 use namespace="System.Diagnostics"
 use namespace="System.IO"
+use namespace="System.Threading.Tasks"
 use import="Files"
 use import="BuildEnv"
 
@@ -10,6 +11,8 @@ default SRC_DIR='${Path.Combine(BASE_DIR, "src")}'
 default BUILD_SHARE='${Environment.GetEnvironmentVariable("BUILD_SHARE")}'
 default BUILD_DIR='${Path.Combine(TARGET_DIR, "build")}'
 default SANITY_CHECKER='${Path.Combine(SRC_DIR, "SanityCheck")}'
+default NUGET_FEED='${Environment.GetEnvironmentVariable("NUGET_FEED")}'
+default NUGET_SYMBOLS_FEED='${Environment.GetEnvironmentVariable("NUGET_SYMBOLS_FEED")}'
 
 use-standard-lifecycle
 
@@ -27,3 +30,23 @@ use-standard-lifecycle
   }
 
   exec program='${Path.Combine(SANITY_CHECKER, "bin", "Release", "SanityCheck.exe")}' commandline='${BUILD_SHARE} ${BUILD_DIR}'
+  
+#publish-packages target="package"
+  @{
+      if (string.IsNullOrEmpty(NUGET_FEED)) {
+        Log.Warn("NUGET_FEED environment varible is not set.");
+        Environment.Exit(-1);
+        return;
+      }
+      
+      var packages = Directory.EnumerateFiles(BUILD_DIR, "*.nupkg");
+      Parallel.ForEach(packages, new ParallelOptions { MaxDegreeOfParallelism  = 5 }, package => 
+      {
+        var feed = package.EndsWith(".symbols.nupkg", StringComparison.OrdinalIgnoreCase) ? 
+                      NUGET_SYMBOLS_FEED: NUGET_FEED;
+        NuGetPush(feed, package);
+      });
+  }
+  
+macro name='NuGetPush' source='string' nupkgFile='string'
+  nuget-push
