@@ -71,7 +71,15 @@ namespace SanityCheck
 
                 foreach (var packageInfo in build.EnumerateFiles("*.nupkg"))
                 {
+                    if (packageInfo.FullName.EndsWith(".symbols.nupkg", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
                     Console.WriteLine("Processing " + packageInfo + "...");
+
+                    string symbolsPath = Path.Combine(packageInfo.Directory.FullName,
+                                                      Path.GetFileNameWithoutExtension(packageInfo.Name) + ".symbols.nupkg");
 
                     Retry(() =>
                     {
@@ -80,6 +88,7 @@ namespace SanityCheck
                         {
                             Package = zipPackage,
                             PackagePath = packageInfo.FullName,
+                            SymbolsPath = symbolsPath,
                             IsCoreCLRPackage = isCoreCLR
                         };
                     });
@@ -101,6 +110,15 @@ namespace SanityCheck
                 {
                     File.Copy(packageInfo.PackagePath, path, overwrite: true);
                 });
+
+                // REVIEW: Should we copy symbol packages elsewhere
+                //Retry(() =>
+                //{
+                //if (File.Exists(packageInfo.SymbolsPath))
+                //{
+                //    File.Copy(packageInfo.SymbolsPath, path, overwrite: true);
+                //}
+                //});
 
                 Console.WriteLine("Copied to {0}", path);
             }
@@ -249,6 +267,9 @@ namespace SanityCheck
 
             // The path to this package
             public string PackagePath { get; set; }
+
+            // The path to this package's symbol package
+            public string SymbolsPath { get; set; }
 
             public bool Success
             {
