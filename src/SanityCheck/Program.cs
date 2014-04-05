@@ -49,13 +49,15 @@ namespace SanityCheck
                     continue;
                 }
 
-                var latestPath = Path.Combine(projectFolder.FullName, "dev", "Latest");
+                var latestPath = FindLatest(projectFolder);
 
                 if (!Directory.Exists(latestPath))
                 {
                     WriteError("Couldn't find latest for {0}", latestPath);
                     continue;
                 }
+
+                Console.WriteLine("Using {0}", latestPath);
 
                 var build = new DirectoryInfo(Path.Combine(latestPath, "build"));
 
@@ -104,6 +106,31 @@ namespace SanityCheck
             }
 
             return 0;
+        }
+
+        private static string FindLatest(DirectoryInfo projectFolder)
+        {
+            var devPath = Path.Combine(projectFolder.FullName, "dev");
+
+            return new DirectoryInfo(devPath)
+                              .EnumerateDirectories()
+                              .Select(d =>
+                              {
+                                  int buildNumber;
+                                  if (!Int32.TryParse(d.Name, out buildNumber))
+                                  {
+                                      buildNumber = Int32.MinValue;
+                                  }
+
+                                  return new
+                                  {
+                                      DirectoryInfo = d,
+                                      BuildNumber = buildNumber
+                                  };
+                              })
+                              .OrderByDescending(r => r.BuildNumber)
+                              .Select(r => r.DirectoryInfo.FullName)
+                              .FirstOrDefault();
         }
 
         private static bool VerifyAll(Dictionary<string, PackageInfo> universe)
