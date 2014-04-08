@@ -10,6 +10,7 @@ default TARGET_DIR='${Path.Combine(BASE_DIR, "artifacts")}'
 default SRC_DIR='${Path.Combine(BASE_DIR, "src")}'
 default BUILD_SHARE='${Environment.GetEnvironmentVariable("BUILD_SHARE")}'
 default BUILD_DIR='${Path.Combine(TARGET_DIR, "build")}'
+default SYMBOLS_DIR='${Path.Combine(TARGET_DIR, "symbols")}'
 default SANITY_CHECKER='${Path.Combine(SRC_DIR, "SanityCheck")}'
 default NUGET_FEED='${Environment.GetEnvironmentVariable("NUGET_FEED")}'
 default NUGET_SYMBOLS_FEED='${Environment.GetEnvironmentVariable("NUGET_SYMBOLS_FEED")}'
@@ -29,7 +30,7 @@ use-standard-lifecycle
       }
   }
 
-  exec program='${Path.Combine(SANITY_CHECKER, "bin", "Release", "SanityCheck.exe")}' commandline='${BUILD_SHARE} ${BUILD_DIR}'
+  exec program='${Path.Combine(SANITY_CHECKER, "bin", "Release", "SanityCheck.exe")}' commandline='${BUILD_SHARE} ${BUILD_DIR} ${SYMBOLS_DIR}'
   
 #publish-packages target="package"
   @{
@@ -46,12 +47,12 @@ use-standard-lifecycle
         
         if (symbols)
         {
-            // TODO: Remove when we figure this out
-            // NuGetPush(NUGET_SYMBOLS_FEED, package);
-            return;
+            NuGetPush(NUGET_SYMBOLS_FEED, package);
         }
-        
-        NuGetPush(NUGET_FEED, package);
+        else
+        {
+            NuGetPush(NUGET_FEED, package);
+        }
       });
   }
   

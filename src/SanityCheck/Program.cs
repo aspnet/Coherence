@@ -14,14 +14,15 @@ namespace SanityCheck
     {
         static int Main(string[] args)
         {
-            if (args.Length < 2)
+            if (args.Length < 3)
             {
-                Console.WriteLine("Usage: SanityCheck [dropFolder] [outputPath]");
+                Console.WriteLine("Usage: SanityCheck [dropFolder] [outputPath] [symbolsOutputPath]");
                 return 1;
             }
 
             string dropFolder = args[0];
             string outputPath = args[1];
+            string symbolsOutputPath = args[2];
 
             var di = new DirectoryInfo(dropFolder);
 
@@ -101,26 +102,31 @@ namespace SanityCheck
             }
 
             Directory.CreateDirectory(outputPath);
+            Directory.CreateDirectory(symbolsOutputPath);
 
             foreach (var packageInfo in packages.Values)
             {
-                var path = Path.Combine(outputPath, Path.GetFileName(packageInfo.PackagePath));
+                var packagePath = Path.Combine(outputPath, Path.GetFileName(packageInfo.PackagePath));
 
                 Retry(() =>
                 {
-                    File.Copy(packageInfo.PackagePath, path, overwrite: true);
+                    File.Copy(packageInfo.PackagePath, packagePath, overwrite: true);
                 });
 
-                // REVIEW: Should we copy symbol packages elsewhere
-                //Retry(() =>
-                //{
-                //if (File.Exists(packageInfo.SymbolsPath))
-                //{
-                //    File.Copy(packageInfo.SymbolsPath, path, overwrite: true);
-                //}
-                //});
+                Console.WriteLine("Copied to {0}", packagePath);
 
-                Console.WriteLine("Copied to {0}", path);
+                if (File.Exists(packageInfo.SymbolsPath))
+                {
+                    var symbolsPath = Path.Combine(symbolsOutputPath, Path.GetFileName(packageInfo.SymbolsPath));
+
+                    // REVIEW: Should we copy symbol packages elsewhere
+                    Retry(() =>
+                    {
+                        File.Copy(packageInfo.SymbolsPath, symbolsPath, overwrite: true);
+                    });
+
+                    Console.WriteLine("Copied to {0}", symbolsPath);
+                }
             }
 
             return 0;
