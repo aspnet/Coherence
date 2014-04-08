@@ -43,16 +43,13 @@ use-standard-lifecycle
       var packages = Directory.EnumerateFiles(BUILD_DIR, "*.nupkg");
       Parallel.ForEach(packages, new ParallelOptions { MaxDegreeOfParallelism  = 5 }, package => 
       {
-        bool symbols = package.EndsWith(".symbols.nupkg", StringComparison.OrdinalIgnoreCase);
-        
-        if (symbols)
-        {
-            NuGetPush(NUGET_SYMBOLS_FEED, package);
-        }
-        else
-        {
-            NuGetPush(NUGET_FEED, package);
-        }
+          NuGetPush(NUGET_FEED, package);
+      });
+
+      var packageSymbols = Directory.EnumerateFiles(SYMBOLS_DIR, "*.symbols.nupkg");
+      Parallel.ForEach(packageSymbols, new ParallelOptions { MaxDegreeOfParallelism  = 5 }, package => 
+      {
+          NuGetPush(NUGET_SYMBOLS_FEED, package);
       });
   }
   
