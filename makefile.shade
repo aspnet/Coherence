@@ -46,38 +46,6 @@ use-standard-lifecycle
       {
           NuGetPush(NUGET_FEED, package);
       });
-
-      bool onTeamCity = Environment.GetEnvironmentVariable("TEAMCITY_VERSION") != null;
-      bool success = true;
-
-      var packageSymbols = Directory.EnumerateFiles(SYMBOLS_DIR, "*.symbols.nupkg");
-      Parallel.ForEach(packageSymbols, new ParallelOptions { MaxDegreeOfParallelism  = 5 }, package => 
-      {
-          try
-          {
-              // Symbol source is pretty flaky so just handle exceptions and move on
-              NuGetPush(NUGET_SYMBOLS_FEED, package);
-          }
-          catch (Exception ex)
-          {
-              success = false;
-              
-              if (onTeamCity)
-              {
-                // TODO: Add a helper to universe that does this logging if we're on team city
-                Log.Warn("##teamcity[message text='" + ex.Message + "' status='ERROR']");
-              }
-              else
-              {
-                Log.Warn(ex.Message);
-              }
-          }
-      });
-      
-      if (!success)
-      {
-        Environment.Exit(-1);
-      }
   }
   
 macro name='NuGetPush' source='string' nupkgFile='string'
