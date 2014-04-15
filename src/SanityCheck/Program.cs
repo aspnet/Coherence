@@ -38,7 +38,6 @@ namespace SanityCheck
                 "MusicStore",
                 "Coherence",
                 "latest-dev",
-                "xunit",
                 "Entropy",
                 "latest-packages"
             };
