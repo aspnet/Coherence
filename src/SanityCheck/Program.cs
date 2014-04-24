@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Versioning;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using NuGet;
 
 namespace SanityCheck
@@ -14,15 +13,17 @@ namespace SanityCheck
     {
         static int Main(string[] args)
         {
-            if (args.Length < 3)
+            if (args.Length < 5)
             {
-                Console.WriteLine("Usage: SanityCheck [dropFolder] [outputPath] [symbolsOutputPath]");
+                Console.WriteLine("Usage: SanityCheck [dropFolder] [outputPath] [symbolsOutputPath] [symbolSourcePath] [nugetExePath]");
                 return 1;
             }
 
             string dropFolder = args[0];
             string outputPath = args[1];
             string symbolsOutputPath = args[2];
+            string symbolSourcePath = args[3];
+            string nugetExePath = args[4];
 
             var di = new DirectoryInfo(dropFolder);
 
@@ -106,6 +107,19 @@ namespace SanityCheck
             Directory.CreateDirectory(outputPath);
             Directory.CreateDirectory(symbolsOutputPath);
 
+            var pdbOutputPath = Path.Combine(symbolSourcePath, "pdbrepo");
+            var sourceFilesPath = Path.Combine(symbolSourcePath, "sources");
+
+            if (!Directory.Exists(pdbOutputPath))
+            {
+                Directory.CreateDirectory(pdbOutputPath);
+            }
+
+            if (!Directory.Exists(sourceFilesPath))
+            {
+                Directory.CreateDirectory(sourceFilesPath);
+            }
+
             foreach (var packageInfo in packages.Values)
             {
                 var packagePath = Path.Combine(outputPath, Path.GetFileName(packageInfo.PackagePath));
@@ -125,6 +139,7 @@ namespace SanityCheck
                     Retry(() =>
                     {
                         File.Copy(packageInfo.SymbolsPath, symbolsPath, overwrite: true);
+                        ExtractPdbsAndSourceFiles(packageInfo.SymbolsPath, sourceFilesPath, pdbOutputPath, nugetExePath);
                     });
 
                     Console.WriteLine("Copied to {0}", symbolsPath);
@@ -264,6 +279,18 @@ namespace SanityCheck
                     Thread.Sleep(3000);
                 }
             }
+        }
+
+        private static void ExtractPdbsAndSourceFiles(string symbolsPath, string sourceFilesPath, string pdbPath, string nugetExePath)
+        {
+            nugetExePath = Path.Combine(nugetExePath, "nuget.exe");
+
+            string processArgs = string.Format("pushsymbol \"{0}\" -symbolserver \"{1}\" -sourceserver \"{2}\"", symbolsPath, pdbPath, sourceFilesPath);
+            var psi = new ProcessStartInfo(nugetExePath, processArgs)
+            {
+                CreateNoWindow = true,
+            };
+            Process.Start(psi).WaitForExit();
         }
 
         public class PackageInfo

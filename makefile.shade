@@ -17,6 +17,8 @@ default SANITY_CHECKER='${Path.Combine(SRC_DIR, "SanityCheck")}'
 default NUGET_FEED='${Environment.GetEnvironmentVariable("NUGET_FEED")}'
 default NUGET_SYMBOLS_FEED='${Environment.GetEnvironmentVariable("NUGET_SYMBOLS_FEED")}'
 default DROP_SHARE='${Environment.GetEnvironmentVariable("DROP_SHARE")}'
+default NUGET_SYMBOLS_SHARE='${Environment.GetEnvironmentVariable("NUGET_SYMBOLS_SHARE")}'
+default SYMBOLS_NUGET_EXE='${Environment.GetEnvironmentVariable("SYMBOLS_NUGET_EXE")}'
 
 use-standard-lifecycle
 
@@ -33,7 +35,7 @@ use-standard-lifecycle
       }
   }
 
-  exec program='${Path.Combine(SANITY_CHECKER, "bin", "Release", "SanityCheck.exe")}' commandline='${BUILD_SHARE} ${BUILD_DIR} ${SYMBOLS_DIR}'
+  exec program='${Path.Combine(SANITY_CHECKER, "bin", "Release", "SanityCheck.exe")}' commandline='${BUILD_SHARE} ${BUILD_DIR} ${SYMBOLS_DIR} ${NUGET_SYMBOLS_SHARE} ${SYMBOLS_NUGET_EXE} '
   
 #publish-packages target="package"
   @{
