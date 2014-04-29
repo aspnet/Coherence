@@ -1,6 +1,8 @@
 use namespace="System"
+use namespace="System.Collections.Concurrent"
 use namespace="System.Diagnostics"
 use namespace="System.IO"
+use namespace="System.Threading"
 use namespace="System.Threading.Tasks"
 use import="Files"
 use import="BuildEnv"
@@ -14,6 +16,7 @@ default SYMBOLS_DIR='${Path.Combine(TARGET_DIR, "symbols")}'
 default SANITY_CHECKER='${Path.Combine(SRC_DIR, "SanityCheck")}'
 default NUGET_FEED='${Environment.GetEnvironmentVariable("NUGET_FEED")}'
 default NUGET_SYMBOLS_FEED='${Environment.GetEnvironmentVariable("NUGET_SYMBOLS_FEED")}'
+default DROP_SHARE='${Environment.GetEnvironmentVariable("DROP_SHARE")}'
 
 use-standard-lifecycle
 
@@ -41,12 +44,155 @@ use-standard-lifecycle
         return;
       }
       
-      var packages = Directory.EnumerateFiles(BUILD_DIR, "*.nupkg");
-      Parallel.ForEach(packages, new ParallelOptions { MaxDegreeOfParallelism  = 5 }, package => 
+      if (string.IsNullOrEmpty(DROP_SHARE))
       {
-          NuGetPush(NUGET_FEED, package);
-      });
+        Log.Warn("DROP_SHARE environment varible is not set.");
+        Environment.Exit(-1);
+        return;
+      }
+      
+      var lastUploadedFilePath = Path.Combine(DROP_SHARE, "uploaded-files");
+      var packages = Directory.EnumerateFiles(BUILD_DIR, "*.nupkg");
+      using (var fileList = new UploadedFileList(lastUploadedFilePath))
+      {
+          while (!fileList.TryRead())
+          {
+              Log.Warn(lastUploadedFilePath + " currently being used.");
+              Thread.Sleep(TimeSpan.FromSeconds(3));
+          }
+          
+          Parallel.ForEach(packages, new ParallelOptions { MaxDegreeOfParallelism  = 5 }, package => 
+          {
+              var packageInfo = PackageInfo.FromPath(package);
+              PackageInfo existing;
+              if (fileList.Infos.TryGetValue(packageInfo.Id, out existing) && 
+                  existing.Equals(packageInfo))
+              {
+                  return;
+              }
+              
+              fileList.Infos[packageInfo.Id] = packageInfo;
+              NuGetPush(NUGET_FEED, package);
+          });
+      }
   }
+  
+functions @{
+    private sealed class UploadedFileList : IDisposable
+    {
+        private readonly string _path;
+        private Stream _fileStream;
+        
+        public UploadedFileList(string path)
+        {
+            _path = path;
+        }
+        
+        public IDictionary<string, PackageInfo> Infos { get; private set; }
+                
+        public bool TryRead()
+        {
+            try
+            {
+                _fileStream = File.Open(_path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None);
+                ReadContents();
+                return true;
+            }
+            catch (IOException)
+            {
+                // The file must be locked by another concurrent CI run.
+            }
+            return false;
+        }
+        
+        private void ReadContents()
+        {
+            Infos = new ConcurrentDictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
+            var reader = new StreamReader(_fileStream);
+            var contents = reader.ReadToEnd();
+            foreach (var line in contents.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var tabs = line.Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries);
+                Infos.Add(tabs[0], new PackageInfo { Id = tabs[0], Version = tabs[1], Hash = tabs[2] });
+            }
+        }
+        
+        private void UpdateContents()
+        {
+            _fileStream.Position = 0;
+            var writer = new StreamWriter(_fileStream);
+            foreach (var item in Infos.Values)
+            {
+                writer.WriteLine("{0},{1},{2}", item.Id, item.Version, item.Hash);
+            }
+            writer.Flush();
+        }
+        
+        public void Dispose()
+        {
+            if (_fileStream != null)
+            {
+                UpdateContents();
+                _fileStream.Dispose();
+            }
+        }
+    }
+    
+    private class PackageInfo : IEquatable<PackageInfo>
+    {
+        private static readonly Regex _packageNameRegex = new Regex(@"^(?<id>.+?)\.(?<version>[0-9].*)$");
+        private string _hash;
+        
+        public string Id { get; set; }
+            
+        public string Version { get; set; }
+        
+        private string Path { get; set; }
+        
+        public string Hash 
+        { 
+            get
+            {
+                if (_hash == null)
+                {
+                    using (var md5 = System.Security.Cryptography.MD5.Create())
+                    using (var fileStream = File.OpenRead(Path))
+                    {
+                        _hash = Convert.ToBase64String(md5.ComputeHash(fileStream));
+                    }
+                }
+                return _hash;
+            }
+            set
+            {
+                _hash = value;
+            }
+        }
+            
+        public static PackageInfo FromPath(string path)
+        {
+            var fileName = System.IO.Path.GetFileNameWithoutExtension(path);
+            var match = _packageNameRegex.Match(fileName);
+            if (!match.Success)
+            {
+                throw new InvalidOperationException("Can't parse file " + path);
+            }
+            return new PackageInfo
+            {
+              Id = match.Groups["id"].Value,
+              Version = match.Groups["version"].Value,
+              Path = path
+            };
+        }
+        
+        public bool Equals(PackageInfo other)
+        {
+            return string.Equals(Id, other.Id, StringComparison.OrdinalIgnoreCase) &&
+                   string.Equals(Version, other.Version, StringComparison.OrdinalIgnoreCase) &&
+                   string.Equals(Hash, other.Hash, StringComparison.OrdinalIgnoreCase);
+        }
+    }
+}
   
 macro name='NuGetPush' source='string' nupkgFile='string'
   nuget-push
