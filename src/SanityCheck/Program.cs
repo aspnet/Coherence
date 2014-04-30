@@ -37,6 +37,7 @@ namespace SanityCheck
             var projectsToSkip = new[] {
                 "MusicStore",
                 "Coherence",
+                "Coherence-Signed",
                 "latest-dev",
                 "Entropy",
                 "latest-packages"
