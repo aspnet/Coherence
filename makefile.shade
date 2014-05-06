@@ -17,10 +17,27 @@ default SANITY_CHECKER='${Path.Combine(SRC_DIR, "SanityCheck")}'
 default NUGET_FEED='${Environment.GetEnvironmentVariable("NUGET_FEED")}'
 default NUGET_SYMBOLS_FEED='${Environment.GetEnvironmentVariable("NUGET_SYMBOLS_FEED")}'
 default DROP_SHARE='${Environment.GetEnvironmentVariable("DROP_SHARE")}'
+default PACKAGE_DROP_SHARE='${Environment.GetEnvironmentVariable("PACKAGE_DROP_SHARE")}'
 default NUGET_SYMBOLS_SHARE='${Environment.GetEnvironmentVariable("NUGET_SYMBOLS_SHARE")}'
 default SYMBOLS_NUGET_EXE='${Environment.GetEnvironmentVariable("SYMBOLS_NUGET_EXE")}'
 
 use-standard-lifecycle
+
+#delete-old-packages target="clean"
+    @{
+        if (string.IsNullOrEmpty(PACKAGE_DROP_SHARE))
+        {
+          Log.Warn("PACKAGE_DROP_SHARE environment varible is not set");
+          return;
+        }
+
+        var files = Directory.EnumerateFiles(PACKAGE_DROP_SHARE, "*.nupkg").ToList();
+        var symbolsFiles = files.Where(f => f.EndsWith(".symbols.nupkg", StringComparison.OrdinalIgnoreCase));
+        var regularFiles = files.Except(symbolsFiles);
+
+        DeleteOldFiles(symbolsFiles);
+        DeleteOldFiles(regularFiles);
+    }
 
 #compile-sanity-check target='compile'
   build projectFile='${Path.Combine(SANITY_CHECKER, "SanityCheck.csproj")}'
@@ -78,8 +95,29 @@ use-standard-lifecycle
           });
       }
   }
-  
+
 functions @{
+    private void DeleteOldFiles(IEnumerable<string> files)
+    {
+        const int LeavePackagesAloneCount = 3;
+        var groups = files.Select(PackageInfo.FromPath)
+                          .GroupBy(p => p.Id, StringComparer.OrdinalIgnoreCase)
+                          .Where(p => p.Count() > LeavePackagesAloneCount);
+        foreach (var item in groups)
+        {
+            var packagesToDelete = item.OrderByDescending(p => p.Version, StringComparer.OrdinalIgnoreCase)
+                                       .Skip(LeavePackagesAloneCount);
+            Log.Info("Deleting " + item.Key + " versions: " + string.Join(",", item.Select(p => p.Version)));
+            foreach (var packageInfo in packagesToDelete)
+            {
+                try
+                {
+                    File.Delete(packageInfo.Path);
+                } catch(IOException) {}
+            }
+        }
+    }
+
     private sealed class UploadedFileList : IDisposable
     {
         private readonly string _path;
@@ -149,7 +187,7 @@ functions @{
             
         public string Version { get; set; }
         
-        private string Path { get; set; }
+        public string Path { get; private set; }
         
         public string Hash 
         { 
