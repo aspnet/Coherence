@@ -41,7 +41,8 @@ namespace SanityCheck
                 "latest-dev",
                 "Entropy",
                 "latest-packages",
-                "xunit"
+                "xunit",
+                "Microsoft.Data.SQLite",
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
