@@ -44,6 +44,7 @@ namespace SanityCheck
                 "latest-packages",
                 "xunit",
                 "Microsoft.Data.SQLite",
+                "WebFx"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
