@@ -42,7 +42,6 @@ namespace SanityCheck
                 "latest-dev",
                 "Entropy",
                 "latest-packages",
-                "xunit",
                 "Microsoft.Data.SQLite",
                 "WebFx",
                 "Data",
