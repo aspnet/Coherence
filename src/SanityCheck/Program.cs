@@ -45,7 +45,8 @@ namespace SanityCheck
                 "Microsoft.Data.SQLite",
                 "WebFx",
                 "Data",
-                "System.Data.Common"
+                "System.Data.Common",
+                "DiagnosticsPages"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
