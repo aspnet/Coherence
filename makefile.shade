@@ -9,6 +9,7 @@ default BASE_DIR='${Directory.GetCurrentDirectory()}'
 default TARGET_DIR='${Path.Combine(BASE_DIR, "artifacts")}'
 default SRC_DIR='${Path.Combine(BASE_DIR, "src")}'
 default BUILD_SHARE='${Environment.GetEnvironmentVariable("BUILD_SHARE")}'
+default BUILD_BRANCH='${Environment.GetEnvironmentVariable("BUILD_BRANCH")}'
 default BUILD_DIR='${Path.Combine(TARGET_DIR, "build")}'
 default SYMBOLS_DIR='${Path.Combine(TARGET_DIR, "symbols")}'
 default SANITY_CHECKER='${Path.Combine(SRC_DIR, "SanityCheck")}'
@@ -50,7 +51,7 @@ use-standard-lifecycle
       }
   }
 
-  exec program='${Path.Combine(SANITY_CHECKER, "bin", "Release", "SanityCheck.exe")}' commandline='${BUILD_SHARE} ${BUILD_DIR} ${SYMBOLS_DIR} ${NUGET_SYMBOLS_SHARE} ${SYMBOLS_NUGET_EXE} '
+  exec program='${Path.Combine(SANITY_CHECKER, "bin", "Release", "SanityCheck.exe")}' commandline='${BUILD_SHARE} ${BUILD_BRANCH} ${BUILD_DIR} ${SYMBOLS_DIR} ${NUGET_SYMBOLS_SHARE} ${SYMBOLS_NUGET_EXE} '
 
 functions @{
     private void DeleteOldFiles(IEnumerable<string> files)

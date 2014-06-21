@@ -13,17 +13,18 @@ namespace SanityCheck
     {
         static int Main(string[] args)
         {
-            if (args.Length < 5)
+            if (args.Length < 6)
             {
-                Console.WriteLine("Usage: SanityCheck [dropFolder] [outputPath] [symbolsOutputPath] [symbolSourcePath] [nugetExePath]");
+                Console.WriteLine("Usage: SanityCheck [dropFolder] [buildBranch] [outputPath] [symbolsOutputPath] [symbolSourcePath] [nugetExePath]");
                 return 1;
             }
 
             string dropFolder = args[0];
-            string outputPath = args[1];
-            string symbolsOutputPath = args[2];
-            string symbolSourcePath = args[3];
-            string nugetExePath = args[4];
+            string buildBranch = args[1];
+            string outputPath = args[2];
+            string symbolsOutputPath = args[3];
+            string symbolSourcePath = args[4];
+            string nugetExePath = args[5];
 
             var di = new DirectoryInfo(dropFolder);
 
@@ -56,7 +57,7 @@ namespace SanityCheck
                     continue;
                 }
 
-                var latestPath = FindLatest(projectFolder);
+                var latestPath = FindLatest(projectFolder, buildBranch);
 
                 if (!Directory.Exists(latestPath))
                 {
@@ -152,11 +153,11 @@ namespace SanityCheck
             return 0;
         }
 
-        private static string FindLatest(DirectoryInfo projectFolder)
+        private static string FindLatest(DirectoryInfo projectFolder, string buildBranch)
         {
-            var devPath = Path.Combine(projectFolder.FullName, "dev");
+            var latestPath = Path.Combine(projectFolder.FullName, buildBranch);
 
-            return new DirectoryInfo(devPath)
+            return new DirectoryInfo(latestPath)
                               .EnumerateDirectories()
                               .Select(d =>
                               {
