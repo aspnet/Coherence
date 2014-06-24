@@ -40,6 +40,7 @@ namespace SanityCheck
                 "MusicStore",
                 "Coherence",
                 "Coherence-Signed",
+                "DataAnnotations",
                 "latest-dev",
                 "Entropy",
                 "latest-packages",
