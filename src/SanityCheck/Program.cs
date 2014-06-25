@@ -40,7 +40,6 @@ namespace SanityCheck
                 "MusicStore",
                 "Coherence",
                 "Coherence-Signed",
-                "DataAnnotations",
                 "latest-dev",
                 "Entropy",
                 "latest-packages",
@@ -237,6 +236,12 @@ namespace SanityCheck
         {
             foreach (var dependencySet in packageInfo.Package.DependencySets)
             {
+                // Skip PCL frameworks for verification
+                if (IsPortableFramework(dependencySet.TargetFramework))
+                {
+                    continue;
+                }
+
                 foreach (var dependency in dependencySet.Dependencies)
                 {
                     // For any dependency in the universe
@@ -296,6 +301,14 @@ namespace SanityCheck
                 CreateNoWindow = true,
             };
             Process.Start(psi).WaitForExit();
+        }
+
+        private static bool IsPortableFramework(FrameworkName framework)
+        {
+            // The profile part has been verified in the ParseFrameworkName() method. 
+            // By the time it is called here, it's guaranteed to be valid.
+            // Thus we can ignore the profile part here
+            return framework != null && ".NETPortable".Equals(framework.Identifier, StringComparison.OrdinalIgnoreCase);
         }
 
         public class PackageInfo
