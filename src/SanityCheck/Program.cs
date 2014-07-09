@@ -47,7 +47,8 @@ namespace SanityCheck
                 "WebFx",
                 "Data",
                 "System.Data.Common",
-                "DiagnosticsPages"
+                "DiagnosticsPages",
+                "HttpClient"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
