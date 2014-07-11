@@ -225,6 +225,11 @@ namespace SanityCheck
         {
             if (Environment.GetEnvironmentVariable("TEAMCITY_VERSION") != null)
             {
+                value = value.Replace("|", "||")
+                             .Replace("'", "|'")
+                             .Replace("\r", "|r")
+                             .Replace("\n", "|n")
+                             .Replace("]", "|]");
                 Console.Error.WriteLine("##teamcity[message text='" + value + "' status='ERROR']", args);
             }
             else
