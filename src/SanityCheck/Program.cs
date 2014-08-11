@@ -49,8 +49,7 @@ namespace SanityCheck
                 "System.Data.Common",
                 "DiagnosticsPages",
                 "HttpClient",
-                "kvm",
-                "IBC"
+                "kvm"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
