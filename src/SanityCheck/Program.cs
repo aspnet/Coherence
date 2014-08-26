@@ -86,8 +86,6 @@ namespace SanityCheck
                         continue;
                     }
 
-                    Console.WriteLine("Processing " + packageInfo + "...");
-
                     string symbolsPath = Path.Combine(packageInfo.Directory.FullName,
                                                       Path.GetFileNameWithoutExtension(packageInfo.Name) + ".symbols.nupkg");
 
@@ -99,6 +97,9 @@ namespace SanityCheck
                     {
                         continue;
                     }
+
+                    Console.WriteLine("Processing {0} ...", packageInfo);
+
                     packages[zipPackage.Id] = new PackageInfo
                     {
                         Package = zipPackage,
