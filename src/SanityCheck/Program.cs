@@ -86,28 +86,22 @@ namespace SanityCheck
                         continue;
                     }
 
+                    Console.WriteLine("Processing " + packageInfo + "...");
+
                     string symbolsPath = Path.Combine(packageInfo.Directory.FullName,
                                                       Path.GetFileNameWithoutExtension(packageInfo.Name) + ".symbols.nupkg");
 
-                    var zipPackage = new ZipPackage(packageInfo.FullName);
-                    PackageInfo existing;
-                    // If the package has already been added, ensure it came from IBC. This makes it so that we always pick the IBC package
-                    if (packages.TryGetValue(zipPackage.Id, out existing) &&
-                        existing.SourceConfiguration.Equals("IBC", StringComparison.OrdinalIgnoreCase))
+                    Retry(() =>
                     {
-                        continue;
-                    }
-
-                    Console.WriteLine("Processing {0} ...", packageInfo);
-
-                    packages[zipPackage.Id] = new PackageInfo
-                    {
-                        Package = zipPackage,
-                        PackagePath = packageInfo.FullName,
-                        SymbolsPath = symbolsPath,
-                        IsCoreCLRPackage = isCoreCLR,
-                        SourceConfiguration = projectFolder.Name
-                    };
+                        var zipPackage = new ZipPackage(packageInfo.FullName);
+                        packages[zipPackage.Id] = new PackageInfo
+                        {
+                            Package = zipPackage,
+                            PackagePath = packageInfo.FullName,
+                            SymbolsPath = symbolsPath,
+                            IsCoreCLRPackage = isCoreCLR
+                        };
+                    });
                 }
             }
 
@@ -344,9 +338,6 @@ namespace SanityCheck
                     return DependencyMismatches.Count == 0;
                 }
             }
-
-            // The source repository \ configurations (e.g. DependencyInjection, IBC etc) where this package came from
-            public string SourceConfiguration { get; set; }
 
             public IList<DependencyMismatch> DependencyMismatches { get; set; }
 
