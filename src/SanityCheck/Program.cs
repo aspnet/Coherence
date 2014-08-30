@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Versioning;
 using System.Threading;
 using NuGet;
@@ -13,6 +14,8 @@ namespace SanityCheck
     {
         static int Main(string[] args)
         {
+            AddNewFrameworksToNuGet();
+
             if (args.Length < 6)
             {
                 Console.WriteLine("Usage: SanityCheck [dropFolder] [buildBranch] [outputPath] [symbolsOutputPath] [symbolSourcePath] [nugetExePath]");
@@ -153,6 +156,42 @@ namespace SanityCheck
             }
 
             return 0;
+        }
+
+        private static void AddNewFrameworksToNuGet()
+        {
+            // Super hacky way to work around known nuget frameworks
+            // Add ASP.NET and ASP.NET Core to the list of frameworks
+            // so that parsing them won't both show up as unsupported
+            const string AspNetFrameworkIdentifier = "Asp.Net";
+            const string AspNetCoreFrameworkIdentifier = "Asp.NetCore";
+
+            var knownIdentifiers = GetDictionaryField("_knownIdentifiers");
+            var identifierToFrameworkFolder = GetDictionaryField("_identifierToFrameworkFolder");
+
+            if (knownIdentifiers != null)
+            {
+                knownIdentifiers["aspnet"] = AspNetFrameworkIdentifier;
+                knownIdentifiers["aspnetcore"] = AspNetCoreFrameworkIdentifier;
+            }
+
+            if (identifierToFrameworkFolder != null)
+            {
+                identifierToFrameworkFolder[AspNetFrameworkIdentifier] = "aspnet";
+                identifierToFrameworkFolder[AspNetCoreFrameworkIdentifier] = "aspnetcore";
+            }
+        }
+
+        private static IDictionary<string, string> GetDictionaryField(string fieldName)
+        {
+            var dictionaryField = typeof(VersionUtility).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static);
+
+            if (dictionaryField != null)
+            {
+                return dictionaryField.GetValue(obj: null) as IDictionary<string, string>;
+            }
+
+            return null;
         }
 
         private static string FindLatest(DirectoryInfo projectFolder, string buildBranch)
