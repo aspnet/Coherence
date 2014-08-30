@@ -173,6 +173,8 @@ namespace SanityCheck
             {
                 knownIdentifiers["aspnet"] = AspNetFrameworkIdentifier;
                 knownIdentifiers["aspnetcore"] = AspNetCoreFrameworkIdentifier;
+                knownIdentifiers["asp.net"] = AspNetFrameworkIdentifier;
+                knownIdentifiers["asp.netcore"] = AspNetCoreFrameworkIdentifier;
             }
 
             if (identifierToFrameworkFolder != null)
