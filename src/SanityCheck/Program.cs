@@ -55,9 +55,7 @@ namespace SanityCheck
                 "kvm",
                 "IBC",
                 "Templates",
-                "aspnet.xunit",
-                "xunit",
-                "Testing"
+                "xunit"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
