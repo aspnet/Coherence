@@ -54,8 +54,7 @@ namespace SanityCheck
                 "HttpClient",
                 "kvm",
                 "IBC",
-                "Templates",
-                "xunit"
+                "Templates"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
