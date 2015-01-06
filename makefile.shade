@@ -20,6 +20,15 @@ default PACKAGE_DROP_SHARE='${Environment.GetEnvironmentVariable("PACKAGE_DROP_S
 default NUGET_SYMBOLS_SHARE='${Environment.GetEnvironmentVariable("NUGET_SYMBOLS_SHARE")}'
 default SYMBOLS_NUGET_EXE='${Environment.GetEnvironmentVariable("SYMBOLS_NUGET_EXE")}'
 
+default KVM_PATH='${Environment.GetEnvironmentVariable("KVM_PATH")}'
+default KVM_ROOT='${String.IsNullOrEmpty(KVM_PATH)?"":Path.Combine(KVM_PATH, "..")}'
+default HOME_CLONE_DIR='${Path.Combine(BASE_DIR, ".deploy")}'
+default HOME_REPO='${Environment.GetEnvironmentVariable("HOME_REPO")}'
+default PUSH_KVM='${Environment.GetEnvironmentVariable("PUSH_KVM")}'
+
+-// Home branch must be set in order to push KVM to aspnet/Home
+default HOME_BRANCH='${Environment.GetEnvironmentVariable("HOME_BRANCH")}'
+
 use-standard-lifecycle
 
 #delete-old-packages target="clean"
@@ -40,6 +49,48 @@ use-standard-lifecycle
 
 #compile-sanity-check target='compile'
   build projectFile='${Path.Combine(SANITY_CHECKER, "SanityCheck.csproj")}'
+
+#push-kvm-to-home target='package'
+  @{
+      // Check entry criteria
+      if(String.IsNullOrEmpty(KVM_ROOT) || 
+            !Directory.Exists(KVM_ROOT) || 
+            String.IsNullOrEmpty(HOME_BRANCH) || 
+            String.IsNullOrEmpty(HOME_CLONE_DIR)) {
+        
+        // Don't continue
+        Log.Warn("Not pushing kvm to Home. A required environment variable was not set");
+        return;
+      }
+
+      var kvmCommitFile = Path.Combine(KVM_ROOT, "commit");
+      var kvmCommit = "<<unknown>>";
+      if(File.Exists(kvmCommitFile)) {
+        kvmCommit = File.ReadAllText(kvmCommitFile).Trim();
+      }
+  }
+
+  -// Whack the old clone dir, if present (regular delete ran in to permission issues that this does not appear to have)
+  robocopy-delete dir="${HOME_CLONE_DIR}"
+
+  -// Clone aspnet/Home
+  git gitFolder="${BASE_DIR}" gitCommand="clone ${HOME_REPO} ${HOME_CLONE_DIR} --branch ${HOME_BRANCH}"
+
+  -// Copy the files into the repo
+  copy include="kvm.ps1" sourceDir="${KVM_ROOT}" outputDir='${HOME_CLONE_DIR}' overwrite='${true}'
+  copy include="kvm.cmd" sourceDir="${KVM_ROOT}" outputDir='${HOME_CLONE_DIR}' overwrite='${true}'
+  copy include="kvm.sh" sourceDir="${KVM_ROOT}" outputDir='${HOME_CLONE_DIR}' overwrite='${true}'
+
+  -// Add and commit all changed files ('add -A :/' isn't a weird emoticon, it's actually how you add any changes under a repo)
+  git gitFolder="${HOME_CLONE_DIR}" gitCommand='add -A :/'
+  git gitFolder="${HOME_CLONE_DIR}" gitCommand='commit -m"Publishing kvm ${kvmCommit} to Home"'
+
+  @{
+      if(String.IsNullOrEmpty(PUSH_KVM) || !String.Equals(PUSH_KVM, "true", StringComparison.OrdinalIgnoreCase)) {
+        return;
+      }
+  }
+  git gitFolder="${HOME_CLONE_DIR}" gitCommand='push origin ${HOME_BRANCH}'
 
 #copy-bits target='package'
   @{
