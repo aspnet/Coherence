@@ -53,6 +53,7 @@ namespace SanityCheck
                 "DiagnosticsPages",
                 "HttpClient",
                 "kvm",
+                "dotnetsdk",
                 "IBC",
                 "Templates",
                 "Setup"
