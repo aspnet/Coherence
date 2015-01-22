@@ -56,7 +56,9 @@ namespace SanityCheck
                 "dotnetsdk",
                 "IBC",
                 "Templates",
-                "Setup"
+                "Setup",
+                "DataCommon",
+                "SqlClient"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
