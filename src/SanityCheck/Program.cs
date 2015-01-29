@@ -58,7 +58,11 @@ namespace SanityCheck
                 "Templates",
                 "Setup",
                 "DataCommon",
-                "SqlClient"
+                "SqlClient",
+
+                // Skip newly introduced SignalR packages for beta3
+                "SignalR-Client-Cpp",
+                "SignalR-SqlServer"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
