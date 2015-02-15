@@ -30,12 +30,25 @@ use-standard-lifecycle
           return;
         }
 
-        var files = Directory.EnumerateFiles(PACKAGE_DROP_SHARE, "*.nupkg").ToList();
-        var symbolsFiles = files.Where(f => f.EndsWith(".symbols.nupkg", StringComparison.OrdinalIgnoreCase));
-        var regularFiles = files.Except(symbolsFiles);
+        foreach (var package in Directory.EnumerateDirectories(PACKAGE_DROP_SHARE))
+        {
+            var versionsToDelete = Directory.EnumerateDirectories(package)
+                                            .OrderByDescending(d => d, StringComparer.OrdinalIgnoreCase)
+                                            .Skip(1);
 
-        DeleteOldFiles(symbolsFiles);
-        DeleteOldFiles(regularFiles);
+            foreach (var versionDir in versionsToDelete)
+            {
+                Log.Info("Deleteing " + versionDir);
+                try
+                {
+                    Directory.Delete(versionDir, recursive: true);
+                }
+                catch (IOException)
+                {
+                    // Ignore.
+                }
+            }
+        }
     }
 
 #compile-sanity-check target='compile'
@@ -53,83 +66,5 @@ use-standard-lifecycle
 
   exec program='${Path.Combine(SANITY_CHECKER, "bin", "Release", "SanityCheck.exe")}' commandline='${BUILD_SHARE} ${BUILD_BRANCH} ${BUILD_DIR} ${SYMBOLS_DIR} ${NUGET_SYMBOLS_SHARE} ${SYMBOLS_NUGET_EXE} '
 
-functions @{
-    private void DeleteOldFiles(IEnumerable<string> files)
-    {
-        const int LeavePackagesAloneCount = 3;
-        var groups = files.Select(PackageInfo.FromPath)
-                          .GroupBy(p => p.Id, StringComparer.OrdinalIgnoreCase)
-                          .Where(p => p.Count() > LeavePackagesAloneCount);
-        foreach (var item in groups)
-        {
-            var packagesToDelete = item.OrderByDescending(p => p.Version, StringComparer.OrdinalIgnoreCase)
-                                       .Skip(LeavePackagesAloneCount);
-            Log.Info("Deleting " + item.Key + " versions: " + string.Join(",", item.Select(p => p.Version)));
-            foreach (var packageInfo in packagesToDelete)
-            {
-                try
-                {
-                    File.Delete(packageInfo.Path);
-                } catch(IOException) {}
-            }
-        }
-    }
-    
-    private class PackageInfo : IEquatable<PackageInfo>
-    {
-        private static readonly Regex _packageNameRegex = new Regex(@"^(?<id>.+?)\.(?<version>[0-9].*)$");
-        private string _hash;
-        
-        public string Id { get; set; }
-            
-        public string Version { get; set; }
-        
-        public string Path { get; private set; }
-        
-        public string Hash 
-        { 
-            get
-            {
-                if (_hash == null)
-                {
-                    using (var md5 = System.Security.Cryptography.MD5.Create())
-                    using (var fileStream = File.OpenRead(Path))
-                    {
-                        _hash = Convert.ToBase64String(md5.ComputeHash(fileStream));
-                    }
-                }
-                return _hash;
-            }
-            set
-            {
-                _hash = value;
-            }
-        }
-            
-        public static PackageInfo FromPath(string path)
-        {
-            var fileName = System.IO.Path.GetFileNameWithoutExtension(path);
-            var match = _packageNameRegex.Match(fileName);
-            if (!match.Success)
-            {
-                throw new InvalidOperationException("Can't parse file " + path);
-            }
-            return new PackageInfo
-            {
-              Id = match.Groups["id"].Value,
-              Version = match.Groups["version"].Value,
-              Path = path
-            };
-        }
-        
-        public bool Equals(PackageInfo other)
-        {
-            return string.Equals(Id, other.Id, StringComparison.OrdinalIgnoreCase) &&
-                   string.Equals(Version, other.Version, StringComparison.OrdinalIgnoreCase) &&
-                   string.Equals(Hash, other.Hash, StringComparison.OrdinalIgnoreCase);
-        }
-    }
-}
-  
 macro name='NuGetPush' source='string' nupkgFile='string'
   nuget-push
