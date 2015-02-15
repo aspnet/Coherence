@@ -245,6 +245,13 @@ namespace SanityCheck
             {
                 if (packageInfo.DependencyMismatches.Any())
                 {
+                    // Temporary workaround for FileSystemGlobbing used in Runtime.
+                    if (packageInfo.Package.Id.Equals("Microsoft.Framework.Runtime", StringComparison.OrdinalIgnoreCase) &&
+                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("Microsoft.Framework.FileSystemGlobbing", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        continue;
+                    }
+
                     WriteError("{0} has mismatched dependencies:", packageInfo.Package.GetFullName());
 
                     foreach (var mismatch in packageInfo.DependencyMismatches)
