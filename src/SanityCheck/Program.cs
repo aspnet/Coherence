@@ -167,26 +167,24 @@ namespace SanityCheck
         private static void AddNewFrameworksToNuGet()
         {
             // Super hacky way to work around known nuget frameworks
-            // Add ASP.NET and ASP.NET Core to the list of frameworks
+            // Add DNX and DNX Core to the list of frameworks
             // so that parsing them won't both show up as unsupported
-            const string AspNetFrameworkIdentifier = "Asp.Net";
-            const string AspNetCoreFrameworkIdentifier = "Asp.NetCore";
+            const string DnxFrameworkIdentifier = "DNX";
+            const string DnxCoreFrameworkIdentifier = "DNXCore";
 
             var knownIdentifiers = GetDictionaryField("_knownIdentifiers");
             var identifierToFrameworkFolder = GetDictionaryField("_identifierToFrameworkFolder");
 
             if (knownIdentifiers != null)
             {
-                knownIdentifiers["aspnet"] = AspNetFrameworkIdentifier;
-                knownIdentifiers["aspnetcore"] = AspNetCoreFrameworkIdentifier;
-                knownIdentifiers["asp.net"] = AspNetFrameworkIdentifier;
-                knownIdentifiers["asp.netcore"] = AspNetCoreFrameworkIdentifier;
+                knownIdentifiers["dnx"] = DnxFrameworkIdentifier;
+                knownIdentifiers["dnxcore"] = DnxCoreFrameworkIdentifier;
             }
 
             if (identifierToFrameworkFolder != null)
             {
-                identifierToFrameworkFolder[AspNetFrameworkIdentifier] = "aspnet";
-                identifierToFrameworkFolder[AspNetCoreFrameworkIdentifier] = "aspnetcore";
+                identifierToFrameworkFolder[DnxFrameworkIdentifier] = "dnx";
+                identifierToFrameworkFolder[DnxCoreFrameworkIdentifier] = "dnxcore";
             }
         }
 
