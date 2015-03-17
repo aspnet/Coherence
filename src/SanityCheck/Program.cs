@@ -58,7 +58,8 @@ namespace SanityCheck
                 "Templates",
                 "Setup",
                 "DataCommon",
-                "SqlClient"
+                "SqlClient",
+                "aspnet.xunit"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
