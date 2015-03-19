@@ -58,8 +58,7 @@ namespace SanityCheck
                 "Templates",
                 "Setup",
                 "DataCommon",
-                "SqlClient",
-                "aspnet.xunit"
+                "SqlClient"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
@@ -247,6 +246,13 @@ namespace SanityCheck
                     // Temporary workaround for FileSystemGlobbing used in Runtime.
                     if (packageInfo.Package.Id.Equals("Microsoft.Framework.Runtime", StringComparison.OrdinalIgnoreCase) &&
                         packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("Microsoft.Framework.FileSystemGlobbing", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        continue;
+                    }
+
+                    // Temporary workaround for xunit.runner.aspnet used in TestAdapter.
+                    if (packageInfo.Package.Id.Equals("Microsoft.Framework.TestAdapter", StringComparison.OrdinalIgnoreCase) &&
+                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("xunit.runner.aspnet", StringComparison.OrdinalIgnoreCase)))
                     {
                         continue;
                     }
