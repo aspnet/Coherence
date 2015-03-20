@@ -250,9 +250,9 @@ namespace SanityCheck
                         continue;
                     }
 
-                    // Temporary workaround for xunit.runner.aspnet used in TestAdapter.
-                    if (packageInfo.Package.Id.Equals("Microsoft.Framework.TestAdapter", StringComparison.OrdinalIgnoreCase) &&
-                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("xunit.runner.aspnet", StringComparison.OrdinalIgnoreCase)))
+                    // Temporary workaround for TestAdapter used in xunit.runner.aspnet. 
+                    if (packageInfo.Package.Id.Equals("xunit.runner.aspnet", StringComparison.OrdinalIgnoreCase) &&
+                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("Microsoft.Framework.TestAdapter", StringComparison.OrdinalIgnoreCase)))
                     {
                         continue;
                     }
