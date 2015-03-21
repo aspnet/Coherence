@@ -250,7 +250,7 @@ namespace SanityCheck
                         continue;
                     }
 
-                    // Temporary workaround for TestAdapter used in xunit.runner.aspnet. 
+                    // Temporary workaround for TestHost used in xunit.runner.aspnet. 
                     if (packageInfo.Package.Id.Equals("xunit.runner.aspnet", StringComparison.OrdinalIgnoreCase) &&
                         packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("Microsoft.Framework.TestHost", StringComparison.OrdinalIgnoreCase)))
                     {
