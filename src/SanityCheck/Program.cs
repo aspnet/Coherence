@@ -47,18 +47,17 @@ namespace SanityCheck
                 "Entropy",
                 "latest-packages",
                 "Microsoft.Data.SQLite",
-                "WebFx",
                 "Data",
                 "System.Data.Common",
                 "DiagnosticsPages",
                 "HttpClient",
-                "kvm",
                 "dotnetsdk",
                 "IBC",
                 "Templates",
                 "Setup",
-                "DataCommon",
-                "SqlClient"
+                "SqlClient",
+                "NuGet.Packaging",
+                "NuGet.Versioning"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
