@@ -249,9 +249,9 @@ namespace SanityCheck
                         continue;
                     }
 
-                    // Temporary workaround for TestHost used in xunit.runner.aspnet. 
-                    if (packageInfo.Package.Id.Equals("xunit.runner.aspnet", StringComparison.OrdinalIgnoreCase) &&
-                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("Microsoft.Framework.TestHost", StringComparison.OrdinalIgnoreCase)))
+                    // Temporary workaround for xunit.runner.aspnet used in Microsoft.AspNet.Testing. 
+                    if (packageInfo.Package.Id.Equals("Microsoft.AspNet.Testing", StringComparison.OrdinalIgnoreCase) &&
+                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("xunit.runner.aspnet", StringComparison.OrdinalIgnoreCase)))
                     {
                         continue;
                     }
