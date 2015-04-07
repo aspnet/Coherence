@@ -47,6 +47,7 @@ namespace SanityCheck
                 "Entropy",
                 "latest-packages",
                 "Microsoft.Data.SQLite",
+                "DataCommon.SQLite",
                 "Data",
                 "System.Data.Common",
                 "DiagnosticsPages",
