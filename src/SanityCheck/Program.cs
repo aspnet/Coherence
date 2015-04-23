@@ -51,7 +51,7 @@ namespace SanityCheck
                 "System.Data.Common",
                 "DiagnosticsPages",
                 "HttpClient",
-                "dotnetsdk",
+                "dnvm",
                 "IBC",
                 "Templates",
                 "Setup",
@@ -59,7 +59,7 @@ namespace SanityCheck
                 "NuGet.Packaging",
                 "NuGet.Versioning",
                 "DNX-Linux",
-		"DNX-Darwin"
+                "DNX-Darwin"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
