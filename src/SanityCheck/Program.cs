@@ -39,27 +39,28 @@ namespace SanityCheck
 
             var packages = new Dictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
 
-            var projectsToSkip = new[] {
-                "MusicStore",
+            var projectsToSkip = new[]
+            {
                 "Coherence",
                 "Coherence-Signed",
-                "latest-dev",
+                "Data",
+                "DiagnosticsPages",
+                "dnvm",
+                "DNX-Darwin",
+                "DNX-Linux",
                 "Entropy",
+                "HttpClient",
+                "IBC",
+                "latest-dev",
                 "latest-packages",
                 "Microsoft.Data.SQLite",
-                "Data",
-                "System.Data.Common",
-                "DiagnosticsPages",
-                "HttpClient",
-                "dnvm",
-                "IBC",
-                "Templates",
-                "Setup",
-                "SqlClient",
+                "MusicStore",
                 "NuGet.Packaging",
                 "NuGet.Versioning",
-                "DNX-Linux",
-                "DNX-Darwin"
+                "Setup",
+                "SqlClient",
+                "System.Data.Common",
+                "Templates",
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
