@@ -58,7 +58,8 @@ namespace SanityCheck
                 "SqlClient",
                 "NuGet.Packaging",
                 "NuGet.Versioning",
-                "DNX-Linux"
+                "DNX-Linux",
+		"DNX-Darwin"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
