@@ -62,6 +62,7 @@ namespace SanityCheck
                 "SqlClient",
                 "System.Data.Common",
                 "Templates",
+                "WebSocketAbstractions",
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
