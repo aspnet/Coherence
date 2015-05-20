@@ -53,7 +53,7 @@ namespace SanityCheck
                 "IBC",
                 "latest-dev",
                 "latest-packages",
-                "Microsoft.Data.SQLite",
+                "DataCommon.SQLite",
                 "MusicStore",
                 "NuGet.Packaging",
                 "NuGet.Versioning",
