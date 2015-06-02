@@ -49,6 +49,7 @@ namespace SanityCheck
                 "DNX-Darwin",
                 "DNX-Linux",
                 "Entropy",
+                "EventNotification",
                 "HttpClient",
                 "IBC",
                 "latest-dev",
