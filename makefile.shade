@@ -34,7 +34,7 @@ use-standard-lifecycle
         {
             var versionsToDelete = Directory.EnumerateDirectories(package)
                                             .OrderByDescending(d => d, StringComparer.OrdinalIgnoreCase)
-                                            .Skip(1);
+                                            .Skip(3);
 
             foreach (var versionDir in versionsToDelete)
             {
