@@ -246,7 +246,7 @@ namespace SanityCheck
 
             foreach (var packageInfo in universe.Values)
             {
-                if (packageInfo.DependencyMismatches.Any())
+                if (!packageInfo.Success)
                 {
                     // Temporary workaround for FileSystemGlobbing used in Runtime.
                     if (packageInfo.Package.Id.Equals("Microsoft.Framework.Runtime", StringComparison.OrdinalIgnoreCase) &&
@@ -262,16 +262,31 @@ namespace SanityCheck
                         continue;
                     }
 
-                    WriteError("{0} has mismatched dependencies:", packageInfo.Package.GetFullName());
-
-                    foreach (var mismatch in packageInfo.DependencyMismatches)
+                    if (packageInfo.InvalidCoreCLRPackageReferences.Count > 0)
                     {
-                        WriteError("    Expected {0}({1}) but got {2}",
-                            mismatch.Dependency,
-                            (mismatch.TargetFramework == VersionUtility.UnsupportedFrameworkName ?
-                            "k10" :
-                            VersionUtility.GetShortFrameworkName(mismatch.TargetFramework)),
-                            mismatch.Info.Package.Version);
+                        WriteError("{0} has invalid package references:", packageInfo.Package.GetFullName());
+
+                        foreach (var invalidReference in packageInfo.InvalidCoreCLRPackageReferences)
+                        {
+                            WriteError("Reference {0}({1}) must be changed to be a frameworkAssembly.",
+                            invalidReference.Dependency,
+                            invalidReference.TargetFramework);
+                        }
+                    }
+
+                    if (packageInfo.DependencyMismatches.Count > 0)
+                    {
+                        WriteError("{0} has mismatched dependencies:", packageInfo.Package.GetFullName());
+
+                        foreach (var mismatch in packageInfo.DependencyMismatches)
+                        {
+                            WriteError("    Expected {0}({1}) but got {2}",
+                                mismatch.Dependency,
+                                (mismatch.TargetFramework == VersionUtility.UnsupportedFrameworkName ?
+                                "DNXCORE50" :
+                                VersionUtility.GetShortFrameworkName(mismatch.TargetFramework)),
+                                mismatch.Info.Package.Version);
+                        }
                     }
 
                     success = false;
@@ -319,12 +334,26 @@ namespace SanityCheck
                     PackageInfo dependencyPackageInfo;
                     if (universe.TryGetValue(dependency.Id, out dependencyPackageInfo))
                     {
-                        if (dependencyPackageInfo.Package.Version !=
+                        if (dependencyPackageInfo.IsCoreCLRPackage)
+                        {
+                            if (
+                                !string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
+                                !string.Equals(dependencySet.TargetFramework.Identifier, "DOTNET", StringComparison.OrdinalIgnoreCase))
+                            {
+                                packageInfo.InvalidCoreCLRPackageReferences.Add(new DependencyWithIssue
+                                {
+                                    Dependency = dependency,
+                                    TargetFramework = dependencySet.TargetFramework,
+                                    Info = dependencyPackageInfo
+                                });
+                            }
+                        }
+                        else if (dependencyPackageInfo.Package.Version !=
                             dependency.VersionSpec.MinVersion)
                         {
                             // Add a mismatch if the min version doesn't work out
                             // (we only really care about >= minVersion)
-                            packageInfo.DependencyMismatches.Add(new DependencyMismatch
+                            packageInfo.DependencyMismatches.Add(new DependencyWithIssue
                             {
                                 Dependency = dependency,
                                 TargetFramework = dependencySet.TargetFramework,
@@ -399,19 +428,23 @@ namespace SanityCheck
             {
                 get
                 {
-                    return DependencyMismatches.Count == 0;
+                    return DependencyMismatches.Count == 0 &&
+                        InvalidCoreCLRPackageReferences.Count == 0;
                 }
             }
 
-            public IList<DependencyMismatch> DependencyMismatches { get; set; }
+            public IList<DependencyWithIssue> DependencyMismatches { get; }
+
+            public IList<DependencyWithIssue> InvalidCoreCLRPackageReferences { get; }
 
             public PackageInfo()
             {
-                DependencyMismatches = new List<DependencyMismatch>();
+                DependencyMismatches = new List<DependencyWithIssue>();
+                InvalidCoreCLRPackageReferences = new List<DependencyWithIssue>();
             }
         }
 
-        public class DependencyMismatch
+        public class DependencyWithIssue
         {
             public PackageDependency Dependency { get; set; }
             public PackageInfo Info { get; set; }
