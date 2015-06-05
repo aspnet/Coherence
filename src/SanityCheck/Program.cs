@@ -433,9 +433,9 @@ namespace SanityCheck
                 }
             }
 
-            public IList<DependencyWithIssue> DependencyMismatches { get; }
+            public IList<DependencyWithIssue> DependencyMismatches { get; private set; }
 
-            public IList<DependencyWithIssue> InvalidCoreCLRPackageReferences { get; }
+            public IList<DependencyWithIssue> InvalidCoreCLRPackageReferences { get; private set; }
 
             public PackageInfo()
             {
