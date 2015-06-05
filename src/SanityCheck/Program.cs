@@ -176,6 +176,7 @@ namespace SanityCheck
             // so that parsing them won't both show up as unsupported
             const string DnxFrameworkIdentifier = "DNX";
             const string DnxCoreFrameworkIdentifier = "DNXCore";
+            const string NetPlatformFrameworkIdentifier = ".NETPlatform";
 
             var knownIdentifiers = GetDictionaryField("_knownIdentifiers");
             var identifierToFrameworkFolder = GetDictionaryField("_identifierToFrameworkFolder");
@@ -190,6 +191,7 @@ namespace SanityCheck
             {
                 identifierToFrameworkFolder[DnxFrameworkIdentifier] = "dnx";
                 identifierToFrameworkFolder[DnxCoreFrameworkIdentifier] = "dnxcore";
+                identifierToFrameworkFolder[NetPlatformFrameworkIdentifier] = "dotnet";
             }
         }
 
