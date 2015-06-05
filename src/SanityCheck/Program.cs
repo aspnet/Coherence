@@ -185,6 +185,7 @@ namespace SanityCheck
             {
                 knownIdentifiers["dnx"] = DnxFrameworkIdentifier;
                 knownIdentifiers["dnxcore"] = DnxCoreFrameworkIdentifier;
+                knownIdentifiers["dotnet"] = NetPlatformFrameworkIdentifier;
             }
 
             if (identifierToFrameworkFolder != null)
