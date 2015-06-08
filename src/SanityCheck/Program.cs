@@ -14,8 +14,6 @@ namespace SanityCheck
     {
         static int Main(string[] args)
         {
-            AddNewFrameworksToNuGet();
-
             if (args.Length < 6)
             {
                 Console.WriteLine("Usage: SanityCheck [dropFolder] [buildBranch] [outputPath] [symbolsOutputPath] [symbolSourcePath] [nugetExePath]");
@@ -167,33 +165,6 @@ namespace SanityCheck
             }
 
             return 0;
-        }
-
-        private static void AddNewFrameworksToNuGet()
-        {
-            // Super hacky way to work around known nuget frameworks
-            // Add DNX and DNX Core to the list of frameworks
-            // so that parsing them won't both show up as unsupported
-            const string DnxFrameworkIdentifier = "DNX";
-            const string DnxCoreFrameworkIdentifier = "DNXCore";
-            const string NetPlatformFrameworkIdentifier = ".NETPlatform";
-
-            var knownIdentifiers = GetDictionaryField("_knownIdentifiers");
-            var identifierToFrameworkFolder = GetDictionaryField("_identifierToFrameworkFolder");
-
-            if (knownIdentifiers != null)
-            {
-                knownIdentifiers["dnx"] = DnxFrameworkIdentifier;
-                knownIdentifiers["dnxcore"] = DnxCoreFrameworkIdentifier;
-                knownIdentifiers["dotnet"] = NetPlatformFrameworkIdentifier;
-            }
-
-            if (identifierToFrameworkFolder != null)
-            {
-                identifierToFrameworkFolder[DnxFrameworkIdentifier] = "dnx";
-                identifierToFrameworkFolder[DnxCoreFrameworkIdentifier] = "dnxcore";
-                identifierToFrameworkFolder[NetPlatformFrameworkIdentifier] = "dotnet";
-            }
         }
 
         private static IDictionary<string, string> GetDictionaryField(string fieldName)
