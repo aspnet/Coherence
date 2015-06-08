@@ -339,9 +339,8 @@ namespace SanityCheck
                     {
                         if (dependencyPackageInfo.IsCoreCLRPackage)
                         {
-                            if (
-                                !string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
-                                !string.Equals(dependencySet.TargetFramework.Identifier, "DOTNET", StringComparison.OrdinalIgnoreCase))
+                            if (!string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
+                                !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase))
                             {
                                 packageInfo.InvalidCoreCLRPackageReferences.Add(new DependencyWithIssue
                                 {
