@@ -35,7 +35,8 @@ namespace SanityCheck
                 return 1;
             }
 
-            var packages = new Dictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
+            var productPackages = new Dictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
+            var coreclrPackages = new Dictionary<string, List<PackageInfo>>(StringComparer.OrdinalIgnoreCase);
 
             var projectsToSkip = new[]
             {
@@ -106,18 +107,35 @@ namespace SanityCheck
                     Retry(() =>
                     {
                         var zipPackage = new ZipPackage(packageInfo.FullName);
-                        packages[zipPackage.Id] = new PackageInfo
+
+                        var info = new PackageInfo
                         {
                             Package = zipPackage,
                             PackagePath = packageInfo.FullName,
                             SymbolsPath = symbolsPath,
                             IsCoreCLRPackage = isCoreCLR
                         };
+
+                        if (isCoreCLR)
+                        {
+                            List<PackageInfo> clrPackages;
+                            if (!coreclrPackages.TryGetValue(zipPackage.Id, out clrPackages))
+                            {
+                                clrPackages = new List<PackageInfo>();
+                                coreclrPackages[zipPackage.Id] = clrPackages;
+                            }
+
+                            clrPackages.Add(info);
+                        }
+                        else
+                        {
+                            productPackages[zipPackage.Id] = info;
+                        }
                     });
                 }
             }
 
-            if (!VerifyAll(packages))
+            if (!VerifyAll(productPackages, coreclrPackages))
             {
                 return 1;
             }
@@ -138,7 +156,7 @@ namespace SanityCheck
                 Directory.CreateDirectory(sourceFilesPath);
             }
 
-            foreach (var packageInfo in packages.Values)
+            foreach (var packageInfo in productPackages.Values.Concat(coreclrPackages.SelectMany(pair => pair.Value)))
             {
                 var packagePath = Path.Combine(outputPath, Path.GetFileName(packageInfo.PackagePath));
 
@@ -204,21 +222,16 @@ namespace SanityCheck
                               .FirstOrDefault();
         }
 
-        private static bool VerifyAll(Dictionary<string, PackageInfo> universe)
+        private static bool VerifyAll(Dictionary<string, PackageInfo> productPackages, Dictionary<string, List<PackageInfo>> coreclrPackages)
         {
-            foreach (var packageInfo in universe.Values)
+            foreach (var productPackageInfo in productPackages.Values)
             {
-                if (packageInfo.IsCoreCLRPackage)
-                {
-                    continue;
-                }
-
-                Visit(packageInfo, universe);
+                Visit(productPackageInfo, productPackages, coreclrPackages);
             }
 
             bool success = true;
 
-            foreach (var packageInfo in universe.Values)
+            foreach (var packageInfo in productPackages.Values)
             {
                 if (!packageInfo.Success)
                 {
@@ -292,9 +305,9 @@ namespace SanityCheck
             }
         }
 
-        private static void Visit(PackageInfo packageInfo, Dictionary<string, PackageInfo> universe)
+        private static void Visit(PackageInfo productPackageInfo, Dictionary<string, PackageInfo> productPackages, Dictionary<string, List<PackageInfo>> coreclrPackages)
         {
-            foreach (var dependencySet in packageInfo.Package.DependencySets)
+            foreach (var dependencySet in productPackageInfo.Package.DependencySets)
             {
                 // Skip PCL frameworks for verification
                 if (IsPortableFramework(dependencySet.TargetFramework))
@@ -306,31 +319,33 @@ namespace SanityCheck
                 {
                     // For any dependency in the universe
                     PackageInfo dependencyPackageInfo;
-                    if (universe.TryGetValue(dependency.Id, out dependencyPackageInfo))
+                    if (productPackages.TryGetValue(dependency.Id, out dependencyPackageInfo))
                     {
-                        if (dependencyPackageInfo.IsCoreCLRPackage)
-                        {
-                            if (!string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
-                                !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase))
-                            {
-                                packageInfo.InvalidCoreCLRPackageReferences.Add(new DependencyWithIssue
-                                {
-                                    Dependency = dependency,
-                                    TargetFramework = dependencySet.TargetFramework,
-                                    Info = dependencyPackageInfo
-                                });
-                            }
-                        }
-                        else if (dependencyPackageInfo.Package.Version !=
-                            dependency.VersionSpec.MinVersion)
+                        if (dependencyPackageInfo.Package.Version !=
+                                                         dependency.VersionSpec.MinVersion)
                         {
                             // Add a mismatch if the min version doesn't work out
                             // (we only really care about >= minVersion)
-                            packageInfo.DependencyMismatches.Add(new DependencyWithIssue
+                            productPackageInfo.DependencyMismatches.Add(new DependencyWithIssue
                             {
                                 Dependency = dependency,
                                 TargetFramework = dependencySet.TargetFramework,
                                 Info = dependencyPackageInfo
+                            });
+                        }
+                    }
+                    else if (coreclrPackages.Keys.Contains(dependency.Id))
+                    {
+                        var coreclrDependency = coreclrPackages[dependency.Id].Last();
+
+                        if (!string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
+                            !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase))
+                        {
+                            productPackageInfo.InvalidCoreCLRPackageReferences.Add(new DependencyWithIssue
+                            {
+                                Dependency = dependency,
+                                TargetFramework = dependencySet.TargetFramework,
+                                Info = coreclrDependency
                             });
                         }
                     }
@@ -399,11 +414,7 @@ namespace SanityCheck
 
             public bool Success
             {
-                get
-                {
-                    return DependencyMismatches.Count == 0 &&
-                        InvalidCoreCLRPackageReferences.Count == 0;
-                }
+                get { return DependencyMismatches.Count == 0 && InvalidCoreCLRPackageReferences.Count == 0; }
             }
 
             public IList<DependencyWithIssue> DependencyMismatches { get; private set; }
