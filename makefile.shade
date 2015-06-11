@@ -22,35 +22,6 @@ default SYMBOLS_NUGET_EXE='${Environment.GetEnvironmentVariable("SYMBOLS_NUGET_E
 
 use-standard-lifecycle
 
-#delete-old-packages target="clean"
-    @{
-        if (string.IsNullOrEmpty(PACKAGE_DROP_SHARE))
-        {
-          Log.Warn("PACKAGE_DROP_SHARE environment varible is not set");
-          return;
-        }
-
-        foreach (var package in Directory.EnumerateDirectories(PACKAGE_DROP_SHARE))
-        {
-            var versionsToDelete = Directory.EnumerateDirectories(package)
-                                            .OrderByDescending(d => d, StringComparer.OrdinalIgnoreCase)
-                                            .Skip(3);
-
-            foreach (var versionDir in versionsToDelete)
-            {
-                Log.Info("Deleteing " + versionDir);
-                try
-                {
-                    Directory.Delete(versionDir, recursive: true);
-                }
-                catch (IOException)
-                {
-                    // Ignore.
-                }
-            }
-        }
-    }
-
 #compile-sanity-check target='compile'
   build projectFile='${Path.Combine(SANITY_CHECKER, "SanityCheck.csproj")}'
 
@@ -65,6 +36,32 @@ use-standard-lifecycle
   }
 
   exec program='${Path.Combine(SANITY_CHECKER, "bin", "Release", "SanityCheck.exe")}' commandline='${BUILD_SHARE} ${BUILD_BRANCH} ${BUILD_DIR} ${SYMBOLS_DIR} ${NUGET_SYMBOLS_SHARE} ${SYMBOLS_NUGET_EXE} '
+
+#nuget-install target='install' description='Publish all coherent packages'
+  @{
+      if (string.IsNullOrEmpty(PACKAGE_DROP_SHARE))
+      {
+          Log.Warn("PACKAGE_DROP_SHARE environment varible is not set");
+          return;
+      }
+
+      foreach (var package in Directory.EnumerateDirectories(PACKAGE_DROP_SHARE))
+      {
+          // delete every thing 
+          try 
+          {
+              Log.Info("Removing " + package);
+
+              // Check in the try run first to ensure correct packages are removed.
+              // Directory.Delete(package); 
+          }
+          catch (IOException) 
+          {
+              Log.Warn("Fail to delete " + package);
+          }
+      }
+  }
+  kpm-publish sourcePackagesDir='${BUILD_DIR}' targetPackagesDir='${PACKAGE_DROP_SHARE}'
 
 macro name='NuGetPush' source='string' nupkgFile='string'
   nuget-push
