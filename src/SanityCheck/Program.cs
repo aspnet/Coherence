@@ -337,7 +337,8 @@ namespace SanityCheck
                     {
                         var coreclrDependency = coreclrPackages[dependency.Id].Last();
 
-                        if (productPackageInfo.Package.GetFullName().Contains("Microsoft.CodeAnalysis.Common"))
+                        if (string.Equals(dependency.Id, "System.Collections.Immutable", StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(dependency.Id, "System.Reflection.Metadata", StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }
