@@ -337,6 +337,11 @@ namespace SanityCheck
                     {
                         var coreclrDependency = coreclrPackages[dependency.Id].Last();
 
+                        if (productPackageInfo.Package.GetFullName().Contains("Microsoft.CodeAnalysis.Common"))
+                        {
+                            continue;
+                        }
+
                         if (!string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
                             !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase))
                         {
