@@ -336,6 +336,12 @@ namespace SanityCheck
                     {
                         var coreclrDependency = coreclrPackages[dependency.Id].Last();
 
+                        if (string.Equals(dependency.Id, "System.Collections.Immutable", StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(dependency.Id, "System.Reflection.Metadata", StringComparison.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
                         if (!string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
                             !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase))
                         {
