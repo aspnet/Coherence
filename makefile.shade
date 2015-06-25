@@ -67,14 +67,14 @@ use-standard-lifecycle
           else
           {
               delete.Add(latestPackageFolder);
-              Console.WriteLine(string.Format("Project {0} doesn't exist in this Coherence build hence it will be deleted from {1}",
+              Log.Warn(string.Format("Project {0} doesn't exist in this Coherence build hence it will be deleted from {1}",
                   projectName, PACKAGE_DROP_SHARE));
           }
       }
 
       foreach (var d in delete)
       {
-          Console.WriteLine(string.Format("Delete folder {0}", d));
+          Log.Info(string.Format("Delete folder {0}", d));
 
           // Disable during dry run.
           // Directory.Delete(d, recursive: true);
