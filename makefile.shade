@@ -45,23 +45,41 @@ use-standard-lifecycle
           return;
       }
 
-      foreach (var package in Directory.EnumerateDirectories(PACKAGE_DROP_SHARE))
-      {
-          // delete every thing 
-          try 
-          {
-              Log.Info("Removing " + package);
+      var latestPackageFolders = Directory.GetDirectories(PACKAGE_DROP_SHARE);
+      var coherentPackageNames = Directory.GetFiles(BUILD_DIR, "*.nupkg").Select(p => Path.GetFileNameWithoutExtension(p));
 
-              // Check in the try run first to ensure correct packages are removed.
-              // Directory.Delete(package); 
-          }
-          catch (IOException) 
+      var delete = new List<string>();
+
+      foreach (var latestPackageFolder in latestPackageFolders)
+      {
+          var projectName = Path.GetFileName(latestPackageFolder);
+
+          var matchedVersion = new HashSet<string>(
+              coherentPackageNames
+                  .Where(packageName => packageName.IndexOf(projectName) == 0)
+                  .Select(packageName => packageName.Substring(projectName.Length + 1)));
+
+          if (matchedVersion.Any())
           {
-              Log.Warn("Fail to delete " + package);
+              delete.AddRange(Directory.GetDirectories(latestPackageFolder)
+                                       .Where(p => !matchedVersion.Contains(Path.GetFileName(p))));
+          }
+          else
+          {
+              delete.Add(latestPackageFolder);
+              Console.WriteLine(string.Format("Project {0} doesn't exist in this Coherence build hence it will be deleted from {1}",
+                  projectName, PACKAGE_DROP_SHARE));
           }
       }
+
+      foreach (var d in delete)
+      {
+          Console.WriteLine(string.Format("Delete folder {0}", d));
+
+          // Disable during dry run.
+          // Directory.Delete(d, recursive: true);
+      }
   }
-  kpm-publish sourcePackagesDir='${BUILD_DIR}' targetPackagesDir='${PACKAGE_DROP_SHARE}'
 
 macro name='NuGetPush' source='string' nupkgFile='string'
   nuget-push
