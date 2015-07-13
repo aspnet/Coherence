@@ -48,6 +48,7 @@ namespace SanityCheck
                 "DNX-Darwin",
                 "DNX-Linux",
                 "Entropy",
+                "Glimpse",
                 "IBC",
                 "latest-dev",
                 "latest-packages",
