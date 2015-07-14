@@ -56,6 +56,7 @@ namespace SanityCheck
                 "MusicStore",
                 "NuGet.Packaging",
                 "NuGet.Versioning",
+                "Roslyn",
                 "ServerTests",
                 "Setup",
                 "SqlClient",
