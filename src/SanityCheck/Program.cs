@@ -47,6 +47,7 @@ namespace SanityCheck
                 "dnvm",
                 "DNX-Darwin",
                 "DNX-Linux",
+                "docfx",
                 "Entropy",
                 "Glimpse",
                 "IBC",
