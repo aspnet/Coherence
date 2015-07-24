@@ -39,6 +39,8 @@ use-standard-lifecycle
 
 #nuget-install target='install' description='Publish all coherent packages'
   @{
+      Log.Info("Removing old packages from latest folder");
+
       if (string.IsNullOrEmpty(PACKAGE_DROP_SHARE))
       {
           Log.Warn("PACKAGE_DROP_SHARE environment varible is not set");
@@ -49,7 +51,6 @@ use-standard-lifecycle
       var coherentPackageNames = Directory.GetFiles(BUILD_DIR, "*.nupkg").Select(p => Path.GetFileNameWithoutExtension(p));
 
       var delete = new List<string>();
-
       foreach (var latestPackageFolder in latestPackageFolders)
       {
           var projectName = Path.GetFileName(latestPackageFolder);
