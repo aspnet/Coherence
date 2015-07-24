@@ -48,6 +48,7 @@ namespace SanityCheck
                 "DNX-Darwin",
                 "DNX-Linux",
                 "docfx",
+                "docfx-signed",
                 "Entropy",
                 "Glimpse",
                 "IBC",
