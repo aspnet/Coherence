@@ -51,7 +51,6 @@ namespace SanityCheck
                 "docfx-signed",
                 "Entropy",
                 "Glimpse",
-                "Helios",
                 "IBC",
                 "latest-dev",
                 "latest-packages",
