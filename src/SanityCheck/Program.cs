@@ -41,7 +41,9 @@ namespace SanityCheck
             var projectsToSkip = new[]
             {
                 "Coherence",
+                "Coherence-External",
                 "Coherence-Signed",
+                "Coherence-Signed-External",
                 "Data",
                 "DiagnosticsPages",
                 "dnvm",
