@@ -66,6 +66,7 @@ namespace SanityCheck
                 "SqlClient",
                 "System.Data.Common",
                 "Templates",
+                "WebHooks",
                 "WebSocketAbstractions",
             };
 
