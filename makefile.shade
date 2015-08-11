@@ -19,6 +19,7 @@ default DROP_SHARE='${Environment.GetEnvironmentVariable("DROP_SHARE")}'
 default PACKAGE_DROP_SHARE='${Environment.GetEnvironmentVariable("PACKAGE_DROP_SHARE")}'
 default NUGET_SYMBOLS_SHARE='${Environment.GetEnvironmentVariable("NUGET_SYMBOLS_SHARE")}'
 default SYMBOLS_NUGET_EXE='${Environment.GetEnvironmentVariable("SYMBOLS_NUGET_EXE")}'
+default PUSH_TO_NUGET='${ !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("NUGET_PUBLISH_FEED")) && !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("COHERENCE_PUSH_TO_NUGET")) }'
 
 use-standard-lifecycle
 
@@ -80,6 +81,8 @@ use-standard-lifecycle
           Directory.Delete(d, recursive: true);
       }
   }
+
+  nuget-resilient-publish sourcePackagesDir='${BUILD_DIR}' nugetFeed='${Environment.GetEnvironmentVariable("NUGET_PUBLISH_FEED")}' if='PUSH_TO_NUGET' 
 
 macro name='NuGetPush' source='string' nupkgFile='string'
   nuget-push
