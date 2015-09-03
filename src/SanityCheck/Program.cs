@@ -342,9 +342,14 @@ namespace SanityCheck
                     else if (coreclrPackages.Keys.Contains(dependency.Id))
                     {
                         var coreclrDependency = coreclrPackages[dependency.Id].Last();
+                        var dependenciesToIgnore = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                        {
+                            "System.Collections.Immutable",
+                            "System.Reflection.Metadata",
+                            "System.Diagnostics.Tracing.Telemetry"
+                        };
 
-                        if (string.Equals(dependency.Id, "System.Collections.Immutable", StringComparison.OrdinalIgnoreCase) ||
-                            string.Equals(dependency.Id, "System.Reflection.Metadata", StringComparison.OrdinalIgnoreCase))
+                        if (dependenciesToIgnore.Contains(dependency.Id))
                         {
                             continue;
                         }
