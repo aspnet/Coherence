@@ -66,6 +66,7 @@ namespace SanityCheck
                 "System.Data.Common",
                 "Templates",
                 "WebHooks",
+                "WebHooks-Signed",
                 "WebSocketAbstractions",
             };
 
