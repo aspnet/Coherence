@@ -49,6 +49,7 @@ namespace SanityCheck
                 "dnvm",
                 "DNX-Darwin",
                 "DNX-Linux",
+                "DnxTools",
                 "docfx",
                 "docfx-signed",
                 "Entropy",
