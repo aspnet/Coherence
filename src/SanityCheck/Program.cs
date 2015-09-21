@@ -54,6 +54,7 @@ namespace SanityCheck
                 "docfx-signed",
                 "Entropy",
                 "Glimpse",
+                "Helios",
                 "IBC",
                 "latest-dev",
                 "latest-packages",
@@ -248,7 +249,7 @@ namespace SanityCheck
                         continue;
                     }
 
-                    // Temporary workaround for xunit.runner.aspnet used in Microsoft.AspNet.Testing. 
+                    // Temporary workaround for xunit.runner.aspnet used in Microsoft.AspNet.Testing.
                     if (packageInfo.Package.Id.Equals("Microsoft.AspNet.Testing", StringComparison.OrdinalIgnoreCase) &&
                         packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("xunit.runner.aspnet", StringComparison.OrdinalIgnoreCase)))
                     {
@@ -411,7 +412,7 @@ namespace SanityCheck
 
         private static bool IsPortableFramework(FrameworkName framework)
         {
-            // The profile part has been verified in the ParseFrameworkName() method. 
+            // The profile part has been verified in the ParseFrameworkName() method.
             // By the time it is called here, it's guaranteed to be valid.
             // Thus we can ignore the profile part here
             return framework != null && ".NETPortable".Equals(framework.Identifier, StringComparison.OrdinalIgnoreCase);
