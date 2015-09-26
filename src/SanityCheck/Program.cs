@@ -349,7 +349,7 @@ namespace SanityCheck
                             "System.Collections.Immutable",
                             "System.Reflection.Metadata",
                             "System.Diagnostics.Tracing.Telemetry",
-                            "System.Numerics.Vector",
+                            "System.Numerics.Vectors",
                         };
 
                         if (dependenciesToIgnore.Contains(dependency.Id))
