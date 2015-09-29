@@ -55,6 +55,7 @@ namespace SanityCheck
                 "Entropy",
                 "Glimpse",
                 "Helios",
+                "HttpClient",
                 "IBC",
                 "latest-dev",
                 "latest-packages",
