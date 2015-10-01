@@ -71,6 +71,7 @@ namespace SanityCheck
                 "WebHooks",
                 "WebHooks-Signed",
                 "WebSocketAbstractions",
+                "xunit-performance"
             };
 
             foreach (var projectFolder in di.EnumerateDirectories())
@@ -208,6 +209,11 @@ namespace SanityCheck
         private static string FindLatest(DirectoryInfo projectFolder, string buildBranch)
         {
             var latestPath = Path.Combine(projectFolder.FullName, buildBranch);
+
+            if (!Directory.Exists(latestPath))
+            {
+                return latestPath;
+            }
 
             return new DirectoryInfo(latestPath)
                               .EnumerateDirectories()
