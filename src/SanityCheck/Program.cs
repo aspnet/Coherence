@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -250,8 +250,8 @@ namespace SanityCheck
                 if (!packageInfo.Success)
                 {
                     // Temporary workaround for FileSystemGlobbing used in Runtime.
-                    if (packageInfo.Package.Id.Equals("Microsoft.Framework.Runtime", StringComparison.OrdinalIgnoreCase) &&
-                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("Microsoft.Framework.FileSystemGlobbing", StringComparison.OrdinalIgnoreCase)))
+                    if (packageInfo.Package.Id.Equals("Microsoft.Extensions.Runtime", StringComparison.OrdinalIgnoreCase) &&
+                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("Microsoft.Extensions.FileSystemGlobbing", StringComparison.OrdinalIgnoreCase)))
                     {
                         continue;
                     }
