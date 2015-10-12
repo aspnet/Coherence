@@ -1,0 +1,16 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "NuGet.Core": "2.8.6",
+    "Microsoft.Extensions.CommandLineUtils.Sources": { "version": "1.0.0-*", "type": "build" }
+  },
+
+  "commands": {
+    "CoherenceBuild": "CoherenceBuild"
+  },
+
+  "frameworks": {
+    "dnx451": { }
+  }
+}
