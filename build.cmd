@@ -4,8 +4,8 @@ cd %~dp0
 SETLOCAL
 SET NUGET_VERSION=latest
 SET CACHED_NUGET=%LocalAppData%\NuGet\nuget.%NUGET_VERSION%.exe
-SET BUILDCMD_KOREBUILD_VERSION=""
-SET BUILDCMD_DNX_VERSION=""
+SET BUILDCMD_KOREBUILD_VERSION=
+SET BUILDCMD_DNX_VERSION=
 
 IF EXIST %CACHED_NUGET% goto copynuget
 echo Downloading latest version of NuGet.exe...
@@ -19,7 +19,7 @@ copy %CACHED_NUGET% .nuget\nuget.exe > nul
 
 :restore
 IF EXIST packages\Sake goto getdnx
-IF %BUILDCMD_KOREBUILD_VERSION%=="" (
+IF "%BUILDCMD_KOREBUILD_VERSION%"=="" (
     .nuget\nuget.exe install KoreBuild -ExcludeVersion -o packages -nocache -pre
 ) ELSE (
     .nuget\nuget.exe install KoreBuild -version %BUILDCMD_KOREBUILD_VERSION% -ExcludeVersion -o packages -nocache -pre
@@ -28,10 +28,10 @@ IF %BUILDCMD_KOREBUILD_VERSION%=="" (
 .nuget\NuGet.exe install Sake -ExcludeVersion -Source https://www.nuget.org/api/v2/ -Out packages
 
 :getdnx
+IF "%BUILDCMD_DNX_VERSION%"=="" (
+    SET BUILDCMD_DNX_VERSION=latest
+)
 IF "%SKIP_DNX_INSTALL%"=="" (
-    IF "%BUILDCMD_DNX_VERSION%"=="" (
-        BUILDCMD_DNX_VERSION=latest
-    )
     CALL packages\KoreBuild\build\dnvm install %BUILDCMD_DNX_VERSION% -runtime CLR -arch x86 -alias default
 ) ELSE (
     CALL packages\KoreBuild\build\dnvm use default -runtime CLR -arch x86
