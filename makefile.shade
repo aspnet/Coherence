@@ -36,7 +36,7 @@ use-standard-lifecycle
         return;
       }
 
-      Directory.CreateDirectory(TARGET_DIR);
+      Directory.CreateDirectory(BUILD_DIR);
    }
 
   var args = '--drop-folder ${BUILD_SHARE} --build-branch ${BUILD_BRANCH} --output-path ${BUILD_DIR} --symbols-source-path ${SYMBOLS_DIR} --symbols-output-path ${NUGET_SYMBOLS_SHARE} --symbols-nuget-exe ${SYMBOLS_NUGET_EXE} --nuget-publish-feed ${NUGET_PUBLISH_FEED} --apikey ${APIKEY}'
