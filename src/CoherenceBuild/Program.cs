@@ -209,7 +209,7 @@ namespace CoherenceBuild
                     action();
                     break;
                 }
-                catch (FileNotFoundException ex)
+                catch
                 {
                     attempts--;
 
@@ -218,7 +218,6 @@ namespace CoherenceBuild
                         throw;
                     }
 
-                    Console.WriteLine(ex);
                     Console.WriteLine("Retrying...");
                     Thread.Sleep(3000);
                 }
