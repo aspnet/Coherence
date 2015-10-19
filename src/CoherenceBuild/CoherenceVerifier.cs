@@ -105,7 +105,7 @@ namespace CoherenceBuild
                         {
                             "System.Collections.Immutable",
                             "System.Reflection.Metadata",
-                            "System.Diagnostics.Tracing.Telemetry",
+                            "System.Diagnostics.DiagnosticSource",
                             "System.Numerics.Vectors",
                         };
 
