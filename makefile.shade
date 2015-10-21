@@ -82,6 +82,12 @@ use-standard-lifecycle
       {
           Log.Info(string.Format("Delete folder {0}", d));
 
-          Directory.Delete(d, recursive: true);
+          try 
+          {
+              Directory.Delete(d, recursive: true);
+          }
+          catch
+          {
+          }
       }
   }

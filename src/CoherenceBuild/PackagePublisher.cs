@@ -80,26 +80,17 @@ namespace CoherenceBuild
             var packagesToPushInOrder = Enumerable.Concat(
                  processResult.CoreCLRPackages.SelectMany(p => p.Value),
                  processResult.ProductPackages.OrderBy(p => p.Value.Degree).Select(p => p.Value));
-
-            var semaphore = new SemaphoreSlim(8);
-            var timeSpan = TimeSpan.FromMinutes(5);
-            var tasks = packagesToPushInOrder.Select(package =>
-                Task.Run(async () =>
+            
+            foreach (var package in packagesToPushInOrder)
+            {
+                Console.WriteLine($"Publishing package {package.Package}");
+                Program.Retry(() =>
                 {
-                    await semaphore.WaitAsync(timeSpan);
-
-                    Console.WriteLine($"Publishing package {package.Package}");
-                    Program.Retry(() =>
-                    {
-                        var length = new FileInfo(package.PackagePath).Length;
-                        server.PushPackage(apiKey, new PushLocalPackage(package.PackagePath), length, (int)timeSpan.TotalMilliseconds, disableBuffering: false);
-                    });
-                    Console.WriteLine($"Done publishing package {package.Package}");
-
-                    semaphore.Release();
-                })).ToArray();
-
-            Task.WaitAll(tasks);
+                    var length = new FileInfo(package.PackagePath).Length;
+                    server.PushPackage(apiKey, new PushLocalPackage(package.PackagePath), length, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, disableBuffering: false);
+                });
+                Console.WriteLine($"Done publishing package {package.Package}");
+            }
         }
 
         private class PushLocalPackage : LocalPackage

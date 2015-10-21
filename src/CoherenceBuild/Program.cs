@@ -201,7 +201,7 @@ namespace CoherenceBuild
 
         public static void Retry(Action action)
         {
-            int attempts = 3;
+            int attempts = 10;
             while (true)
             {
                 try
