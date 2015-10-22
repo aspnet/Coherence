@@ -57,6 +57,7 @@ namespace CoherenceBuild
             var symbolsNuGetExe = app.Option("--symbols-nuget-exe", "Symbols NuGet exe", CommandOptionType.SingleValue);
             var nugetPublishFeed = app.Option("--nuget-publish-feed", "Feed to push packages to", CommandOptionType.SingleValue);
             var apiKey = app.Option("--apikey", "NuGet API Key", CommandOptionType.SingleValue);
+            var ciVolatileShare = app.Option("--ci-volatile-share", "CI Volatile share", CommandOptionType.SingleValue);
 
             app.OnExecute(() =>
             {
@@ -75,16 +76,18 @@ namespace CoherenceBuild
                 }
 
                 PackagePublisher.PublishSymbolsPackages(
-                    outputPath.Value(), 
-                    symbolsOutputPath.Value(), 
-                    symbolSourcePath.Value(), 
-                    symbolsNuGetExe.Value(), 
+                    outputPath.Value(),
+                    symbolsOutputPath.Value(),
+                    symbolSourcePath.Value(),
+                    symbolsNuGetExe.Value(),
                     processResult);
 
                 if (nugetPublishFeed.HasValue())
                 {
                     PackagePublisher.PublishNuGetPackages(processResult, nugetPublishFeed.Value(), apiKey.Value());
                 }
+
+                CIVolatileFeedPublisher.CleanupVolatileFeed(processResult, ciVolatileShare.Value());
 
                 return 0;
             });

@@ -39,55 +39,5 @@ use-standard-lifecycle
       Directory.CreateDirectory(BUILD_DIR);
    }
 
-  var args = '--drop-folder ${BUILD_SHARE} --build-branch ${BUILD_BRANCH} --output-path ${BUILD_DIR} --symbols-source-path ${SYMBOLS_DIR} --symbols-output-path ${NUGET_SYMBOLS_SHARE} --symbols-nuget-exe ${SYMBOLS_NUGET_EXE} --nuget-publish-feed ${NUGET_PUBLISH_FEED} --apikey ${APIKEY}'
+  var args = '--drop-folder ${BUILD_SHARE} --build-branch ${BUILD_BRANCH} --output-path ${BUILD_DIR} --symbols-source-path ${SYMBOLS_DIR} --symbols-output-path ${NUGET_SYMBOLS_SHARE} --symbols-nuget-exe ${SYMBOLS_NUGET_EXE} --nuget-publish-feed ${NUGET_PUBLISH_FEED} --apikey ${APIKEY} --ci-volatile-share ${PACKAGE_DROP_SHARE}'
   exec program='cmd' commandline='/C dnx CoherenceBuild ${args}' workingdir='${COHERENCE_BUILD_PROJ}'
-
-#clean-ci-packages target='package'
-  @{
-      Log.Info("Removing old packages from latest folder");
-
-      if (string.IsNullOrEmpty(PACKAGE_DROP_SHARE))
-      {
-          Log.Warn("PACKAGE_DROP_SHARE environment varible is not set");
-          return;
-      }
-
-      var latestPackageFolders = Directory.GetDirectories(PACKAGE_DROP_SHARE);
-      var coherentPackageNames = Directory.GetFiles(BUILD_DIR, "*.nupkg").Select(p => Path.GetFileNameWithoutExtension(p));
-
-      var delete = new List<string>();
-      foreach (var latestPackageFolder in latestPackageFolders)
-      {
-          var projectName = Path.GetFileName(latestPackageFolder);
-
-          var matchedVersion = new HashSet<string>(
-              coherentPackageNames
-                  .Where(packageName => packageName.IndexOf(projectName) == 0)
-                  .Select(packageName => packageName.Substring(projectName.Length + 1)));
-
-          if (matchedVersion.Any())
-          {
-              delete.AddRange(Directory.GetDirectories(latestPackageFolder)
-                                       .Where(p => !matchedVersion.Contains(Path.GetFileName(p))));
-          }
-          else
-          {
-              delete.Add(latestPackageFolder);
-              Log.Warn(string.Format("Project {0} doesn't exist in this Coherence build hence it will be deleted from {1}",
-                  projectName, PACKAGE_DROP_SHARE));
-          }
-      }
-
-      foreach (var d in delete)
-      {
-          Log.Info(string.Format("Delete folder {0}", d));
-
-          try 
-          {
-              Directory.Delete(d, recursive: true);
-          }
-          catch
-          {
-          }
-      }
-  }
