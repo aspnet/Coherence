@@ -74,6 +74,12 @@ namespace CoherenceBuild
             {
                 foreach (var dependencySet in productPackageInfo.Package.DependencySets)
                 {
+                    // If the package doens't target any frameworks, just accept it
+                    if (dependencySet.TargetFramework == null)
+                    {
+                        continue;
+                    }
+
                     // Skip PCL frameworks for verification
                     if (IsPortableFramework(dependencySet.TargetFramework))
                     {
