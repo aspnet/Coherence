@@ -70,63 +70,70 @@ namespace CoherenceBuild
 
         private static void Visit(PackageInfo productPackageInfo, ProcessResult result)
         {
-            foreach (var dependencySet in productPackageInfo.Package.DependencySets)
+            try
             {
-                // Skip PCL frameworks for verification
-                if (IsPortableFramework(dependencySet.TargetFramework))
+                foreach (var dependencySet in productPackageInfo.Package.DependencySets)
                 {
-                    continue;
-                }
-
-                foreach (var dependency in dependencySet.Dependencies)
-                {
-                    // For any dependency in the universe
-                    PackageInfo dependencyPackageInfo;
-                    if (result.ProductPackages.TryGetValue(dependency.Id, out dependencyPackageInfo))
+                    // Skip PCL frameworks for verification
+                    if (IsPortableFramework(dependencySet.TargetFramework))
                     {
-                        productPackageInfo.ProductDependencies.Add(dependencyPackageInfo);
+                        continue;
+                    }
 
-                        if (dependencyPackageInfo.Package.Version != dependency.VersionSpec.MinVersion)
+                    foreach (var dependency in dependencySet.Dependencies)
+                    {
+                        // For any dependency in the universe
+                        PackageInfo dependencyPackageInfo;
+                        if (result.ProductPackages.TryGetValue(dependency.Id, out dependencyPackageInfo))
                         {
-                            // Add a mismatch if the min version doesn't work out
-                            // (we only really care about >= minVersion)
-                            productPackageInfo.DependencyMismatches.Add(new DependencyWithIssue
+                            productPackageInfo.ProductDependencies.Add(dependencyPackageInfo);
+
+                            if (dependencyPackageInfo.Package.Version != dependency.VersionSpec.MinVersion)
                             {
-                                Dependency = dependency,
-                                TargetFramework = dependencySet.TargetFramework,
-                                Info = dependencyPackageInfo
-                            });
+                                // Add a mismatch if the min version doesn't work out
+                                // (we only really care about >= minVersion)
+                                productPackageInfo.DependencyMismatches.Add(new DependencyWithIssue
+                                {
+                                    Dependency = dependency,
+                                    TargetFramework = dependencySet.TargetFramework,
+                                    Info = dependencyPackageInfo
+                                });
+                            }
+                        }
+                        else if (result.CoreCLRPackages.Keys.Contains(dependency.Id))
+                        {
+                            var coreclrDependency = result.CoreCLRPackages[dependency.Id].Last();
+                            var dependenciesToIgnore = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+                            {
+                                "System.Collections.Immutable",
+                                "System.Reflection.Metadata",
+                                "System.Diagnostics.DiagnosticSource",
+                                "System.Numerics.Vectors",
+                            };
+
+                            if (dependenciesToIgnore.Contains(dependency.Id))
+                            {
+                                continue;
+                            }
+                            if (!string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
+                                !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase) &&
+                                !string.Equals(dependencySet.TargetFramework.Identifier, ".NETCore", StringComparison.OrdinalIgnoreCase))
+                            {
+                                productPackageInfo.InvalidCoreCLRPackageReferences.Add(new DependencyWithIssue
+                                {
+                                    Dependency = dependency,
+                                    TargetFramework = dependencySet.TargetFramework,
+                                    Info = coreclrDependency
+                                });
+                            }
                         }
                     }
-                    else if (result.CoreCLRPackages.Keys.Contains(dependency.Id))
-                    {
-                        var coreclrDependency = result.CoreCLRPackages[dependency.Id].Last();
-                        var dependenciesToIgnore = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                        {
-                            "System.Collections.Immutable",
-                            "System.Reflection.Metadata",
-                            "System.Diagnostics.DiagnosticSource",
-                            "System.Numerics.Vectors",
-                        };
-
-                        if (dependenciesToIgnore.Contains(dependency.Id))
-                        {
-                            continue;
-                        }
-
-                        if (!string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
-                            !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase) &&
-                            !string.Equals(dependencySet.TargetFramework.Identifier, ".NETCore", StringComparison.OrdinalIgnoreCase))
-                        {
-                            productPackageInfo.InvalidCoreCLRPackageReferences.Add(new DependencyWithIssue
-                            {
-                                Dependency = dependency,
-                                TargetFramework = dependencySet.TargetFramework,
-                                Info = coreclrDependency
-                            });
-                        }
-                    }
                 }
+            }
+            catch
+            {
+                Log.WriteError($"Unable to verify package {productPackageInfo.Package.GetFullName()}");
+                throw;
             }
         }
 
