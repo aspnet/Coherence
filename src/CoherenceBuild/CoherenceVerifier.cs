@@ -112,9 +112,10 @@ namespace CoherenceBuild
                             var dependenciesToIgnore = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                             {
                                 "System.Collections.Immutable",
-                                "System.Reflection.Metadata",
                                 "System.Diagnostics.DiagnosticSource",
                                 "System.Numerics.Vectors",
+                                "System.Reflection.Metadata",
+                                "System.Text.Encodings.Web",
                             };
 
                             if (dependenciesToIgnore.Contains(dependency.Id))
