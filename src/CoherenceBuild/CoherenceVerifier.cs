@@ -124,7 +124,8 @@ namespace CoherenceBuild
                             }
                             if (!string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
                                 !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase) &&
-                                !string.Equals(dependencySet.TargetFramework.Identifier, ".NETCore", StringComparison.OrdinalIgnoreCase))
+                                !string.Equals(dependencySet.TargetFramework.Identifier, ".NETCore", StringComparison.OrdinalIgnoreCase) &&
+                                !string.Equals(dependencySet.TargetFramework.Identifier, "UAP10.0", StringComparison.OrdinalIgnoreCase))
                             {
                                 productPackageInfo.InvalidCoreCLRPackageReferences.Add(new DependencyWithIssue
                                 {
