@@ -79,17 +79,22 @@ namespace CoherenceBuild
             var packagesToPushInOrder = Enumerable.Concat(
                  processResult.CoreCLRPackages.SelectMany(p => p.Value),
                  processResult.ProductPackages.OrderBy(p => p.Value.Degree).Select(p => p.Value));
-            
-            foreach (var package in packagesToPushInOrder)
+
+            Parallel.ForEach(
+                packagesToPushInOrder,
+                new ParallelOptions { MaxDegreeOfParallelism = 4 },
+                package =>
             {
-                Console.WriteLine($"Publishing package {package.Package}");
+                int attempt = 0;
                 Program.Retry(() =>
                 {
+                    attempt++;
+                    Console.WriteLine($"Attempting to publishing package {package.Package} ({attempt})");
                     var length = new FileInfo(package.PackagePath).Length;
                     server.PushPackage(apiKey, new PushLocalPackage(package.PackagePath), length, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, disableBuffering: false);
                 });
                 Console.WriteLine($"Done publishing package {package.Package}");
-            }
+            });
         }
 
         private class PushLocalPackage : LocalPackage
