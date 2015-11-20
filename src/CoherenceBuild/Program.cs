@@ -70,7 +70,8 @@ namespace CoherenceBuild
                 }
 
                 var processResult = ReadPackagesToProcess(di, buildBranch.Value());
-                if (!CoherenceVerifier.VerifyAll(processResult))
+                var disableCoherenceCheck = Envirornment.GetEnvironmentVariable("DISABLE_COHERENCE_CHECK") == "true";
+                if (!disableCoherenceCheck && !CoherenceVerifier.VerifyAll(processResult))
                 {
                     return 1;
                 }
