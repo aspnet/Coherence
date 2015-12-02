@@ -2,7 +2,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NuGet.Core": "2.8.6",
+    "NuGet.Core": "2.10.1",
     "Microsoft.Extensions.CommandLineUtils.Sources": { "version": "1.0.0-*", "type": "build" }
   },
 
