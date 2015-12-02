@@ -1,55 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using NuGet;
 
 namespace CoherenceBuild
 {
     public static class CIVolatileFeedPublisher
     {
         public static void CleanupVolatileFeed(
-            ProcessResult processResult,
+            string outputPackagesDir,
             string volatileShare)
         {
-            var expandedPackageRepository = new ExpandedPackageRepository(new PhysicalFileSystem(volatileShare));
-            var packagesToDelete = new List<IPackage>();
-            foreach (var package in expandedPackageRepository.GetPackages())
-            {
-                List<PackageInfo> coherentPackageInfos;
-                PackageInfo coherentPackageInfo;
-                if (processResult.CoreCLRPackages.TryGetValue(package.Id, out coherentPackageInfos))
-                {
-                    if (coherentPackageInfos.Any(c => c.Package.Version <= package.Version))
-                    {
-                        // Allow packages in the volatile share to be higer than the version that is coherent.
-                        // When we have multiple CoreCLR versions, only delete it if it is lower than all packages
-                        // for that id.
-                        continue;
-                    }
-                }
-                else if (processResult.ProductPackages.TryGetValue(package.Id, out coherentPackageInfo))
-                {
-                    if (coherentPackageInfo.Package.Version <= package.Version)
-                    {
-                        continue;
-                    }
-                }
+            var latestPackageFolders = Directory.GetDirectories(volatileShare);
+            var coherentPackageNames = Directory.GetFiles(outputPackagesDir, "*.nupkg")
+                .Select(p => Path.GetFileNameWithoutExtension(p));
 
-                // The package in the volatile share is older than the coherent package or is no longer being published.
-                packagesToDelete.Add(package);
+            var delete = new List<string>();
+            foreach (var latestPackageFolder in latestPackageFolders)
+            {
+                var projectName = Path.GetFileName(latestPackageFolder);
+
+                var matchedVersion = new HashSet<string>(
+                    coherentPackageNames
+                        .Where(packageName => packageName.IndexOf(projectName) == 0)
+                        .Select(packageName => packageName.Substring(projectName.Length + 1)));
+
+                if (matchedVersion.Any())
+                {
+                    delete.AddRange(Directory.GetDirectories(latestPackageFolder)
+                                            .Where(p => !matchedVersion.Contains(Path.GetFileName(p))));
+                }
+                else
+                {
+                    delete.Add(latestPackageFolder);
+                    Console.WriteLine("Project {0} doesn't exist in this Coherence build hence it will be deleted from {1}",
+                        projectName, outputPackagesDir);
+                }
             }
 
-
-            for (var i = 0; i < packagesToDelete.Count; i++)
+            foreach (var d in delete)
             {
+                Console.WriteLine(string.Format("Delete folder {0}", d));
+
                 try
                 {
-                    Console.WriteLine("Deleting package " + packagesToDelete[i]);
-                    expandedPackageRepository.RemovePackage(packagesToDelete[i]);
+                    Directory.Delete(d, recursive: true);
                 }
                 catch
                 {
-                    // No-op
                 }
             }
         }

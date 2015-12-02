@@ -90,7 +90,7 @@ namespace CoherenceBuild
                     PackagePublisher.PublishNuGetPackages(processResult, nugetPublishFeed.Value(), apiKey.Value());
                 }
 
-                CIVolatileFeedPublisher.CleanupVolatileFeed(processResult, ciVolatileShare.Value());
+                CIVolatileFeedPublisher.CleanupVolatileFeed(outputPath.Value(), ciVolatileShare.Value());
 
                 return 0;
             });
