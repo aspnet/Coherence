@@ -116,6 +116,8 @@ namespace CoherenceBuild
                                 "System.Numerics.Vectors",
                                 "System.Reflection.Metadata",
                                 "System.Text.Encodings.Web",
+                                "System.Runtime.InteropServices.RuntimeInformation",
+                                "Microsoft.IdentityModel.Protocols.OpenIdConnect"
                             };
 
                             if (dependenciesToIgnore.Contains(dependency.Id))
