@@ -23,12 +23,18 @@ namespace CoherenceBuild
                 var matchedVersion = new HashSet<string>(
                     coherentPackageNames
                         .Where(packageName => packageName.IndexOf(projectName) == 0)
-                        .Select(packageName => packageName.Substring(projectName.Length + 1)));
+                        .Select(packageName => packageName.Substring(projectName.Length + 1)),
+                    StringComparer.OrdinalIgnoreCase);
 
                 if (matchedVersion.Any())
                 {
-                    delete.AddRange(Directory.GetDirectories(latestPackageFolder)
-                                            .Where(p => !matchedVersion.Contains(Path.GetFileName(p))));
+                    // Retain all versions of packages published since the Coherent package was published.
+                    var directoryInfo = new DirectoryInfo(latestPackageFolder);
+                    var versionsToDelete = directoryInfo.EnumerateDirectories()
+                        .OrderBy(d => d.Name, StringComparer.OrdinalIgnoreCase)
+                        .TakeWhile(d => !matchedVersion.Contains(d.Name))
+                        .Select(d => d.FullName);
+                    delete.AddRange(versionsToDelete);
                 }
                 else
                 {
