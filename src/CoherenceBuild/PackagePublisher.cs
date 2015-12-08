@@ -25,9 +25,7 @@ namespace CoherenceBuild
             Directory.CreateDirectory(pdbOutputPath);
             Directory.CreateDirectory(sourceFilesPath);
 
-            var packagesToCopy = Enumerable.Concat(
-                processResult.CoreCLRPackages.SelectMany(p => p.Value),
-                processResult.ProductPackages.Select(p => p.Value));
+            var packagesToCopy = processResult.AllPackages.Values;
 
             Parallel.ForEach(packagesToCopy, new ParallelOptions { MaxDegreeOfParallelism = 4 }, packageInfo =>
             {
@@ -77,7 +75,7 @@ namespace CoherenceBuild
         {
             var server = new PackageServer(feed, "Custom DNX");
             var packagesToPushInOrder = Enumerable.Concat(
-                 processResult.CoreCLRPackages.SelectMany(p => p.Value),
+                 processResult.CoreCLRPackages.Values,
                  processResult.ProductPackages.OrderBy(p => p.Value.Degree).Select(p => p.Value));
 
             Parallel.ForEach(
