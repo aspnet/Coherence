@@ -155,19 +155,14 @@ namespace CoherenceBuild
 
                         if (isCoreCLR)
                         {
-                            List<PackageInfo> clrPackages;
-                            if (!processResult.CoreCLRPackages.TryGetValue(zipPackage.Id, out clrPackages))
-                            {
-                                clrPackages = new List<PackageInfo>();
-                                processResult.CoreCLRPackages[zipPackage.Id] = clrPackages;
-                            }
-
-                            clrPackages.Add(info);
+                            processResult.CoreCLRPackages[zipPackage.Id] = info;
                         }
                         else
                         {
                             processResult.ProductPackages[zipPackage.Id] = info;
                         }
+
+                        processResult.AllPackages[zipPackage.Id] = info;
                     });
                 }
             }

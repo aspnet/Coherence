@@ -88,27 +88,33 @@ namespace CoherenceBuild
 
                     foreach (var dependency in dependencySet.Dependencies)
                     {
-                        // For any dependency in the universe
                         PackageInfo dependencyPackageInfo;
-                        if (result.ProductPackages.TryGetValue(dependency.Id, out dependencyPackageInfo))
+                        if (!result.AllPackages.TryGetValue(dependency.Id, out dependencyPackageInfo))
+                        {
+                            // External dependency
+                            continue;
+                        }
+
+                        if (dependencyPackageInfo.Package.Version != dependency.VersionSpec.MinVersion)
+                        {
+                            // For any dependency in the universe
+                            // Add a mismatch if the min version doesn't work out
+                            // (we only really care about >= minVersion)
+                            productPackageInfo.DependencyMismatches.Add(new DependencyWithIssue
+                            {
+                                Dependency = dependency,
+                                TargetFramework = dependencySet.TargetFramework,
+                                Info = dependencyPackageInfo
+                            });
+                        }
+
+                        if (result.ProductPackages.ContainsKey(dependency.Id))
                         {
                             productPackageInfo.ProductDependencies.Add(dependencyPackageInfo);
-
-                            if (dependencyPackageInfo.Package.Version != dependency.VersionSpec.MinVersion)
-                            {
-                                // Add a mismatch if the min version doesn't work out
-                                // (we only really care about >= minVersion)
-                                productPackageInfo.DependencyMismatches.Add(new DependencyWithIssue
-                                {
-                                    Dependency = dependency,
-                                    TargetFramework = dependencySet.TargetFramework,
-                                    Info = dependencyPackageInfo
-                                });
-                            }
                         }
-                        else if (result.CoreCLRPackages.Keys.Contains(dependency.Id))
+
+                        if (result.CoreCLRPackages.ContainsKey(dependency.Id))
                         {
-                            var coreclrDependency = result.CoreCLRPackages[dependency.Id].Last();
                             var dependenciesToIgnore = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                             {
                                 "System.Collections.Immutable",
@@ -133,7 +139,7 @@ namespace CoherenceBuild
                                 {
                                     Dependency = dependency,
                                     TargetFramework = dependencySet.TargetFramework,
-                                    Info = coreclrDependency
+                                    Info = dependencyPackageInfo
                                 });
                             }
                         }

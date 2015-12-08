@@ -8,7 +8,10 @@ namespace CoherenceBuild
         public Dictionary<string, PackageInfo> ProductPackages { get; } =
             new Dictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
 
-        public Dictionary<string, List<PackageInfo>> CoreCLRPackages { get; } =
-            new Dictionary<string, List<PackageInfo>>(StringComparer.OrdinalIgnoreCase);
+        public Dictionary<string, PackageInfo> CoreCLRPackages { get; } =
+            new Dictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
+
+        public Dictionary<string, PackageInfo> AllPackages { get; } =
+            new Dictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
     }
 }
