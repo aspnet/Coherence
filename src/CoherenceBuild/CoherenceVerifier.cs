@@ -97,6 +97,17 @@ namespace CoherenceBuild
 
                         if (dependencyPackageInfo.Package.Version != dependency.VersionSpec.MinVersion)
                         {
+                            if (result.CoreCLRPackages.ContainsKey(dependency.Id))
+                            {
+                                if (
+                                    !string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
+                                    !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    // For CoreCLR packages, only verify if this is DNXCORE50
+                                    continue;
+                                }
+                            }
+
                             // For any dependency in the universe
                             // Add a mismatch if the min version doesn't work out
                             // (we only really care about >= minVersion)
