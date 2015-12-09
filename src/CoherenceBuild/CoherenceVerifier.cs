@@ -106,6 +106,12 @@ namespace CoherenceBuild
                                     // For CoreCLR packages, only verify if this is DNXCORE50
                                     continue;
                                 }
+
+                                if (dependency.Id == "System.Collections.Immutable")
+                                {
+                                    // EF depends on RTM build of System.Collections.Immutable.
+                                    continue;
+                                }
                             }
 
                             // For any dependency in the universe
