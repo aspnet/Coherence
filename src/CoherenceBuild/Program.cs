@@ -47,7 +47,8 @@ namespace CoherenceBuild
             "WebSocketAbstractions",
             "xunit-performance",
             "Xunit",
-            "Benchmarks"
+            "Benchmarks",
+            "Performance",
         };
 
         static int Main(string[] args)
