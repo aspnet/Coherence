@@ -46,7 +46,8 @@ namespace CoherenceBuild
             "WebHooks-Signed",
             "WebSocketAbstractions",
             "xunit-performance",
-            "Xunit"
+            "Xunit",
+            "Benchmarks"
         };
 
         static int Main(string[] args)
