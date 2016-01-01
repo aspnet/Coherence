@@ -145,6 +145,7 @@ namespace CoherenceBuild
                                 "System.Numerics.Vectors",
                                 "System.Reflection.Metadata",
                                 "System.Text.Encodings.Web",
+                                "System.Threading.Tasks.Extensions",
                                 "System.Buffers",
                                 "System.Runtime.InteropServices.RuntimeInformation",
                                 "Microsoft.NETCore.Platforms",
