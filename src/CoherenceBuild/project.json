@@ -3,7 +3,7 @@
 
   "dependencies": {
     "NuGet.Core": "2.10.1",
-    "Microsoft.Extensions.CommandLineUtils.Sources": { "version": "1.0.0-*", "type": "build" }
+    "Microsoft.Extensions.CommandLineUtils": "1.0.0-*"
   },
 
   "commands": {
