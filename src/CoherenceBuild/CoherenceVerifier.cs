@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Versioning;
@@ -27,8 +27,8 @@ namespace CoherenceBuild
                         continue;
                     }
 
-                    // Temporary workaround for xunit.runner.aspnet used in Microsoft.AspNet.Testing.
-                    if (packageInfo.Package.Id.Equals("Microsoft.AspNet.Testing", StringComparison.OrdinalIgnoreCase) &&
+                    // Temporary workaround for xunit.runner.aspnet used in Microsoft.AspNetCore.Testing.
+                    if (packageInfo.Package.Id.Equals("Microsoft.AspNetCore.Testing", StringComparison.OrdinalIgnoreCase) &&
                         packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("xunit.runner.aspnet", StringComparison.OrdinalIgnoreCase)))
                     {
                         continue;
