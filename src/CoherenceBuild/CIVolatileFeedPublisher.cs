@@ -22,7 +22,7 @@ namespace CoherenceBuild
 
                 var matchedVersion = new HashSet<string>(
                     coherentPackageNames
-                        .Where(packageName => packageName.StartsWith(projectName, StringComparer.OrdinalIgnoreCase))
+                        .Where(packageName => packageName.StartsWith(projectName, StringComparison.OrdinalIgnoreCase))
                         .Select(packageName => packageName.Substring(projectName.Length + 1)),
                     StringComparer.OrdinalIgnoreCase);
 
