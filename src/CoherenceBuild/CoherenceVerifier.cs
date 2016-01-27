@@ -34,12 +34,6 @@ namespace CoherenceBuild
                         continue;
                     }
 
-                    if (packageInfo.Package.Id.Equals("Microsoft.Extensions.PlatformAbstractions"))
-                    {
-                        // Temporarily skip PlatformAbstractions
-                        continue;
-                    }
-
                     if (packageInfo.InvalidCoreCLRPackageReferences.Count > 0)
                     {
                         Log.WriteError("{0} has invalid package references:", packageInfo.Package.GetFullName());
