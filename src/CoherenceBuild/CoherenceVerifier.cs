@@ -143,7 +143,8 @@ namespace CoherenceBuild
                                 "System.Buffers",
                                 "System.Runtime.InteropServices.RuntimeInformation",
                                 "Microsoft.NETCore.Platforms",
-                                "Microsoft.IdentityModel.Protocols.OpenIdConnect"
+                                "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+                                "Microsoft.Extensions.DependencyModel",
                             };
 
                             if (dependenciesToIgnore.Contains(dependency.Id))
