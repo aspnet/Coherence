@@ -49,6 +49,7 @@ namespace CoherenceBuild
             "Xunit",
             "Benchmarks",
             "Performance",
+            "NodeServices",
         };
 
         static int Main(string[] args)

@@ -34,6 +34,12 @@ namespace CoherenceBuild
                         continue;
                     }
 
+                    // Temporarily skip scaffolding from coherence verification.
+                    if (packageInfo.Package.Id.StartsWith("Microsoft.Extensions.CodeGeneration", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+
                     if (packageInfo.InvalidCoreCLRPackageReferences.Count > 0)
                     {
                         Log.WriteError("{0} has invalid package references:", packageInfo.Package.GetFullName());
