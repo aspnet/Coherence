@@ -151,6 +151,11 @@ namespace CoherenceBuild
                                 "Microsoft.NETCore.Platforms",
                                 "Microsoft.IdentityModel.Protocols.OpenIdConnect",
                                 "Microsoft.Extensions.DependencyModel",
+
+                                // temporary until we build CoreCLR grabbing non rc2 versions of these packages
+                                "System.Runtime.Serialization.Json",
+                                "System.Runtime.Serialization.Primitives",
+                                "System.Runtime.Serialization.Xml"
                             };
 
                             if (dependenciesToIgnore.Contains(dependency.Id))
