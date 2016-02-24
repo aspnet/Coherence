@@ -101,6 +101,19 @@ namespace CoherenceBuild
                             continue;
                         }
 
+                        var coreCLRPackagesToIgnore = new[]
+                        {
+                            // temporary until we build CoreCLR grabbing non rc2 versions of these packages
+                            "System.Runtime.Serialization.Json",
+                            "System.Runtime.Serialization.Primitives",
+                            "System.Runtime.Serialization.Xml"
+                        };
+
+                        if (coreCLRPackagesToIgnore.Contains(dependency.Id, StringComparer.OrdinalIgnoreCase))
+                        {
+                            continue;
+                        }
+
                         if (dependencyPackageInfo.Package.Version != dependency.VersionSpec.MinVersion)
                         {
                             if (result.CoreCLRPackages.ContainsKey(dependency.Id))
@@ -151,11 +164,6 @@ namespace CoherenceBuild
                                 "Microsoft.NETCore.Platforms",
                                 "Microsoft.IdentityModel.Protocols.OpenIdConnect",
                                 "Microsoft.Extensions.DependencyModel",
-
-                                // temporary until we build CoreCLR grabbing non rc2 versions of these packages
-                                "System.Runtime.Serialization.Json",
-                                "System.Runtime.Serialization.Primitives",
-                                "System.Runtime.Serialization.Xml"
                             };
 
                             if (dependenciesToIgnore.Contains(dependency.Id))
