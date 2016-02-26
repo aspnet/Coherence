@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
 using NuGet;
 
@@ -10,46 +11,13 @@ namespace CoherenceBuild
 {
     class Program
     {
-        private static readonly string[] ReposToSkip = new[]
+        private static readonly string[] ReposToScan = new[]
         {
-            "Coherence",
-            "Coherence-External",
-            "Coherence-Signed",
-            "Coherence-Signed-External",
-            "Data",
-            "DiagnosticsPages",
-            "dnvm",
-            "DNX-Darwin",
-            "DNX-Linux",
-            "DnxTools",
-            "docfx",
-            "docfx-signed",
-            "Entropy",
-            "Glimpse",
-            "Helios",
-            "HttpClient",
-            "IBC",
-            "latest-dev",
-            "latest-packages",
-            "DataCommon.SQLite",
-            "MusicStore",
-            "NuGet.Packaging",
-            "NuGet.Versioning",
-            "ServerTests",
-            "Setup",
-            "Setup-Osx-Pkg",
-            "SqlClient",
-            "Stress",
-            "System.Data.Common",
-            "Templates",
-            "WebHooks",
-            "WebHooks-Signed",
-            "WebSocketAbstractions",
-            "xunit-performance",
-            "Xunit",
-            "Benchmarks",
-            "Performance",
-            "NodeServices",
+            "UniverseCoherence",
+            "CoreCLR",
+            "Roslyn",
+            "libuv-build-windows",
+            "SignalR-Client-Cpp",
         };
 
         static int Main(string[] args)
@@ -58,9 +26,6 @@ namespace CoherenceBuild
             var dropFolder = app.Option("--drop-folder", "Drop folder", CommandOptionType.SingleValue);
             var buildBranch = app.Option("--build-branch", "Build branch (dev \\ release)", CommandOptionType.SingleValue);
             var outputPath = app.Option("--output-path", "Output path", CommandOptionType.SingleValue);
-            var symbolSourcePath = app.Option("--symbols-source-path", "Symbol source path", CommandOptionType.SingleValue);
-            var symbolsOutputPath = app.Option("--symbols-output-path", "Symbols output path", CommandOptionType.SingleValue);
-            var symbolsNuGetExe = app.Option("--symbols-nuget-exe", "Symbols NuGet exe", CommandOptionType.SingleValue);
             var nugetPublishFeed = app.Option("--nuget-publish-feed", "Feed to push packages to", CommandOptionType.SingleValue);
             var apiKey = app.Option("--apikey", "NuGet API Key", CommandOptionType.SingleValue);
             var ciVolatileShare = app.Option("--ci-volatile-share", "CI Volatile share", CommandOptionType.SingleValue);
@@ -82,16 +47,11 @@ namespace CoherenceBuild
                     return 1;
                 }
 
-                PackagePublisher.PublishSymbolsPackages(
-                    outputPath.Value(),
-                    symbolsOutputPath.Value(),
-                    symbolSourcePath.Value(),
-                    symbolsNuGetExe.Value(),
-                    processResult);
+                PackagePublisher.PublishToShare(processResult, outputPath.Value());
 
-                if (nugetPublishFeed.HasValue())
+                if (nugetPublishFeed.HasValue() && !string.IsNullOrEmpty(nugetPublishFeed.Value()))
                 {
-                    PackagePublisher.PublishNuGetPackages(processResult, nugetPublishFeed.Value(), apiKey.Value());
+                    PackagePublisher.PublishToFeed(processResult, nugetPublishFeed.Value(), apiKey.Value());
                 }
 
                 CIVolatileFeedPublisher.CleanupVolatileFeed(outputPath.Value(), ciVolatileShare.Value());
@@ -105,17 +65,13 @@ namespace CoherenceBuild
         private static ProcessResult ReadPackagesToProcess(DirectoryInfo di, string buildBranch)
         {
             var processResult = new ProcessResult();
-
-            foreach (var projectFolder in di.EnumerateDirectories())
+            var dictionaryLock = new object();
+            foreach (var repo in ReposToScan)
             {
-                if (ReposToSkip.Contains(projectFolder.Name, StringComparer.OrdinalIgnoreCase))
-                {
-                    continue;
-                }
+                var repoDirectory = Path.Combine(di.FullName, repo, buildBranch);
+                var latestPath = FindLatest(repoDirectory, buildBranch);
 
-                var latestPath = FindLatest(projectFolder, buildBranch);
-
-                if (!Directory.Exists(latestPath))
+                if (latestPath == null)
                 {
                     Log.WriteError("Couldn't find latest for {0}", latestPath);
                     continue;
@@ -127,23 +83,24 @@ namespace CoherenceBuild
 
                 if (!build.Exists)
                 {
-                    Log.WriteError("Can't find build dir for {0}", projectFolder.Name);
+                    Log.WriteError("Can't find build dir for {0}", repo);
                     continue;
                 }
 
-                var isCoreCLR = projectFolder.Name.Equals("CoreCLR", StringComparison.OrdinalIgnoreCase);
+                var isCoreCLR = repo.Equals("CoreCLR", StringComparison.OrdinalIgnoreCase);
 
-                foreach (var packageInfo in build.EnumerateFiles("*.nupkg"))
+                Parallel.ForEach(build.GetFiles("*.nupkg", SearchOption.AllDirectories),  packageInfo =>
                 {
                     if (packageInfo.FullName.EndsWith(".symbols.nupkg", StringComparison.OrdinalIgnoreCase))
                     {
-                        continue;
+                        return;
                     }
 
                     Console.WriteLine("Processing " + packageInfo + "...");
 
-                    string symbolsPath = Path.Combine(packageInfo.Directory.FullName,
-                                                      Path.GetFileNameWithoutExtension(packageInfo.Name) + ".symbols.nupkg");
+                    string symbolsPath = Path.Combine(
+                        packageInfo.Directory.FullName,
+                        Path.GetFileNameWithoutExtension(packageInfo.Name) + ".symbols.nupkg");
 
                     Retry(() =>
                     {
@@ -157,33 +114,34 @@ namespace CoherenceBuild
                             IsCoreCLRPackage = isCoreCLR
                         };
 
-                        if (isCoreCLR)
+                        lock (dictionaryLock)
                         {
-                            processResult.CoreCLRPackages[zipPackage.Id] = info;
-                        }
-                        else
-                        {
-                            processResult.ProductPackages[zipPackage.Id] = info;
-                        }
+                            if (isCoreCLR)
+                            {
+                                processResult.CoreCLRPackages[zipPackage.Id] = info;
+                            }
+                            else
+                            {
+                                processResult.ProductPackages[zipPackage.Id] = info;
+                            }
 
-                        processResult.AllPackages[zipPackage.Id] = info;
+                            processResult.AllPackages[zipPackage.Id] = info;
+                        }
                     });
-                }
+                });
             }
 
             return processResult;
         }
 
-        private static string FindLatest(DirectoryInfo projectFolder, string buildBranch)
+        private static string FindLatest(string repoDirectory, string buildBranch)
         {
-            var latestPath = Path.Combine(projectFolder.FullName, buildBranch);
-
-            if (!Directory.Exists(latestPath))
+            if (!Directory.Exists(repoDirectory))
             {
-                return latestPath;
+                return null;
             }
 
-            return new DirectoryInfo(latestPath)
+            return new DirectoryInfo(repoDirectory)
                 .EnumerateDirectories()
                 .Select(d =>
                 {

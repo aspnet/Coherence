@@ -6,11 +6,15 @@
     "Microsoft.Extensions.CommandLineUtils": "1.0.0-*"
   },
 
+  "compilationOptions": {
+    "emitEntryPoint": true
+  },
+
   "commands": {
     "CoherenceBuild": "CoherenceBuild"
   },
 
   "frameworks": {
-    "dnx451": { }
+    "net451": { }
   }
 }

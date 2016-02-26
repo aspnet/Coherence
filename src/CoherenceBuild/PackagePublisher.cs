@@ -10,21 +10,11 @@ namespace CoherenceBuild
 {
     public static class PackagePublisher
     {
-        public static void PublishSymbolsPackages(
-            string outputPath,
-            string symbolsOutputPath,
-            string symbolSourcePath,
-            string symbolsNuGetExe,
-            ProcessResult processResult)
+        public static void PublishToShare(
+            ProcessResult processResult,
+            string outputPath)
         {
-            Directory.CreateDirectory(symbolsOutputPath);
-
-            var pdbOutputPath = Path.Combine(symbolSourcePath, "pdbrepo");
-            var sourceFilesPath = Path.Combine(symbolSourcePath, "sources");
-
-            Directory.CreateDirectory(pdbOutputPath);
-            Directory.CreateDirectory(sourceFilesPath);
-
+            Directory.CreateDirectory(outputPath);
             var packagesToCopy = processResult.AllPackages.Values;
 
             Parallel.ForEach(packagesToCopy, new ParallelOptions { MaxDegreeOfParallelism = 4 }, packageInfo =>
@@ -39,39 +29,10 @@ namespace CoherenceBuild
                 });
 
                 Console.WriteLine("Copied to {0}", packagePath);
-
-                if (File.Exists(packageInfo.SymbolsPath))
-                {
-                    var symbolsPath = Path.Combine(symbolsOutputPath, Path.GetFileName(packageInfo.SymbolsPath));
-
-                    // REVIEW: Should we copy symbol packages elsewhere
-                    Program.Retry(() =>
-                    {
-                        File.Copy(packageInfo.SymbolsPath, symbolsPath, overwrite: true);
-                        ExtractPdbsAndSourceFiles(packageInfo.SymbolsPath, sourceFilesPath, pdbOutputPath, symbolsNuGetExe);
-                    });
-
-                    Console.WriteLine("Copied to {0}", symbolsPath);
-                }
             });
         }
 
-        private static void ExtractPdbsAndSourceFiles(string symbolsPath, string sourceFilesPath, string pdbPath, string nugetExePath)
-        {
-            nugetExePath = Path.Combine(nugetExePath, "nuget.exe");
-
-            string processArgs = string.Format("pushsymbol \"{0}\" -symbolserver \"{1}\" -sourceserver \"{2}\"", symbolsPath, pdbPath, sourceFilesPath);
-            var psi = new ProcessStartInfo(nugetExePath, processArgs)
-            {
-                UseShellExecute = false,
-            };
-            using (var process = Process.Start(psi))
-            {
-                process.WaitForExit();
-            }
-        }
-
-        public static void PublishNuGetPackages(ProcessResult processResult, string feed, string apiKey)
+        public static void PublishToFeed(ProcessResult processResult, string feed, string apiKey)
         {
             var server = new PackageServer(feed, "Custom DNX");
             var packagesToPushInOrder = Enumerable.Concat(
