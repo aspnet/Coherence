@@ -18,6 +18,7 @@ namespace CoherenceBuild
             "Roslyn",
             "libuv-build-windows",
             "SignalR-Client-Cpp",
+            "DNX"
         };
 
         static int Main(string[] args)

@@ -40,6 +40,13 @@ namespace CoherenceBuild
                         continue;
                     }
 
+                    // Ignore the dotnet-test-xunit dependency mismatch for now.
+                    if (packageInfo.Package.Id.Equals("Microsoft.EntityFrameworkCore.FunctionalTests", StringComparison.OrdinalIgnoreCase) &&
+                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("dotnet-test-xunit", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        continue;
+                    }
+
                     if (packageInfo.InvalidCoreCLRPackageReferences.Count > 0)
                     {
                         Log.WriteError("{0} has invalid package references:", packageInfo.Package.GetFullName());
