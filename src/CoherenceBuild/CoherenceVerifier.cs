@@ -74,7 +74,7 @@ namespace CoherenceBuild
                             Log.WriteError("    Expected {0}({1}) but got {2}",
                                 mismatch.Dependency,
                                 (mismatch.TargetFramework == VersionUtility.UnsupportedFrameworkName ?
-                                "DNXCORE50" :
+                                "NETSTANDARDAPP1_5" :
                                 VersionUtility.GetShortFrameworkName(mismatch.TargetFramework)),
                                 mismatch.Info.Package.Version);
                         }
@@ -135,7 +135,7 @@ namespace CoherenceBuild
                                     !string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
                                     !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    // For CoreCLR packages, only verify if this is DNXCORE50
+                                    // For CoreCLR packages, only verify if this is NETSTANDARDAPP1_5
                                     continue;
                                 }
 
