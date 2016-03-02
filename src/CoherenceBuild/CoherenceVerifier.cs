@@ -161,41 +161,6 @@ namespace CoherenceBuild
                         {
                             productPackageInfo.ProductDependencies.Add(dependencyPackageInfo);
                         }
-
-                        if (result.CoreCLRPackages.ContainsKey(dependency.Id))
-                        {
-                            var dependenciesToIgnore = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                            {
-                                "System.Collections.Immutable",
-                                "System.Diagnostics.DiagnosticSource",
-                                "System.Numerics.Vectors",
-                                "System.Reflection.Metadata",
-                                "System.Text.Encodings.Web",
-                                "System.Threading.Tasks.Extensions",
-                                "System.Buffers",
-                                "System.Runtime.InteropServices.RuntimeInformation",
-                                "Microsoft.NETCore.Platforms",
-                                "Microsoft.IdentityModel.Protocols.OpenIdConnect",
-                                "Microsoft.Extensions.DependencyModel",
-                            };
-
-                            if (dependenciesToIgnore.Contains(dependency.Id))
-                            {
-                                continue;
-                            }
-                            if (!string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
-                                !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase) &&
-                                !string.Equals(dependencySet.TargetFramework.Identifier, ".NETCore", StringComparison.OrdinalIgnoreCase) &&
-                                !string.Equals(dependencySet.TargetFramework.Identifier, "UAP10.0", StringComparison.OrdinalIgnoreCase))
-                            {
-                                productPackageInfo.InvalidCoreCLRPackageReferences.Add(new DependencyWithIssue
-                                {
-                                    Dependency = dependency,
-                                    TargetFramework = dependencySet.TargetFramework,
-                                    Info = dependencyPackageInfo
-                                });
-                            }
-                        }
                     }
                 }
             }
