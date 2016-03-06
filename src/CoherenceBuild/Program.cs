@@ -30,6 +30,7 @@ namespace CoherenceBuild
             var nugetPublishFeed = app.Option("--nuget-publish-feed", "Feed to push packages to", CommandOptionType.SingleValue);
             var apiKey = app.Option("--apikey", "NuGet API Key", CommandOptionType.SingleValue);
             var ciVolatileShare = app.Option("--ci-volatile-share", "CI Volatile share", CommandOptionType.SingleValue);
+            var symbolsOutputPath = app.Option("--symbols-output-path", "Symbols output path", CommandOptionType.SingleValue);
 
             app.OnExecute(() =>
             {
@@ -48,7 +49,7 @@ namespace CoherenceBuild
                     return 1;
                 }
 
-                PackagePublisher.PublishToShare(processResult, outputPath.Value());
+                PackagePublisher.PublishToShare(processResult, outputPath.Value(), symbolsOutputPath.Value());
 
                 if (nugetPublishFeed.HasValue() && !string.IsNullOrEmpty(nugetPublishFeed.Value()))
                 {

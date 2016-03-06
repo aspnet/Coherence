@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,8 @@ namespace CoherenceBuild
     {
         public static void PublishToShare(
             ProcessResult processResult,
-            string outputPath)
+            string outputPath,
+            string symbolsOutputPath)
         {
             Directory.CreateDirectory(outputPath);
             var packagesToCopy = processResult.AllPackages.Values;
@@ -27,6 +27,17 @@ namespace CoherenceBuild
                     // Update package path to point to local share.
                     packageInfo.PackagePath = packagePath;
                 });
+
+                if (File.Exists(packageInfo.SymbolsPath))
+                {
+                    Program.Retry(() =>
+                    {
+                        File.Copy(
+                            packageInfo.SymbolsPath,
+                            Path.Combine(symbolsOutputPath, Path.GetFileName(packageInfo.SymbolsPath)),
+                            overwrite: true);
+                    });
+                }
 
                 Console.WriteLine("Copied to {0}", packagePath);
             });
