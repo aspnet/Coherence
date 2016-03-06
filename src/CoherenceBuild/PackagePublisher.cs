@@ -15,6 +15,7 @@ namespace CoherenceBuild
             string symbolsOutputPath)
         {
             Directory.CreateDirectory(outputPath);
+            Directory.CreateDirectory(symbolsOutputPath);
             var packagesToCopy = processResult.AllPackages.Values;
 
             Parallel.ForEach(packagesToCopy, new ParallelOptions { MaxDegreeOfParallelism = 4 }, packageInfo =>
