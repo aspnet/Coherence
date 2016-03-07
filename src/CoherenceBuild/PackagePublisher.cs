@@ -60,7 +60,7 @@ namespace CoherenceBuild
                 Program.Retry(() =>
                 {
                     attempt++;
-                    Console.WriteLine($"Attempting to publishing package {package.Package} ({attempt})");
+                    Console.WriteLine($"Attempting to publish package {package.Package} ({attempt})");
                     var length = new FileInfo(package.PackagePath).Length;
                     server.PushPackage(apiKey, new PushLocalPackage(package.PackagePath), length, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, disableBuffering: false);
                 });
