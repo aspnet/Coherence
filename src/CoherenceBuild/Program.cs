@@ -99,6 +99,11 @@ namespace CoherenceBuild
                         return;
                     }
 
+                    if (packageInfo.Name.StartsWith("MusicStore", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return;
+                    }
+
                     Console.WriteLine("Processing " + packageInfo + "...");
 
                     string symbolsPath = Path.Combine(
