@@ -1,12 +1,16 @@
 use namespace="System"
+use namespace="System.Net"
+use namespace="System.Linq"
 use import="BuildEnv"
 
 default BASE_DIR='${Directory.GetCurrentDirectory()}'
 default TARGET_DIR='${Path.Combine(BASE_DIR, "artifacts")}'
 default SRC_DIR='${Path.Combine(BASE_DIR, "src")}'
 default BUILD_DIR='${Path.Combine(TARGET_DIR, "build")}'
+default SPLIT_PROJECT_DOWNLOAD='${BUILD_DIR}'
 default SYMBOLS_DIR='${Path.Combine(TARGET_DIR, "symbols")}'
 default COHERENCE_BUILD_PROJ='${Path.Combine(SRC_DIR, "CoherenceBuild")}'
+default SPLIT_CSV_PATH='${Path.Combine(TARGET_DIR, "packages.csv")}'
 
 - // Required environment variables
 default BUILD_SHARE='${Environment.GetEnvironmentVariable("BUILD_SHARE")}'
@@ -14,11 +18,28 @@ default BUILD_BRANCH='${Environment.GetEnvironmentVariable("BUILD_BRANCH")}'
 default PACKAGE_DROP_SHARE='${Environment.GetEnvironmentVariable("PACKAGE_DROP_SHARE")}'
 default NUGET_PUBLISH_FEED='${Environment.GetEnvironmentVariable("NUGET_PUBLISH_FEED")}'
 default APIKEY='${Environment.GetEnvironmentVariable("APIKEY")}'
+default SPLIT_CSV_URL='${Environment.GetEnvironmentVariable("SPLIT_CSV_URL")}'
 
 use-standard-lifecycle
 
 #package-restore target='initialize'
   exec program='dotnet' commandline='restore'
+
+  @{
+      Directory.CreateDirectory(BUILD_DIR);
+      Log.Info("Downloading csv file from " + SPLIT_CSV_URL);
+      // Download spec file
+      var request =  WebRequest.Create(SPLIT_CSV_URL);
+      using(var responseStream = request.GetResponse().GetResponseStream())
+      {
+         using(var csvFile = File.Create(SPLIT_CSV_PATH))
+         {
+           responseStream.CopyTo(csvFile);
+         }
+      }
+   }
+
+  exec program='dotnet' commandline='restore --packages ${SPLIT_PROJECT_DOWNLOAD}'
 
 #build-project target='compile'
   exec program='dotnet' commandline='build -f net451' workingdir='${COHERENCE_BUILD_PROJ}'
@@ -31,9 +52,12 @@ use-standard-lifecycle
         Environment.Exit(-1);
         return;
       }
-
-      Directory.CreateDirectory(BUILD_DIR);
    }
 
   var args = '--drop-folder ${BUILD_SHARE} --build-branch ${BUILD_BRANCH} --output-path ${BUILD_DIR} --symbols-output-path ${SYMBOLS_DIR} --nuget-publish-feed ${NUGET_PUBLISH_FEED} --apikey ${APIKEY} --ci-volatile-share ${PACKAGE_DROP_SHARE}'
   exec program='dotnet' commandline='run -f net451 -- ${args}' workingdir='${COHERENCE_BUILD_PROJ}'
+
+  - var splitPackagesExe = Directory.GetFiles(SPLIT_PROJECT_DOWNLOAD, "SplitPackages.exe", SearchOption.AllDirectories).First();
+
+  - var splitArgs = "--source " + BUILD_DIR + " --csv " + SPLIT_CSV_PATH + " --destination " + TARGET_DIR + " --warningsaserrors";
+  exec program='${splitPackagesExe}' commandline='${splitArgs}' workingdir='${COHERENCE_BUILD_PROJ}'
