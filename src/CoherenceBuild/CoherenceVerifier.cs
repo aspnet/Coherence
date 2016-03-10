@@ -47,7 +47,9 @@ namespace CoherenceBuild
                         continue;
                     }
 
-                    if (packageInfo.IsDnxPackage || packageInfo.DependencyMismatches.All(d => d.Info.IsDnxPackage))
+                    if (packageInfo.IsDnxPackage ||
+                        packageInfo.DependencyMismatches.All(d => d.Info.IsDnxPackage) ||
+                        packageInfo.Package.Id.StartsWith("Microsoft.Dnx.Test", StringComparison.OrdinalIgnoreCase))
                     {
                         // Ignore DNX packages from Coherence verification
                         continue;
