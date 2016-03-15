@@ -40,7 +40,7 @@ namespace CoherenceBuild
                     });
                 }
 
-                Console.WriteLine("Copied to {0}", packagePath);
+                Log.WriteInformation("Copied to {0}", packagePath);
             });
         }
 
@@ -60,11 +60,11 @@ namespace CoherenceBuild
                 Program.Retry(() =>
                 {
                     attempt++;
-                    Console.WriteLine($"Attempting to publish package {package.Package} ({attempt})");
+                    Log.WriteInformation($"Attempting to publish package {package.Package} ({attempt})");
                     var length = new FileInfo(package.PackagePath).Length;
                     server.PushPackage(apiKey, new PushLocalPackage(package.PackagePath), length, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, disableBuffering: false);
                 });
-                Console.WriteLine($"Done publishing package {package.Package}");
+                Log.WriteInformation($"Done publishing package {package.Package}");
             });
         }
 

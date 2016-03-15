@@ -39,14 +39,14 @@ namespace CoherenceBuild
                 else
                 {
                     delete.Add(latestPackageFolder);
-                    Console.WriteLine("Project {0} doesn't exist in this Coherence build hence it will be deleted from {1}",
+                    Log.WriteInformation("Project {0} doesn't exist in this Coherence build hence it will be deleted from {1}",
                         projectName, outputPackagesDir);
                 }
             }
 
             foreach (var d in delete)
             {
-                Console.WriteLine(string.Format("Delete folder {0}", d));
+                Log.WriteInformation(string.Format("Delete folder {0}", d));
 
                 try
                 {

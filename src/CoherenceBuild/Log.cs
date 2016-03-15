@@ -4,25 +4,35 @@ namespace CoherenceBuild
 {
     public class Log
     {
-        public static void WriteWarning(string value, params object[] args)
+        public static void WriteInformation(string value, params object[] args)
         {
             Console.WriteLine(value, args);
         }
 
+        public static void WriteWarning(string value, params object[] args)
+        {
+            Console.WriteLine(CreateFormattedMessage(string.Format(value, args), "WARNING"));
+        }
+
         public static void WriteError(string value, params object[] args)
+        {
+            Console.Error.WriteLine(CreateFormattedMessage(string.Format(value, args), "ERROR"));
+        }
+
+        private static string CreateFormattedMessage(string message, string category)
         {
             if (Environment.GetEnvironmentVariable("TEAMCITY_VERSION") != null)
             {
-                value = value.Replace("|", "||")
+                message = message.Replace("|", "||")
                              .Replace("'", "|'")
                              .Replace("\r", "|r")
                              .Replace("\n", "|n")
                              .Replace("]", "|]");
-                Console.Error.WriteLine("##teamcity[message text='" + value + "' status='ERROR']", args);
+                return  $"##teamcity[message text='{message}' status='{category}']";
             }
             else
             {
-                Console.Error.WriteLine(value, args);
+                return $"[{category}] {message}";
             }
         }
     }
