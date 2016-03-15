@@ -18,7 +18,8 @@ namespace CoherenceBuild
             "Roslyn",
             "libuv-build-windows",
             "SignalR-Client-Cpp",
-            "DNX"
+            "DNX",
+            "aspnet.xunit",
         };
 
         static int Main(string[] args)
