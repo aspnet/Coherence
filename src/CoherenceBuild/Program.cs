@@ -91,6 +91,7 @@ namespace CoherenceBuild
                 }
 
                 var isCoreCLR = repo.Equals("CoreCLR", StringComparison.OrdinalIgnoreCase);
+                var isCoherencePackage = repo.Equals("UniverseCoherence", StringComparison.OrdinalIgnoreCase);
                 var isDnxPackage = repo.Equals("Dnx", StringComparison.OrdinalIgnoreCase);
 
                 Parallel.ForEach(build.GetFiles("*.nupkg", SearchOption.AllDirectories),  packageInfo =>
@@ -121,6 +122,7 @@ namespace CoherenceBuild
                             PackagePath = packageInfo.FullName,
                             SymbolsPath = symbolsPath,
                             IsCoreCLRPackage = isCoreCLR,
+                            IsCoherencePackage = isCoherencePackage,
                             IsDnxPackage = isDnxPackage,
                         };
 

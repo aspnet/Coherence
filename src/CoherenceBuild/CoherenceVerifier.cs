@@ -20,41 +20,6 @@ namespace CoherenceBuild
             {
                 if (!packageInfo.Success)
                 {
-                    // Temporary workaround for FileSystemGlobbing used in Runtime.
-                    if (packageInfo.Package.Id.Equals("Microsoft.Extensions.Runtime", StringComparison.OrdinalIgnoreCase) &&
-                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("Microsoft.Extensions.FileSystemGlobbing", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        continue;
-                    }
-
-                    // Temporary workaround for xunit.runner.aspnet used in Microsoft.AspNetCore.Testing.
-                    if (packageInfo.Package.Id.Equals("Microsoft.AspNetCore.Testing", StringComparison.OrdinalIgnoreCase) &&
-                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("xunit.runner.aspnet", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        continue;
-                    }
-
-                    // Temporarily skip scaffolding from coherence verification.
-                    if (packageInfo.Package.Id.StartsWith("Microsoft.Extensions.CodeGeneration", StringComparison.OrdinalIgnoreCase))
-                    {
-                        continue;
-                    }
-
-                    // Ignore the dotnet-test-xunit dependency mismatch for now.
-                    if (packageInfo.Package.Id.Equals("Microsoft.EntityFrameworkCore.FunctionalTests", StringComparison.OrdinalIgnoreCase) &&
-                        packageInfo.DependencyMismatches.All(d => d.Dependency.Id.Equals("dotnet-test-xunit", StringComparison.OrdinalIgnoreCase)))
-                    {
-                        continue;
-                    }
-
-                    if (packageInfo.IsDnxPackage ||
-                        packageInfo.DependencyMismatches.All(d => d.Info.IsDnxPackage) ||
-                        packageInfo.Package.Id.StartsWith("Microsoft.Dnx.Test", StringComparison.OrdinalIgnoreCase))
-                    {
-                        // Ignore DNX packages from Coherence verification
-                        continue;
-                    }
-
                     if (packageInfo.InvalidCoreCLRPackageReferences.Count > 0)
                     {
                         Log.WriteError("{0} has invalid package references:", packageInfo.Package.GetFullName());
@@ -91,6 +56,12 @@ namespace CoherenceBuild
 
         private static void Visit(PackageInfo productPackageInfo, ProcessResult result)
         {
+            if (!productPackageInfo.IsCoherencePackage)
+            {
+                // Only verify packages from UniverseCoherence.
+                return;
+            }
+
             try
             {
                 foreach (var dependencySet in productPackageInfo.Package.DependencySets)
@@ -131,6 +102,13 @@ namespace CoherenceBuild
 
                         if (dependencyPackageInfo.Package.Version != dependency.VersionSpec.MinVersion)
                         {
+                            PackageInfo dependencyInfo;
+                            if (result.AllPackages.TryGetValue(dependency.Id, out dependencyInfo) && dependencyInfo.IsDnxPackage)
+                            {
+                                // Ignore Dnx dependencies
+                                continue;
+                            }
+
                             if (result.CoreCLRPackages.ContainsKey(dependency.Id))
                             {
                                 if (

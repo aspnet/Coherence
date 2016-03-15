@@ -8,6 +8,8 @@ namespace CoherenceBuild
     {
         public bool IsCoreCLRPackage { get; set; }
 
+        public bool IsCoherencePackage { get; set; }
+
         public bool IsDnxPackage { get; set; }
 
         // The actual package instance
