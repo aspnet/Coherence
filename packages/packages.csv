@@ -42,6 +42,7 @@ Microsoft.AspNetCore.Diagnostics,ship
 Microsoft.AspNetCore.Diagnostics.Abstractions,ship
 Microsoft.AspNetCore.Diagnostics.Elm,ship
 Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore,ship
+Microsoft.AspNetCore.DiagnosticsViewPage.Sources,noship
 Microsoft.AspNetCore.Hosting,ship
 Microsoft.AspNetCore.Hosting.Abstractions,ship
 Microsoft.AspNetCore.Hosting.Server.Abstractions,ship
