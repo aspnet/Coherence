@@ -22,7 +22,8 @@ default SPLIT_CSV_URL='${Environment.GetEnvironmentVariable("SPLIT_CSV_URL")}'
 use-standard-lifecycle
 
 #package-restore target='initialize'
-  exec program='dotnet' commandline='restore'
+  exec program='dotnet' commandline='restore src'
+  exec program='dotnet' commandline='restore project.json --configfile ${BASE_DIR}/NuGet.config --packages ${SPLIT_PROJECT_DOWNLOAD} -v Minimal'
 
   @{
       if (string.IsNullOrEmpty(SPLIT_CSV_URL))
@@ -42,8 +43,6 @@ use-standard-lifecycle
          }
       }
    }
-
-  exec program='dotnet' commandline='restore --packages ${SPLIT_PROJECT_DOWNLOAD}'
 
 #build-project target='compile'
   exec program='dotnet' commandline='build -f net451' workingdir='${COHERENCE_BUILD_PROJ}'
