@@ -182,6 +182,7 @@ Microsoft.Extensions.Options.ConfigurationExtensions,ship
 Microsoft.Extensions.PlatformAbstractions,ship
 Microsoft.Extensions.PlatformAbstractions.Dnx,ship
 Microsoft.Extensions.Primitives,ship
+Microsoft.Extensions.Process.Sources,noship
 Microsoft.Extensions.PropertyActivator.Sources,noship
 Microsoft.Extensions.PropertyHelper.Sources,noship
 Microsoft.Extensions.SecurityHelper.Sources,noship
