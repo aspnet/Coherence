@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.CommandLineUtils;
@@ -39,6 +39,8 @@ namespace CoherenceBuild
 
         static int Main(string[] args)
         {
+            AddNewFrameworksToNuGet();
+
             var app = new CommandLineApplication();
             var dropFolder = app.Option("--drop-folder", "Drop folder", CommandOptionType.SingleValue);
             var buildBranch = app.Option("--build-branch", "Build branch (dev \\ release)", CommandOptionType.SingleValue);
@@ -84,12 +86,53 @@ namespace CoherenceBuild
                     PackagePublisher.PublishToFeed(processResult, nugetPublishFeed.Value(), apiKey.Value());
                 }
 
-                CIVolatileFeedPublisher.CleanupVolatileFeed(buildFolderPath, volatileFolderPath);
+
+                var clearVolatileShare = Environment.GetEnvironmentVariable("CLEAR_VOLATILE_SHARE") == "true";
+                if (clearVolatileShare)
+                {
+                    CIVolatileFeedPublisher.CleanupVolatileFeed(buildFolderPath, volatileFolderPath);
+                }
 
                 return 0;
             });
 
             return app.Execute(args);
+        }
+
+        private static void AddNewFrameworksToNuGet()
+        {
+            // Super hacky way to work around known nuget frameworks
+            // Add ASP.NET and ASP.NET Core to the list of frameworks
+            // so that parsing them won't both show up as unsupported
+            const string AspNetFrameworkIdentifier = ".NETStandard";
+            const string AspNetCoreFrameworkIdentifier = ".NETStandardApp";
+
+            var knownIdentifiers = GetDictionaryField("_knownIdentifiers");
+            var identifierToFrameworkFolder = GetDictionaryField("_identifierToFrameworkFolder");
+
+            if (knownIdentifiers != null)
+            {
+                knownIdentifiers[".netstandard"] = AspNetFrameworkIdentifier;
+                knownIdentifiers[".netstandardapp"] = AspNetCoreFrameworkIdentifier;
+            }
+
+            if (identifierToFrameworkFolder != null)
+            {
+                identifierToFrameworkFolder[AspNetFrameworkIdentifier] = "netstandard";
+                identifierToFrameworkFolder[AspNetCoreFrameworkIdentifier] = "netstandardapp";
+            }
+        }
+
+        private static IDictionary<string, string> GetDictionaryField(string fieldName)
+        {
+            var dictionaryField = typeof(VersionUtility).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static);
+
+            if (dictionaryField != null)
+            {
+                return dictionaryField.GetValue(obj: null) as IDictionary<string, string>;
+            }
+
+            return null;
         }
 
         private static void WriteReposUsedFile(string destination)
