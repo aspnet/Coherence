@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using NuGet;
 
 namespace CoherenceBuild
@@ -51,6 +53,15 @@ namespace CoherenceBuild
                  processResult.CoreCLRPackages.Values,
                  processResult.ProductPackages.OrderBy(p => p.Value.Degree).Select(p => p.Value));
 
+            var httpClient = new System.Net.Http.HttpClient();
+            var indexJson = JObject.Parse(httpClient.GetAsync(feed.TrimEnd('/') + "/api/v3/index.json").Result.Content.ReadAsStringAsync().Result);
+            var v3Feed = indexJson
+                .Property("resources")
+                .Value.AsJEnumerable().Cast<JObject>()
+                .First(item => item.Property("@type").Value.ToString() == "PackageBaseAddress/3.0.0")
+                .Property("@id")
+                .Value.ToString();
+
             Parallel.ForEach(
                 packagesToPushInOrder,
                 new ParallelOptions { MaxDegreeOfParallelism = 4 },
@@ -59,13 +70,30 @@ namespace CoherenceBuild
                 int attempt = 0;
                 Program.Retry(() =>
                 {
+                    if (package.IsCoreCLRPackage && IsAlreadyUploaded(v3Feed, httpClient, package.Package))
+                    {
+                        Log.WriteInformation($"Skipping {package.Package} since it is already published.");
+                        return;
+                    }
+
                     attempt++;
-                    Log.WriteInformation($"Attempting to publish package {package.Package} ({attempt})");
+                    Log.WriteInformation($"Attempting to publish package {package.Package} (Attempt: {attempt})");
                     var length = new FileInfo(package.PackagePath).Length;
                     server.PushPackage(apiKey, new PushLocalPackage(package.PackagePath), length, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, disableBuffering: false);
+                    Log.WriteInformation($"Done publishing package {package.Package}");
                 });
-                Log.WriteInformation($"Done publishing package {package.Package}");
             });
+        }
+
+        private static bool IsAlreadyUploaded(string v3Feed, System.Net.Http.HttpClient client, IPackage package)
+        {
+            // https://myget-2e16.kxcdn.com/artifacts/aspnetvolatiledev/nuget/v3/flatcontainer/microsoft.aspnetcore.signalr.server/0.1.0-rc2-20311/microsoft.aspnetcore.signalr.server.0.1.0-rc2-20311.nupkg
+            var id = package.Id.ToLowerInvariant();
+            var version = package.Version.ToNormalizedString();
+            var uri = $"{v3Feed.TrimEnd('/')}/{id}/{version}/{id}.{version}.nupkg";
+            var message = new HttpRequestMessage(HttpMethod.Head, uri);
+            var result = client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead).Result;
+            return result.IsSuccessStatusCode;
         }
 
         private class PushLocalPackage : LocalPackage

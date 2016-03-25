@@ -3,6 +3,7 @@
 
   "dependencies": {
     "NuGet.Core": "2.10.1",
+    "Newtonsoft.Json": "8.0.2",
     "Microsoft.Extensions.CommandLineUtils": "1.0.0-*"
   },
 
@@ -15,6 +16,10 @@
   },
 
   "frameworks": {
-    "net451": { }
+    "net451": {
+      "frameworkAssemblies": {
+        "System.Net.Http": ""
+      }
+    }
   }
 }
