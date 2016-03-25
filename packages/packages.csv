@@ -200,6 +200,7 @@ Microsoft.TargetingPack.*,ext
 Microsoft.VisualBasic,ext
 Microsoft.VisualStudio.Web.BrowserLink.Loader,ship
 Microsoft.Win32.*,ext
+NETStandard.App,ext
 NETStandard.Library,ext
 NETStandard.Platform,ext
 NuGet.*,ext
