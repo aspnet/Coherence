@@ -189,7 +189,6 @@ Microsoft.Extensions.SecurityHelper.Sources,noship
 Microsoft.Extensions.Testing.Abstractions,ext
 Microsoft.Extensions.TypeNameHelper.Sources,noship
 Microsoft.Extensions.WebEncoders,ship
-Microsoft.Identity.Client,ext
 Microsoft.IdentityModel.*,ext
 Microsoft.Net.Http.Headers,ship
 Microsoft.Net.Http.Server,ship
