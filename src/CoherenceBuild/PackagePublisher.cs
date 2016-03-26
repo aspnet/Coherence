@@ -57,10 +57,13 @@ namespace CoherenceBuild
             var indexJson = JObject.Parse(httpClient.GetAsync(feed.TrimEnd('/') + "/api/v3/index.json").Result.Content.ReadAsStringAsync().Result);
             var v3Feed = indexJson
                 .Property("resources")
-                .Value.AsJEnumerable().Cast<JObject>()
+                ?.Value
+                .AsJEnumerable()
+                ?.Cast<JObject>()
                 .First(item => item.Property("@type").Value.ToString() == "PackageBaseAddress/3.0.0")
-                .Property("@id")
-                .Value.ToString();
+                ?.Property("@id")
+                ?.Value
+                ?.ToString();
 
             Parallel.ForEach(
                 packagesToPushInOrder,
@@ -68,14 +71,15 @@ namespace CoherenceBuild
                 package =>
             {
                 int attempt = 0;
+
+                if (package.IsCoherencePackage && IsAlreadyUploaded(v3Feed, httpClient, package.Package))
+                {
+                    Log.WriteInformation($"Skipping {package.Package} since it is already published.");
+                    return;
+
+                }
                 Program.Retry(() =>
                 {
-                    if (package.IsCoreCLRPackage && IsAlreadyUploaded(v3Feed, httpClient, package.Package))
-                    {
-                        Log.WriteInformation($"Skipping {package.Package} since it is already published.");
-                        return;
-                    }
-
                     attempt++;
                     Log.WriteInformation($"Attempting to publish package {package.Package} (Attempt: {attempt})");
                     var length = new FileInfo(package.PackagePath).Length;
@@ -87,13 +91,28 @@ namespace CoherenceBuild
 
         private static bool IsAlreadyUploaded(string v3Feed, System.Net.Http.HttpClient client, IPackage package)
         {
-            // https://myget-2e16.kxcdn.com/artifacts/aspnetvolatiledev/nuget/v3/flatcontainer/microsoft.aspnetcore.signalr.server/0.1.0-rc2-20311/microsoft.aspnetcore.signalr.server.0.1.0-rc2-20311.nupkg
+            if (string.IsNullOrEmpty(v3Feed))
+            {
+                // If we couldn't locate the v3 feed, republish the packages
+                return false;
+            }
+
             var id = package.Id.ToLowerInvariant();
             var version = package.Version.ToNormalizedString();
             var uri = $"{v3Feed.TrimEnd('/')}/{id}/{version}/{id}.{version}.nupkg";
             var message = new HttpRequestMessage(HttpMethod.Head, uri);
-            var result = client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead).Result;
-            return result.IsSuccessStatusCode;
+
+            try
+            {
+                var result = client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead).Result;
+                return result.StatusCode == System.Net.HttpStatusCode.OK;
+            }
+            catch (Exception ex)
+            {
+                // If we can't read feed info, republish the packages
+                Log.WriteInformation($"Failed to read package existence from {v3Feed}{Environment.NewLine}{ex.Message}.");
+                return false;
+            }
         }
 
         private class PushLocalPackage : LocalPackage

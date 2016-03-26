@@ -268,7 +268,7 @@ namespace CoherenceBuild
 
         public static void Retry(Action action)
         {
-            int attempts = 10;
+            var attempts = 10;
             while (true)
             {
                 try
@@ -276,16 +276,9 @@ namespace CoherenceBuild
                     action();
                     break;
                 }
-                catch
+                catch (Exception ex) when (attempts-- > 1)
                 {
-                    attempts--;
-
-                    if (attempts == 0)
-                    {
-                        throw;
-                    }
-
-                    Log.WriteInformation("Retrying...");
+                    Log.WriteInformation($"Attempt {(10 - attempts)} failed.{Environment.NewLine}{ex}{Environment.NewLine}Retrying...");
                     Thread.Sleep(3000);
                 }
             }
