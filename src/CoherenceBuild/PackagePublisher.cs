@@ -87,6 +87,7 @@ namespace CoherenceBuild
                                     server.PushPackage(apiKey, new PushLocalPackage(package.PackagePath), length, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, disableBuffering: false);
                                 });
                                 Log.WriteInformation($"Done publishing package {package.Package}");
+                                return;
                             }
                             catch (Exception ex) when (attempt < 9)
                             {
