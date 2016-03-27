@@ -72,7 +72,7 @@ namespace CoherenceBuild
             {
                 int attempt = 0;
 
-                if (package.IsCoherencePackage && IsAlreadyUploaded(v3Feed, httpClient, package.Package))
+                if (!package.IsCoherencePackage && IsAlreadyUploaded(v3Feed, httpClient, package.Package))
                 {
                     Log.WriteInformation($"Skipping {package.Package} since it is already published.");
                     return;
