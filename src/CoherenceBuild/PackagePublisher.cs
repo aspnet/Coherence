@@ -100,17 +100,19 @@ namespace CoherenceBuild
             var id = package.Id.ToLowerInvariant();
             var version = package.Version.ToNormalizedString();
             var uri = $"{v3Feed.TrimEnd('/')}/{id}/{version}/{id}.{version}.nupkg";
-            var message = new HttpRequestMessage(HttpMethod.Head, uri);
+            var request = new HttpRequestMessage(HttpMethod.Head, uri);
 
             try
             {
-                var result = client.SendAsync(message, HttpCompletionOption.ResponseHeadersRead).Result;
+                Log.WriteInformation($"Checking the existence of {uri}");
+                var result = client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).Result;
                 return result.StatusCode == System.Net.HttpStatusCode.OK;
             }
             catch (Exception ex)
             {
                 // If we can't read feed info, republish the packages
-                Log.WriteInformation($"Failed to read package existence from {v3Feed}{Environment.NewLine}{ex.Message}.");
+                var exceptionMessage = (ex?.InnerException ?? ex.GetBaseException()).Message;
+                Log.WriteInformation($"Failed to read package existence from {uri}{Environment.NewLine}{exceptionMessage}.");
                 return false;
             }
         }
