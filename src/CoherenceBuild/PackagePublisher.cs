@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using NuGet;
@@ -48,14 +49,67 @@ namespace CoherenceBuild
 
         public static void PublishToFeed(ProcessResult processResult, string feed, string apiKey)
         {
+            PublishToFeedAsync(processResult, feed, apiKey).Wait();
+        }
+
+        private static async Task PublishToFeedAsync(ProcessResult processResult, string feed, string apiKey)
+        {
             var server = new PackageServer(feed, "Custom DNX");
             var packagesToPushInOrder = Enumerable.Concat(
                  processResult.CoreCLRPackages.Values,
                  processResult.ProductPackages.OrderBy(p => p.Value.Degree).Select(p => p.Value));
 
-            var httpClient = new System.Net.Http.HttpClient();
-            var indexJson = JObject.Parse(httpClient.GetAsync(feed.TrimEnd('/') + "/api/v3/index.json").Result.Content.ReadAsStringAsync().Result);
-            var v3Feed = indexJson
+            using (var httpClient = new System.Net.Http.HttpClient())
+            using (var semaphore = new SemaphoreSlim(4))
+            {
+                var v3Feed = await ReadV3FeedAsync(feed, httpClient);
+                var tasks = packagesToPushInOrder.Select(async package =>
+                {
+                    await semaphore.WaitAsync(TimeSpan.FromMinutes(3));
+                    try
+                    {
+                        if (!package.IsCoherencePackage && await IsAlreadyUploadedAsync(v3Feed, httpClient, package.Package))
+                        {
+                            Log.WriteInformation($"Skipping {package.Package} since it is already published.");
+                            return;
+                        }
+
+                        var attempt = 0;
+                        while (attempt < 10)
+                        {
+                            attempt++;
+                            Log.WriteInformation($"Attempting to publish package {package.Package} (Attempt: {attempt})");
+                            try
+                            {
+                                await Task.Run(() =>
+                                {
+                                    var length = new FileInfo(package.PackagePath).Length;
+                                    server.PushPackage(apiKey, new PushLocalPackage(package.PackagePath), length, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, disableBuffering: false);
+                                });
+                                Log.WriteInformation($"Done publishing package {package.Package}");
+                            }
+                            catch (Exception ex) when (attempt < 9)
+                            {
+                                Log.WriteInformation($"Attempt {(10 - attempt)} failed.{Environment.NewLine}{ex}{Environment.NewLine}Retrying...");
+                            }
+                        }
+                    }
+                    finally
+                    {
+                        semaphore.Release();
+                    }
+                });
+
+                await Task.WhenAll(tasks);
+            }
+        }
+
+        private static async Task<string> ReadV3FeedAsync(string feed, System.Net.Http.HttpClient httpClient)
+        {
+            var content = await httpClient.GetStringAsync(feed.TrimEnd('/') + "/api/v3/index.json");
+            var indexJson = JObject.Parse(content);
+
+            return indexJson
                 .Property("resources")
                 ?.Value
                 .AsJEnumerable()
@@ -64,32 +118,9 @@ namespace CoherenceBuild
                 ?.Property("@id")
                 ?.Value
                 ?.ToString();
-
-            Parallel.ForEach(
-                packagesToPushInOrder,
-                new ParallelOptions { MaxDegreeOfParallelism = 4 },
-                package =>
-            {
-                int attempt = 0;
-
-                if (!package.IsCoherencePackage && IsAlreadyUploaded(v3Feed, httpClient, package.Package))
-                {
-                    Log.WriteInformation($"Skipping {package.Package} since it is already published.");
-                    return;
-
-                }
-                Program.Retry(() =>
-                {
-                    attempt++;
-                    Log.WriteInformation($"Attempting to publish package {package.Package} (Attempt: {attempt})");
-                    var length = new FileInfo(package.PackagePath).Length;
-                    server.PushPackage(apiKey, new PushLocalPackage(package.PackagePath), length, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, disableBuffering: false);
-                    Log.WriteInformation($"Done publishing package {package.Package}");
-                });
-            });
         }
 
-        private static bool IsAlreadyUploaded(string v3Feed, System.Net.Http.HttpClient client, IPackage package)
+        private static async Task<bool> IsAlreadyUploadedAsync(string v3Feed, System.Net.Http.HttpClient client, IPackage package)
         {
             if (string.IsNullOrEmpty(v3Feed))
             {
@@ -105,7 +136,7 @@ namespace CoherenceBuild
             try
             {
                 Log.WriteInformation($"Checking the existence of {uri}");
-                var result = client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).Result;
+                var result = await client.SendAsync(request);
                 return result.StatusCode == System.Net.HttpStatusCode.OK;
             }
             catch (Exception ex)
