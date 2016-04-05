@@ -28,7 +28,7 @@ namespace CoherenceBuild
                 return;
             }
 
-            var destinationDirectoryPath = Path.Combine(destination, Destination ?? _folder);
+            var destinationDirectoryPath = Path.Combine(destination, string.IsNullOrEmpty(Destination) ? _folder : Destination);
             CopyDirectory(sourceDirectoryPath, destinationDirectoryPath);
         }
 
