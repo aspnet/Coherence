@@ -19,7 +19,6 @@ namespace CoherenceBuild
             "CoreCLR",
             "DNX",
             "libuv-build-windows",
-            "Roslyn",
             "SignalR-Client-Cpp",
             "UniverseCoherence",
         }.ToDictionary(r => r, r => (string)null);
