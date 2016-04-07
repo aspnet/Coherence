@@ -93,19 +93,6 @@ namespace CoherenceBuild
                             continue;
                         }
 
-                        var coreCLRPackagesToIgnore = new[]
-                        {
-                            // temporary until we build CoreCLR grabbing non rc2 versions of these packages
-                            "System.Runtime.Serialization.Json",
-                            "System.Runtime.Serialization.Primitives",
-                            "System.Runtime.Serialization.Xml"
-                        };
-
-                        if (coreCLRPackagesToIgnore.Contains(dependency.Id, StringComparer.OrdinalIgnoreCase))
-                        {
-                            continue;
-                        }
-
                         if (dependencyPackageInfo.Package.Version != dependency.VersionSpec.MinVersion)
                         {
                             PackageInfo dependencyInfo;
@@ -113,23 +100,6 @@ namespace CoherenceBuild
                             {
                                 // Ignore Dnx dependencies
                                 continue;
-                            }
-
-                            if (result.CoreCLRPackages.ContainsKey(dependency.Id))
-                            {
-                                if (
-                                    !string.Equals(dependencySet.TargetFramework.Identifier, "DNXCORE", StringComparison.OrdinalIgnoreCase) &&
-                                    !string.Equals(dependencySet.TargetFramework.Identifier, ".NETPlatform", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    // For CoreCLR packages, only verify if this is NETSTANDARDAPP1_5
-                                    continue;
-                                }
-
-                                if (dependency.Id == "System.Collections.Immutable")
-                                {
-                                    // EF depends on RTM build of System.Collections.Immutable.
-                                    continue;
-                                }
                             }
 
                             // For any dependency in the universe
