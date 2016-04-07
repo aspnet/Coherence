@@ -22,7 +22,7 @@ default SPLIT_CSV_URL='${Environment.GetEnvironmentVariable("SPLIT_CSV_URL")}'
 use-standard-lifecycle
 
 #package-restore target='initialize'
-  exec program='dotnet' commandline='restore src'
+  exec program='dotnet' commandline='restore --infer-runtimes src'
   exec program='dotnet' commandline='restore project.json --configfile ${BASE_DIR}/NuGet.config --packages ${SPLIT_PROJECT_DOWNLOAD} -v Minimal'
 
   @{
