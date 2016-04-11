@@ -106,7 +106,7 @@ Microsoft.AspNetCore.SignalR.SqlServer,noship
 Microsoft.AspNetCore.StaticFiles,ship
 Microsoft.AspNetCore.TestHost,ship
 Microsoft.AspNetCore.Testing,noship
-Microsoft.AspNetCore.WebSockets.Client,ship
+Microsoft.AspNetCore.WebSockets.Client,noship
 Microsoft.AspNetCore.WebSockets.Protocol,ship
 Microsoft.AspNetCore.WebSockets.Server,ship
 Microsoft.AspNetCore.WebUtilities,ship
