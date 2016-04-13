@@ -93,6 +93,12 @@ namespace CoherenceBuild
                             continue;
                         }
 
+                        if (string.Equals(dependencySet.TargetFramework.Identifier, ".NETCore", StringComparison.OrdinalIgnoreCase))
+                        {
+                            // Skip netcore50 since it references RTM package versions.
+                            continue;
+                        }
+
                         if (dependencyPackageInfo.Package.Version != dependency.VersionSpec.MinVersion)
                         {
                             PackageInfo dependencyInfo;
