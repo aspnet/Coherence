@@ -32,7 +32,8 @@ namespace CoherenceBuild
             },
             ["UniverseCoherence"] = new FileSystemDependency[]
             {
-                new FileDependency("commits") { Destination = "commits-universe" }
+                new FileDependency("commits") { Destination = "commits-universe" },
+                new FolderDependecy(".build"),
             },
         };
 
