@@ -15,6 +15,7 @@ dotnet-sql-cache,ship
 dotnet-test-xunit,ext
 dotnet-user-secrets,ship
 dotnet-watch,ship
+Libuv,ship-ext
 Microsoft.AspNet.SignalR.Client.Cpp.v120.WinDesktop,noship
 Microsoft.AspNet.SignalR.Client.Cpp.v140.WinDesktop,noship
 Microsoft.AspNetCore.Antiforgery,ship
@@ -59,7 +60,7 @@ Microsoft.AspNetCore.Identity,ship
 Microsoft.AspNetCore.Identity.EntityFrameworkCore,ship
 Microsoft.AspNetCore.IISPlatformHandler,noship
 Microsoft.AspNetCore.Internal.libuv-Darwin,noship
-Microsoft.AspNetCore.Internal.libuv-Linux,ship
+Microsoft.AspNetCore.Internal.libuv-Linux,noship
 Microsoft.AspNetCore.Internal.libuv-Windows,noship
 Microsoft.AspNetCore.JsonPatch,ship
 Microsoft.AspNetCore.Localization,ship
@@ -113,7 +114,7 @@ Microsoft.AspNetCore.WebUtilities,ship
 Microsoft.Cci,ext
 Microsoft.CodeAnalysis.*,ext
 Microsoft.CSharp,ext
-Microsoft.Data.Sqlite,ship
+Microsoft.Data.Sqlite,ship-ext
 Microsoft.Dnx.*,noship
 Microsoft.Dnx.Compilation.CSharp.Abstractions,ship
 Microsoft.Dnx.Compilation.CSharp.Common,ship
