@@ -121,12 +121,12 @@ Microsoft.Dnx.Compilation.CSharp.Common,ship
 Microsoft.DotNet.*,ext
 Microsoft.EntityFrameworkCore,ship
 Microsoft.EntityFrameworkCore.Commands,ship
-Microsoft.EntityFrameworkCore.FunctionalTests,ship
+Microsoft.EntityFrameworkCore.Specification.Tests,ship
 Microsoft.EntityFrameworkCore.InMemory,ship
 Microsoft.EntityFrameworkCore.Relational,ship
 Microsoft.EntityFrameworkCore.Relational.Design,ship
-Microsoft.EntityFrameworkCore.Relational.Design.FunctionalTests,ship
-Microsoft.EntityFrameworkCore.Relational.FunctionalTests,ship
+Microsoft.EntityFrameworkCore.Relational.Design.Specification.Tests,ship
+Microsoft.EntityFrameworkCore.Relational.Specification.Tests,ship
 Microsoft.EntityFrameworkCore.Sqlite,ship
 Microsoft.EntityFrameworkCore.Sqlite.Design,ship
 Microsoft.EntityFrameworkCore.SqlServer,ship
