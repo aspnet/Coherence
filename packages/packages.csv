@@ -9,7 +9,6 @@ dnx-coreclr-win-x86,ship
 dnx-mono,ship
 dotnet-aspnet-codegenerator,ship
 dotnet-ef,ship
-dotnet-publish-iis,ship
 dotnet-razor-tooling,ship
 dotnet-sql-cache,ship
 dotnet-test-xunit,ext
@@ -58,7 +57,6 @@ Microsoft.AspNetCore.Http.Features,ship
 Microsoft.AspNetCore.HttpOverrides,ship
 Microsoft.AspNetCore.Identity,ship
 Microsoft.AspNetCore.Identity.EntityFrameworkCore,ship
-Microsoft.AspNetCore.IISPlatformHandler,noship
 Microsoft.AspNetCore.Internal.libuv-Darwin,noship
 Microsoft.AspNetCore.Internal.libuv-Linux,noship
 Microsoft.AspNetCore.Internal.libuv-Windows,noship
