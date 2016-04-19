@@ -13,7 +13,7 @@ dotnet-razor-tooling,ship
 dotnet-sql-cache,ship
 dotnet-test-xunit,ext
 dotnet-user-secrets,ship
-dotnet-watch,ship
+Microsoft.DotNet.Watcher.Tools,ship
 Libuv,ship-ext
 Microsoft.AspNet.SignalR.Client.Cpp.v120.WinDesktop,noship
 Microsoft.AspNet.SignalR.Client.Cpp.v140.WinDesktop,noship
