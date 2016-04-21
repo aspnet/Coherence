@@ -61,5 +61,5 @@ use-standard-lifecycle
   exec program='dotnet' commandline='run -f net451 -- ${args}' workingdir='${COHERENCE_BUILD_PROJ}'
 
   var splitPackagesExe = '${Directory.GetFiles(SPLIT_PROJECT_DOWNLOAD, "SplitPackages.exe", SearchOption.AllDirectories).First()}'
-  var splitArgs = '--source ${BUILD_DIR} --csv ${SPLIT_CSV_PATH} --destination ${TARGET_DIR}'
+  var splitArgs = '--source ${BUILD_DIR} --csv ${SPLIT_CSV_PATH} --destination ${TARGET_DIR} --ignore-errors'
   exec program='${splitPackagesExe}' commandline='${splitArgs}' workingdir='${COHERENCE_BUILD_PROJ}'
