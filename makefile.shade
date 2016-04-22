@@ -9,7 +9,7 @@ default SRC_DIR='${Path.Combine(BASE_DIR, "src")}'
 default BUILD_DIR='${Path.Combine(TARGET_DIR, "build")}'
 default SPLIT_PROJECT_DOWNLOAD='${Path.Combine(BASE_DIR, ".build")}'
 default COHERENCE_BUILD_PROJ='${Path.Combine(SRC_DIR, "CoherenceBuild")}'
-default SPLIT_CSV_PATH='${Path.Combine(TARGET_DIR, "packages.csv")}'
+default SPLIT_CSV_PATH='${Path.Combine(BASE_DIR, "packages", "packages.csv")}'
 
 - // Required environment variables
 default BUILD_SHARE='${Environment.GetEnvironmentVariable("BUILD_SHARE")}'
@@ -17,32 +17,12 @@ default BUILD_BRANCH='${Environment.GetEnvironmentVariable("BUILD_BRANCH")}'
 default PACKAGE_DROP_SHARE='${Environment.GetEnvironmentVariable("PACKAGE_DROP_SHARE")}'
 default NUGET_PUBLISH_FEED='${Environment.GetEnvironmentVariable("NUGET_PUBLISH_FEED")}'
 default APIKEY='${Environment.GetEnvironmentVariable("APIKEY")}'
-default SPLIT_CSV_URL='${Environment.GetEnvironmentVariable("SPLIT_CSV_URL")}'
 
 use-standard-lifecycle
 
 #package-restore target='initialize'
   exec program='dotnet' commandline='restore --infer-runtimes src'
   exec program='dotnet' commandline='restore project.json --configfile ${BASE_DIR}/NuGet.config --packages ${SPLIT_PROJECT_DOWNLOAD} -v Minimal'
-
-  @{
-      if (string.IsNullOrEmpty(SPLIT_CSV_URL))
-      {
-        throw new Exception("SPLIT_CSV_URL must be set.");
-      }
-
-      Directory.CreateDirectory(BUILD_DIR);
-      Log.Info("Downloading csv file from " + SPLIT_CSV_URL);
-      // Download spec file
-      var request =  WebRequest.Create(SPLIT_CSV_URL);
-      using(var responseStream = request.GetResponse().GetResponseStream())
-      {
-         using(var csvFile = File.Create(SPLIT_CSV_PATH))
-         {
-           responseStream.CopyTo(csvFile);
-         }
-      }
-   }
 
 #build-project target='compile'
   exec program='dotnet' commandline='build -f net451' workingdir='${COHERENCE_BUILD_PROJ}'
