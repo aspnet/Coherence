@@ -10,7 +10,7 @@ dnx-mono,ship
 dotnet-aspnet-codegenerator,ship
 dotnet-ef,ship
 dotnet-razor-tooling,ship
-dotnet-sql-cache,ship
+Microsoft.Extensions.Caching.SqlConfig.Tools,ship
 dotnet-test-xunit,ext
 Microsoft.Extensions.SecretManager.Tools,ship
 Microsoft.DotNet.Watcher.Tools,ship
