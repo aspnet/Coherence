@@ -68,7 +68,7 @@ Microsoft.AspNetCore.Mvc.ApiExplorer,ship
 Microsoft.AspNetCore.Mvc.Core,ship
 Microsoft.AspNetCore.Mvc.Cors,ship
 Microsoft.AspNetCore.Mvc.DataAnnotations,ship
-Microsoft.AspNetCore.Mvc.Dnx,ship
+Microsoft.AspNetCore.Mvc.Dnx,noship
 Microsoft.AspNetCore.Mvc.Formatters.Json,ship
 Microsoft.AspNetCore.Mvc.Formatters.Xml,ship
 Microsoft.AspNetCore.Mvc.Localization,ship
@@ -113,8 +113,8 @@ Microsoft.CodeAnalysis.*,ext
 Microsoft.CSharp,ext
 Microsoft.Data.Sqlite,ship-ext
 Microsoft.Dnx.*,noship
-Microsoft.Dnx.Compilation.CSharp.Abstractions,ship
-Microsoft.Dnx.Compilation.CSharp.Common,ship
+Microsoft.Dnx.Compilation.CSharp.Abstractions,noship
+Microsoft.Dnx.Compilation.CSharp.Common,noship
 Microsoft.DotNet.*,ext
 Microsoft.EntityFrameworkCore,ship
 Microsoft.EntityFrameworkCore.InMemory,ship
@@ -189,7 +189,7 @@ Microsoft.Extensions.Options,ship
 Microsoft.Extensions.OptionsModel.VSRC1,ship
 Microsoft.Extensions.Options.ConfigurationExtensions,ship
 Microsoft.Extensions.PlatformAbstractions,ship
-Microsoft.Extensions.PlatformAbstractions.Dnx,ship
+Microsoft.Extensions.PlatformAbstractions.Dnx,noship
 Microsoft.Extensions.Primitives,ship
 Microsoft.Extensions.Primitives.VSRC1,ship
 Microsoft.Extensions.Process.Sources,noship
