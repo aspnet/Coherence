@@ -7,7 +7,7 @@ default BASE_DIR='${Directory.GetCurrentDirectory()}'
 default TARGET_DIR='${Path.Combine(BASE_DIR, "artifacts")}'
 default SRC_DIR='${Path.Combine(BASE_DIR, "src")}'
 default BUILD_DIR='${Path.Combine(TARGET_DIR, "build")}'
-default SPLIT_PROJECT_DOWNLOAD='${Path.Combine(BASE_DIR, ".build")}'
+default TOOLS_DOWNLOAD_PATH='${Path.Combine(BASE_DIR, ".build")}'
 default COHERENCE_BUILD_PROJ='${Path.Combine(SRC_DIR, "CoherenceBuild")}'
 default SPLIT_CSV_PATH='${Path.Combine(BASE_DIR, "packages", "packages.csv")}'
 
@@ -17,12 +17,13 @@ default BUILD_BRANCH='${Environment.GetEnvironmentVariable("BUILD_BRANCH")}'
 default PACKAGE_DROP_SHARE='${Environment.GetEnvironmentVariable("PACKAGE_DROP_SHARE")}'
 default NUGET_PUBLISH_FEED='${Environment.GetEnvironmentVariable("NUGET_PUBLISH_FEED")}'
 default APIKEY='${Environment.GetEnvironmentVariable("APIKEY")}'
+default NATIVE_CACHE_VERSION = '${Environment.GetEnvironmentVariable("DOTNET_BUILD_VERSION")}'
 
 use-standard-lifecycle
 
 #package-restore target='initialize'
   exec program='dotnet' commandline='restore --infer-runtimes src'
-  exec program='dotnet' commandline='restore project.json --configfile ${BASE_DIR}/NuGet.config --packages ${SPLIT_PROJECT_DOWNLOAD} -v Minimal'
+  exec program='dotnet' commandline='restore project.json --configfile ${BASE_DIR}/NuGet.config --packages ${TOOLS_DOWNLOAD_PATH} -v Minimal'
 
 #build-project target='compile'
   exec program='dotnet' commandline='build -f net451' workingdir='${COHERENCE_BUILD_PROJ}'
@@ -40,6 +41,10 @@ use-standard-lifecycle
   var args = '--drop-folder ${BUILD_SHARE} --build-branch ${BUILD_BRANCH} --output-path ${TARGET_DIR} --nuget-publish-feed ${NUGET_PUBLISH_FEED} --apikey ${APIKEY}'
   exec program='dotnet' commandline='run -f net451 -- ${args}' workingdir='${COHERENCE_BUILD_PROJ}'
 
-  var splitPackagesExe = '${Directory.GetFiles(SPLIT_PROJECT_DOWNLOAD, "SplitPackages.exe", SearchOption.AllDirectories).First()}'
+  var splitPackagesExe = '${Directory.GetFiles(TOOLS_DOWNLOAD_PATH, "SplitPackages.exe", SearchOption.AllDirectories).First()}'
   var splitArgs = '--source ${BUILD_DIR} --csv ${SPLIT_CSV_PATH} --destination ${TARGET_DIR}'
   exec program='${splitPackagesExe}' commandline='${splitArgs}' workingdir='${COHERENCE_BUILD_PROJ}'
+
+  var dependenciesPackagerExe = '${Directory.GetFiles(TOOLS_DOWNLOAD_PATH, "DependenciesPackager.exe", SearchOption.AllDirectories).First()}'
+  var dependenciesPackagerArgs = '--project ${TARGET_DIR}\ship\project.json --diagnostics-project ${TARGET_DIR}\ship\noimports.project.json --sources ${TARGET_DIR}\ship --sources ${TARGET_DIR}\ship-ext --sources ${TARGET_DIR}\ext --fallback https://api.nuget.org/v3/index.json --destination ${TARGET_DIR} --version ${NATIVE_CACHE_VERSION}'
+  exec program='${dependenciesPackagerExe}' commandline='${dependenciesPackagerArgs}' workingdir='${COHERENCE_BUILD_PROJ}'
