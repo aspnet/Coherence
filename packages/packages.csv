@@ -111,7 +111,7 @@ Microsoft.AspNetCore.WebUtilities,ship
 Microsoft.Cci,ext
 Microsoft.CodeAnalysis.*,ext
 Microsoft.CSharp,ext
-Microsoft.Data.Sqlite,ship-ext
+Microsoft.Data.Sqlite,ship
 Microsoft.Dnx.*,noship
 Microsoft.Dnx.Compilation.CSharp.Abstractions,noship
 Microsoft.Dnx.Compilation.CSharp.Common,noship
