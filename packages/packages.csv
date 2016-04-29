@@ -8,9 +8,7 @@ dnx-coreclr-win-x64,ship
 dnx-coreclr-win-x86,ship
 dnx-mono,ship
 dotnet-aspnet-codegenerator,ship
-dotnet-publish-iis,ship
 dotnet-razor-tooling,ship
-dotnet-sql-cache,ship
 dotnet-test-xunit,ext
 Microsoft.Extensions.SecretManager.Tools,ship
 Microsoft.DotNet.Watcher.Tools,ship
@@ -57,7 +55,6 @@ Microsoft.AspNetCore.Http.Features,ship
 Microsoft.AspNetCore.HttpOverrides,ship
 Microsoft.AspNetCore.Identity,ship
 Microsoft.AspNetCore.Identity.EntityFrameworkCore,ship
-Microsoft.AspNetCore.IISPlatformHandler,noship
 Microsoft.AspNetCore.Internal.libuv-Darwin,noship
 Microsoft.AspNetCore.Internal.libuv-Linux,noship
 Microsoft.AspNetCore.Internal.libuv-Windows,noship
@@ -70,7 +67,7 @@ Microsoft.AspNetCore.Mvc.ApiExplorer,ship
 Microsoft.AspNetCore.Mvc.Core,ship
 Microsoft.AspNetCore.Mvc.Cors,ship
 Microsoft.AspNetCore.Mvc.DataAnnotations,ship
-Microsoft.AspNetCore.Mvc.Dnx,ship
+Microsoft.AspNetCore.Mvc.Dnx,noship
 Microsoft.AspNetCore.Mvc.Formatters.Json,ship
 Microsoft.AspNetCore.Mvc.Formatters.Xml,ship
 Microsoft.AspNetCore.Mvc.Localization,ship
@@ -110,13 +107,12 @@ Microsoft.AspNetCore.WebSockets.Client,noship
 Microsoft.AspNetCore.WebSockets.Protocol,ship
 Microsoft.AspNetCore.WebSockets.Server,ship
 Microsoft.AspNetCore.WebUtilities,ship
-Microsoft.Cci,ext
 Microsoft.CodeAnalysis.*,ext
 Microsoft.CSharp,ext
 Microsoft.Data.Sqlite,ship
 Microsoft.Dnx.*,noship
-Microsoft.Dnx.Compilation.CSharp.Abstractions,ship
-Microsoft.Dnx.Compilation.CSharp.Common,ship
+Microsoft.Dnx.Compilation.CSharp.Abstractions,noship
+Microsoft.Dnx.Compilation.CSharp.Common,noship
 Microsoft.DotNet.*,ext
 Microsoft.EntityFrameworkCore,ship
 Microsoft.EntityFrameworkCore.InMemory,ship
@@ -132,13 +128,13 @@ Microsoft.EntityFrameworkCore.SqlServer.Design,ship
 Microsoft.EntityFrameworkCore.Tools,ship
 Microsoft.EntityFrameworkCore.Tools.Cli,ship
 Microsoft.EntityFrameworkCore.Tools.Core,ship
-Microsoft.Experimental.IdentityModel.Clients.ActiveDirectory,ext
 Microsoft.Extensions.ActivatorUtilities.Sources,noship
 Microsoft.Extensions.Caching.Abstractions,ship
 Microsoft.Extensions.Caching.Abstractions.VSRC1,ship
 Microsoft.Extensions.Caching.Memory,ship
 Microsoft.Extensions.Caching.Memory.VSRC1,ship
 Microsoft.Extensions.Caching.Redis,ship
+Microsoft.Extensions.Caching.SqlConfig.Tools,ship
 Microsoft.Extensions.Caching.SqlServer,ship
 Microsoft.Extensions.ClosedGenericMatcher.Sources,noship
 Microsoft.Extensions.CodeGeneration,ship
@@ -156,7 +152,6 @@ Microsoft.Extensions.Configuration.Binder,ship
 Microsoft.Extensions.Configuration.CommandLine,ship
 Microsoft.Extensions.Configuration.EnvironmentVariables,ship
 Microsoft.Extensions.Configuration.FileExtensions,ship
-Microsoft.Extensions.Configuration.FileProviderExtensions,ship
 Microsoft.Extensions.Configuration.Ini,ship
 Microsoft.Extensions.Configuration.Json,ship
 Microsoft.Extensions.Configuration.UserSecrets,ship
@@ -167,6 +162,7 @@ Microsoft.Extensions.DependencyInjection.Abstractions,ship
 Microsoft.Extensions.DependencyInjection.Specification.Tests,ship
 Microsoft.Extensions.DependencyModel,ship
 Microsoft.Extensions.DiagnosticAdapter,ship
+Microsoft.Extensions.DotnetToolDispatcher.Sources,noship
 Microsoft.Extensions.FileProviders.Abstractions,ship
 Microsoft.Extensions.FileProviders.Composite,ship
 Microsoft.Extensions.FileProviders.Embedded,ship
@@ -191,7 +187,7 @@ Microsoft.Extensions.Options,ship
 Microsoft.Extensions.OptionsModel.VSRC1,ship
 Microsoft.Extensions.Options.ConfigurationExtensions,ship
 Microsoft.Extensions.PlatformAbstractions,ship
-Microsoft.Extensions.PlatformAbstractions.Dnx,ship
+Microsoft.Extensions.PlatformAbstractions.Dnx,noship
 Microsoft.Extensions.Primitives,ship
 Microsoft.Extensions.Primitives.VSRC1,ship
 Microsoft.Extensions.Process.Sources,noship
@@ -211,7 +207,6 @@ Microsoft.TargetingPack.*,ext
 Microsoft.VisualBasic,ext
 Microsoft.VisualStudio.Web.BrowserLink.Loader,ship
 Microsoft.Win32.*,ext
-NETStandard.App,ext
 NETStandard.Library,ext
 NuGet.*,ext
 PageGenerator,noship
