@@ -7,8 +7,8 @@ dnx-coreclr-win-arm,noship
 dnx-coreclr-win-x64,ship
 dnx-coreclr-win-x86,ship
 dnx-mono,ship
-dotnet-aspnet-codegenerator,ship
-dotnet-razor-tooling,ship
+Microsoft.AspNetCore.Razor.Tools,ship
+Microsoft.Extensions.CodeGenerations.Tools,ship
 dotnet-test-xunit,ext
 Microsoft.Extensions.SecretManager.Tools,ship
 Microsoft.DotNet.Watcher.Tools,ship
