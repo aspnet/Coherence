@@ -9,7 +9,6 @@ dnx-coreclr-win-x86,ship
 dnx-mono,ship
 dotnet-aspnet-codegenerator,ship
 dotnet-razor-tooling,ship
-Microsoft.Extensions.Caching.SqlConfig.Tools,ship
 dotnet-test-xunit,ext
 Microsoft.Extensions.SecretManager.Tools,ship
 Microsoft.DotNet.Watcher.Tools,ship
@@ -108,7 +107,6 @@ Microsoft.AspNetCore.WebSockets.Client,noship
 Microsoft.AspNetCore.WebSockets.Protocol,ship
 Microsoft.AspNetCore.WebSockets.Server,ship
 Microsoft.AspNetCore.WebUtilities,ship
-Microsoft.Cci,ext
 Microsoft.CodeAnalysis.*,ext
 Microsoft.CSharp,ext
 Microsoft.Data.Sqlite,ship
@@ -130,13 +128,13 @@ Microsoft.EntityFrameworkCore.SqlServer.Design,ship
 Microsoft.EntityFrameworkCore.Tools,ship
 Microsoft.EntityFrameworkCore.Tools.Cli,ship
 Microsoft.EntityFrameworkCore.Tools.Core,ship
-Microsoft.Experimental.IdentityModel.Clients.ActiveDirectory,ext
 Microsoft.Extensions.ActivatorUtilities.Sources,noship
 Microsoft.Extensions.Caching.Abstractions,ship
 Microsoft.Extensions.Caching.Abstractions.VSRC1,ship
 Microsoft.Extensions.Caching.Memory,ship
 Microsoft.Extensions.Caching.Memory.VSRC1,ship
 Microsoft.Extensions.Caching.Redis,ship
+Microsoft.Extensions.Caching.SqlConfig.Tools,ship
 Microsoft.Extensions.Caching.SqlServer,ship
 Microsoft.Extensions.ClosedGenericMatcher.Sources,noship
 Microsoft.Extensions.CodeGeneration,ship
@@ -154,7 +152,6 @@ Microsoft.Extensions.Configuration.Binder,ship
 Microsoft.Extensions.Configuration.CommandLine,ship
 Microsoft.Extensions.Configuration.EnvironmentVariables,ship
 Microsoft.Extensions.Configuration.FileExtensions,ship
-Microsoft.Extensions.Configuration.FileProviderExtensions,ship
 Microsoft.Extensions.Configuration.Ini,ship
 Microsoft.Extensions.Configuration.Json,ship
 Microsoft.Extensions.Configuration.UserSecrets,ship
@@ -165,6 +162,7 @@ Microsoft.Extensions.DependencyInjection.Abstractions,ship
 Microsoft.Extensions.DependencyInjection.Specification.Tests,ship
 Microsoft.Extensions.DependencyModel,ship
 Microsoft.Extensions.DiagnosticAdapter,ship
+Microsoft.Extensions.DotnetToolDispatcher.Sources,noship
 Microsoft.Extensions.FileProviders.Abstractions,ship
 Microsoft.Extensions.FileProviders.Composite,ship
 Microsoft.Extensions.FileProviders.Embedded,ship
