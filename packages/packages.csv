@@ -67,7 +67,6 @@ Microsoft.AspNetCore.Mvc.ApiExplorer,ship
 Microsoft.AspNetCore.Mvc.Core,ship
 Microsoft.AspNetCore.Mvc.Cors,ship
 Microsoft.AspNetCore.Mvc.DataAnnotations,ship
-Microsoft.AspNetCore.Mvc.Dnx,noship
 Microsoft.AspNetCore.Mvc.Formatters.Json,ship
 Microsoft.AspNetCore.Mvc.Formatters.Xml,ship
 Microsoft.AspNetCore.Mvc.Localization,ship
