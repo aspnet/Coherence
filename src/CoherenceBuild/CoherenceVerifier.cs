@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Versioning;
-using NuGet;
 
 namespace CoherenceBuild
 {
@@ -22,7 +19,7 @@ namespace CoherenceBuild
                 {
                     if (packageInfo.InvalidCoreCLRPackageReferences.Count > 0)
                     {
-                        Log.WriteError("{0} has invalid package references:", packageInfo.Package.GetFullName());
+                        Log.WriteError("{0} has invalid package references:", packageInfo.Identity);
 
                         foreach (var invalidReference in packageInfo.InvalidCoreCLRPackageReferences)
                         {
@@ -32,19 +29,10 @@ namespace CoherenceBuild
                         }
                     }
 
-                    if (packageInfo.DependencyMismatches.Count > 0)
+                    foreach (var mismatch in packageInfo.DependencyMismatches)
                     {
-                        Log.WriteError("{0} has mismatched dependencies:", packageInfo.Package.GetFullName());
-
-                        foreach (var mismatch in packageInfo.DependencyMismatches)
-                        {
-                            Log.WriteError("    Expected {0}({1}) but got {2}",
-                                mismatch.Dependency,
-                                (mismatch.TargetFramework == VersionUtility.UnsupportedFrameworkName ?
-                                "NETSTANDARDAPP1_5" :
-                                VersionUtility.GetShortFrameworkName(mismatch.TargetFramework)),
-                                mismatch.Info.Package.Version);
-                        }
+                        Log.WriteError($"{packageInfo.Identity} depends on {mismatch.Dependency.Id} " +
+                            $"v{mismatch.Dependency.VersionRange} ({mismatch.TargetFramework}) when the latest build is v{mismatch.Info.Identity.Version}.");
                     }
 
                     success = false;
@@ -62,7 +50,7 @@ namespace CoherenceBuild
                 return;
             }
 
-            if (productPackageInfo.Package.Id.Contains(".VSRC1"))
+            if (productPackageInfo.Identity.Id.Contains(".VSRC1"))
             {
                 // Ignore .VSRC1 for SanityCheck
                 return;
@@ -70,7 +58,7 @@ namespace CoherenceBuild
 
             try
             {
-                foreach (var dependencySet in productPackageInfo.Package.DependencySets)
+                foreach (var dependencySet in productPackageInfo.PackageDependencyGroups)
                 {
                     // If the package doens't target any frameworks, just accept it
                     if (dependencySet.TargetFramework == null)
@@ -79,12 +67,12 @@ namespace CoherenceBuild
                     }
 
                     // Skip PCL frameworks for verification
-                    if (IsPortableFramework(dependencySet.TargetFramework))
+                    if (dependencySet.TargetFramework.IsPCL)
                     {
                         continue;
                     }
 
-                    foreach (var dependency in dependencySet.Dependencies)
+                    foreach (var dependency in dependencySet.Packages)
                     {
                         PackageInfo dependencyPackageInfo;
                         if (!result.AllPackages.TryGetValue(dependency.Id, out dependencyPackageInfo))
@@ -93,13 +81,13 @@ namespace CoherenceBuild
                             continue;
                         }
 
-                        if (string.Equals(dependencySet.TargetFramework.Identifier, ".NETCore", StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals(dependencySet.TargetFramework.Framework, ".NETCore", StringComparison.OrdinalIgnoreCase))
                         {
                             // Skip netcore50 since it references RTM package versions.
                             continue;
                         }
 
-                        if (dependencyPackageInfo.Package.Version != dependency.VersionSpec.MinVersion)
+                        if (dependencyPackageInfo.Identity.Version != dependency.VersionRange.MinVersion)
                         {
                             PackageInfo dependencyInfo;
                             if (result.AllPackages.TryGetValue(dependency.Id, out dependencyInfo) && dependencyInfo.IsDnxPackage)
@@ -128,7 +116,7 @@ namespace CoherenceBuild
             }
             catch
             {
-                Log.WriteError($"Unable to verify package {productPackageInfo.Package.GetFullName()}");
+                Log.WriteError($"Unable to verify package {productPackageInfo.Identity}");
                 throw;
             }
         }
