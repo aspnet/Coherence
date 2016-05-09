@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NuGet;
+using NuGet.Packaging;
+using NuGet.Packaging.Core;
 
 namespace CoherenceBuild
 {
@@ -12,8 +13,9 @@ namespace CoherenceBuild
 
         public bool IsDnxPackage { get; set; }
 
-        // The actual package instance
-        public IPackage Package { get; set; }
+        public PackageIdentity Identity { get; set; }
+
+        public IEnumerable<PackageDependencyGroup> PackageDependencyGroups { get; set; }
 
         // The path to this package
         public string PackagePath { get; set; }

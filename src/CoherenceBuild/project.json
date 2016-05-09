@@ -2,17 +2,14 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NuGet.Core": "2.10.1",
-    "Newtonsoft.Json": "8.0.2",
+    "NuGet.Packaging": "3.5.0-beta",
+    "NuGet.Protocol.Core.v3": "3.5.0-beta",
+    "Newtonsoft.Json": "8.0.3",
     "Microsoft.Extensions.CommandLineUtils": "1.0.0-*"
   },
 
-  "compilationOptions": {
+  "buildOptions": {
     "emitEntryPoint": true
-  },
-
-  "commands": {
-    "CoherenceBuild": "CoherenceBuild"
   },
 
   "frameworks": {

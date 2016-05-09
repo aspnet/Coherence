@@ -1,5 +1,5 @@
-﻿using System.Runtime.Versioning;
-using NuGet;
+﻿using NuGet.Frameworks;
+using NuGet.Packaging.Core;
 
 namespace CoherenceBuild
 {
@@ -7,6 +7,6 @@ namespace CoherenceBuild
     {
         public PackageDependency Dependency { get; set; }
         public PackageInfo Info { get; set; }
-        public FrameworkName TargetFramework { get; set; }
+        public NuGetFramework TargetFramework { get; set; }
     }
 }

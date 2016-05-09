@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using NuGet;
+using NuGet.Common;
+using NuGet.Configuration;
+using NuGet.Packaging.Core;
+using NuGet.Protocol.Core.Types;
+using NuGet.Protocol.Core.v3;
 
 namespace CoherenceBuild
 {
@@ -54,23 +55,24 @@ namespace CoherenceBuild
 
         private static async Task PublishToFeedAsync(ProcessResult processResult, string feed, string apiKey)
         {
-            var server = new PackageServer(feed, "Custom DNX");
             var packagesToPushInOrder = Enumerable.Concat(
                  processResult.CoreCLRPackages.Values,
                  processResult.ProductPackages.OrderBy(p => p.Value.Degree).Select(p => p.Value));
 
-            using (var httpClient = new System.Net.Http.HttpClient())
             using (var semaphore = new SemaphoreSlim(4))
             {
-                var v3Feed = await ReadV3FeedAsync(feed, httpClient);
+                var sourceRepository = CreateSourceRepository(feed);
+
+                var metadataResource = await sourceRepository.GetResourceAsync<MetadataResource>();
+                var packageUpdateResource = await sourceRepository.GetResourceAsync<PackageUpdateResource>();
                 var tasks = packagesToPushInOrder.Select(async package =>
                 {
                     await semaphore.WaitAsync(TimeSpan.FromMinutes(3));
                     try
                     {
-                        if (!package.IsCoherencePackage && await IsAlreadyUploadedAsync(v3Feed, httpClient, package.Package))
+                        if (!package.IsCoherencePackage && await IsAlreadyUploadedAsync(metadataResource, package.Identity))
                         {
-                            Log.WriteInformation($"Skipping {package.Package} since it is already published.");
+                            Log.WriteInformation($"Skipping {package.Identity} since it is already published.");
                             return;
                         }
 
@@ -78,15 +80,17 @@ namespace CoherenceBuild
                         while (attempt < 10)
                         {
                             attempt++;
-                            Log.WriteInformation($"Attempting to publish package {package.Package} (Attempt: {attempt})");
+                            Log.WriteInformation($"Attempting to publish package {package.Identity} (Attempt: {attempt})");
                             try
                             {
-                                await Task.Run(() =>
-                                {
-                                    var length = new FileInfo(package.PackagePath).Length;
-                                    server.PushPackage(apiKey, new PushLocalPackage(package.PackagePath), length, (int)TimeSpan.FromMinutes(5).TotalMilliseconds, disableBuffering: false);
-                                });
-                                Log.WriteInformation($"Done publishing package {package.Package}");
+                                await packageUpdateResource.Push(
+                                    package.PackagePath,
+                                    symbolsSource: null,
+                                    timeoutInSecond: 30,
+                                    disableBuffering: false,
+                                    getApiKey: _ => apiKey,
+                                    log: NullLogger.Instance);
+                                Log.WriteInformation($"Done publishing package {package.Identity}");
                                 return;
                             }
                             catch (Exception ex) when (attempt < 9)
@@ -105,77 +109,38 @@ namespace CoherenceBuild
             }
         }
 
-        private static async Task<string> ReadV3FeedAsync(string feed, System.Net.Http.HttpClient httpClient)
+        private static SourceRepository CreateSourceRepository(string feed)
         {
-            var content = await httpClient.GetStringAsync(feed.TrimEnd('/') + "/api/v3/index.json");
-            var indexJson = JObject.Parse(content);
+            var settings = Settings.LoadDefaultSettings(
+                Directory.GetCurrentDirectory(),
+                configFileName: null,
+                machineWideSettings: null);
+            var sourceRepositoryProvider = new SourceRepositoryProvider(
+                new PackageSourceProvider(settings),
+                FactoryExtensionsV2.GetCoreV3(Repository.Provider));
 
-            return indexJson
-                .Property("resources")
-                ?.Value
-                .AsJEnumerable()
-                ?.Cast<JObject>()
-                .First(item => item.Property("@type").Value.ToString() == "PackageBaseAddress/3.0.0")
-                ?.Property("@id")
-                ?.Value
-                ?.ToString();
+            feed = feed.TrimEnd('/') + "/api/v3/index.json";
+            return sourceRepositoryProvider.CreateRepository(new PackageSource(feed));
         }
 
-        private static async Task<bool> IsAlreadyUploadedAsync(string v3Feed, System.Net.Http.HttpClient client, IPackage package)
+        private static async Task<bool> IsAlreadyUploadedAsync(MetadataResource resource, PackageIdentity packageId)
         {
-            if (string.IsNullOrEmpty(v3Feed))
+            if (resource == null)
             {
                 // If we couldn't locate the v3 feed, republish the packages
                 return false;
             }
 
-            var id = package.Id.ToLowerInvariant();
-            var version = package.Version.ToNormalizedString();
-            var uri = $"{v3Feed.TrimEnd('/')}/{id}/{version}/{id}.{version}.nupkg";
-            var request = new HttpRequestMessage(HttpMethod.Head, uri);
-
             try
             {
-                Log.WriteInformation($"Checking the existence of {uri}");
-                var result = await client.SendAsync(request);
-                return result.StatusCode == System.Net.HttpStatusCode.OK;
+                return await resource.Exists(packageId, NullLogger.Instance, default(CancellationToken));
             }
             catch (Exception ex)
             {
                 // If we can't read feed info, republish the packages
                 var exceptionMessage = (ex?.InnerException ?? ex.GetBaseException()).Message;
-                Log.WriteInformation($"Failed to read package existence from {uri}{Environment.NewLine}{exceptionMessage}.");
+                Log.WriteInformation($"Failed to read package existence {Environment.NewLine}{exceptionMessage}.");
                 return false;
-            }
-        }
-
-        private class PushLocalPackage : LocalPackage
-        {
-            private readonly string _filePath;
-
-            public PushLocalPackage(string filePath)
-            {
-                _filePath = filePath;
-            }
-
-            public override void ExtractContents(IFileSystem fileSystem, string extractPath)
-            {
-                throw new NotSupportedException();
-            }
-
-            public override Stream GetStream()
-            {
-                return File.OpenRead(_filePath);
-            }
-
-            protected override IEnumerable<IPackageAssemblyReference> GetAssemblyReferencesCore()
-            {
-                throw new NotSupportedException();
-            }
-
-            protected override IEnumerable<IPackageFile> GetFilesBase()
-            {
-                throw new NotSupportedException();
             }
         }
     }
