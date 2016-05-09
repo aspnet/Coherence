@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
@@ -62,14 +61,16 @@ namespace CoherenceBuild
 
             using (var semaphore = new SemaphoreSlim(4))
             {
-                var resource = await GetMetadataResourceAsync(feed);
-                var packageUpdateResource = new PackageUpdateResource(feed, httpSource: null);
+                var sourceRepository = CreateSourceRepository(feed);
+
+                var metadataResource = await sourceRepository.GetResourceAsync<MetadataResource>();
+                var packageUpdateResource = await sourceRepository.GetResourceAsync<PackageUpdateResource>();
                 var tasks = packagesToPushInOrder.Select(async package =>
                 {
                     await semaphore.WaitAsync(TimeSpan.FromMinutes(3));
                     try
                     {
-                        if (!package.IsCoherencePackage && await IsAlreadyUploadedAsync(resource, package.Identity))
+                        if (!package.IsCoherencePackage && await IsAlreadyUploadedAsync(metadataResource, package.Identity))
                         {
                             Log.WriteInformation($"Skipping {package.Identity} since it is already published.");
                             return;
@@ -108,7 +109,7 @@ namespace CoherenceBuild
             }
         }
 
-        private static Task<MetadataResource> GetMetadataResourceAsync(string feed)
+        private static SourceRepository CreateSourceRepository(string feed)
         {
             var settings = Settings.LoadDefaultSettings(
                 Directory.GetCurrentDirectory(),
@@ -119,8 +120,7 @@ namespace CoherenceBuild
                 FactoryExtensionsV2.GetCoreV3(Repository.Provider));
 
             feed = feed.TrimEnd('/') + "/api/v3/index.json";
-            var sourceRepository = sourceRepositoryProvider.CreateRepository(new PackageSource(feed));
-            return sourceRepository.GetResourceAsync<MetadataResource>();
+            return sourceRepositoryProvider.CreateRepository(new PackageSource(feed));
         }
 
         private static async Task<bool> IsAlreadyUploadedAsync(MetadataResource resource, PackageIdentity packageId)
