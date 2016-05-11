@@ -8,7 +8,7 @@ dnx-coreclr-win-x64,noship
 dnx-coreclr-win-x86,noship
 dnx-mono,noship
 Microsoft.AspNetCore.Razor.Tools,ship
-Microsoft.Extensions.CodeGeneration.Tools,ship
+Microsoft.VisualStudio.Web.CodeGeneration.Tools,ship
 dotnet-test-xunit,ext
 Microsoft.Extensions.SecretManager.Tools,ship
 Microsoft.DotNet.Watcher.Tools,ship
@@ -136,12 +136,12 @@ Microsoft.Extensions.Caching.Redis,ship
 Microsoft.Extensions.Caching.SqlConfig.Tools,ship
 Microsoft.Extensions.Caching.SqlServer,ship
 Microsoft.Extensions.ClosedGenericMatcher.Sources,noship
-Microsoft.Extensions.CodeGeneration,ship
-Microsoft.Extensions.CodeGeneration.Core,ship
-Microsoft.Extensions.CodeGeneration.EntityFrameworkCore,ship
-Microsoft.Extensions.CodeGeneration.Templating,ship
-Microsoft.Extensions.CodeGeneration.Utils,ship
-Microsoft.Extensions.CodeGenerators.Mvc,ship
+Microsoft.VisualStudio.Web.CodeGeneration,ship
+Microsoft.VisualStudio.Web.CodeGeneration.Core,ship
+Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore,ship
+Microsoft.VisualStudio.Web.CodeGeneration.Templating,ship
+Microsoft.VisualStudio.Web.CodeGeneration.Utils,ship
+Microsoft.VisualStudio.Web.CodeGenerators.Mvc,ship
 Microsoft.Extensions.CommandLineUtils,ship
 Microsoft.Extensions.CommandLineUtils.Sources,noship
 Microsoft.Extensions.CompilationAbstractions,noship
