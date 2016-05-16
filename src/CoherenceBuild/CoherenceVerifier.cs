@@ -50,12 +50,6 @@ namespace CoherenceBuild
                 return;
             }
 
-            if (productPackageInfo.Identity.Id.Contains(".VSRC1"))
-            {
-                // Ignore .VSRC1 for SanityCheck
-                return;
-            }
-
             try
             {
                 foreach (var dependencySet in productPackageInfo.PackageDependencyGroups)
