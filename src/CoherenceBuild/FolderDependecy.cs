@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace CoherenceBuild
 {
@@ -38,12 +39,12 @@ namespace CoherenceBuild
 
             var sourceInfo = new DirectoryInfo(source);
 
-            foreach (var sourceFile in sourceInfo.GetFiles())
+            Parallel.ForEach(sourceInfo.GetFiles(), sourceFile =>
             {
                 var sourceFilePath = sourceFile.FullName;
                 var destinationFilePath = Path.Combine(destination, Path.GetFileName(sourceFilePath));
                 CopyFile(sourceFilePath, destinationFilePath);
-            }
+            });
 
             foreach (var sourceSubDir in sourceInfo.GetDirectories())
             {

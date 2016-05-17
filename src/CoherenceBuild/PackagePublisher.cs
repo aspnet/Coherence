@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
 using NuGet.Configuration;
+using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
 using NuGet.Protocol.Core.v3;
@@ -13,64 +15,50 @@ namespace CoherenceBuild
 {
     public static class PackagePublisher
     {
-        public static void PublishToShare(
-            ProcessResult processResult,
-            string outputPath,
-            string symbolsOutputPath)
+        public static void PublishToFeed(IEnumerable<PackageInfo> processedPackages, string feed, string apiKey)
         {
-            Directory.CreateDirectory(outputPath);
-            Directory.CreateDirectory(symbolsOutputPath);
-            var packagesToCopy = processResult.AllPackages.Values;
+            PublishToFeedAsync(processedPackages, feed, apiKey).Wait();
+        }
 
-            Parallel.ForEach(packagesToCopy, new ParallelOptions { MaxDegreeOfParallelism = 4 }, packageInfo =>
+        public static void ExpandPackageFiles(IEnumerable<PackageInfo> processedPackages, string expandDirectory)
+        {
+            Parallel.ForEach (processedPackages, package =>
             {
-                var packagePath = Path.Combine(outputPath, Path.GetFileName(packageInfo.PackagePath));
-
-                Program.Retry(() =>
+                Log.WriteInformation($"Expanding {package.Identity}.");
+                using (var inputStream = File.OpenRead(package.PackagePath))
                 {
-                    File.Copy(packageInfo.PackagePath, packagePath, overwrite: true);
-                    // Update package path to point to local share.
-                    packageInfo.PackagePath = packagePath;
-                });
+                    var versionFolderPathContext = new VersionFolderPathContext(
+                        package.Identity,
+                        expandDirectory,
+                        NullLogger.Instance,
+                        fixNuspecIdCasing: true,
+                        packageSaveMode: PackageSaveMode.Nupkg | PackageSaveMode.Nuspec,
+                        normalizeFileNames: false,
+                        xmlDocFileSaveMode: XmlDocFileSaveMode.Skip);
 
-                if (File.Exists(packageInfo.SymbolsPath))
-                {
-                    Program.Retry(() =>
-                    {
-                        File.Copy(
-                            packageInfo.SymbolsPath,
-                            Path.Combine(symbolsOutputPath, Path.GetFileName(packageInfo.SymbolsPath)),
-                            overwrite: true);
-                    });
+                    PackageExtractor.InstallFromSourceAsync(
+                        inputStream.CopyToAsync,
+                        versionFolderPathContext,
+                        default(CancellationToken)).Wait();
                 }
-
-                Log.WriteInformation("Copied to {0}", packagePath);
             });
         }
 
-        public static void PublishToFeed(ProcessResult processResult, string feed, string apiKey)
+        private static async Task PublishToFeedAsync(IEnumerable<PackageInfo> processedPackages, string feed, string apiKey)
         {
-            PublishToFeedAsync(processResult, feed, apiKey).Wait();
-        }
-
-        private static async Task PublishToFeedAsync(ProcessResult processResult, string feed, string apiKey)
-        {
-            var packagesToPushInOrder = Enumerable.Concat(
-                 processResult.CoreCLRPackages.Values,
-                 processResult.ProductPackages.OrderBy(p => p.Value.Degree).Select(p => p.Value));
-
+            var packagesToPush = processedPackages.OrderBy(a => a.Degree);
             using (var semaphore = new SemaphoreSlim(4))
             {
                 var sourceRepository = CreateSourceRepository(feed);
 
                 var metadataResource = await sourceRepository.GetResourceAsync<MetadataResource>();
                 var packageUpdateResource = await sourceRepository.GetResourceAsync<PackageUpdateResource>();
-                var tasks = packagesToPushInOrder.Select(async package =>
+                var tasks = processedPackages.Select(async package =>
                 {
                     await semaphore.WaitAsync(TimeSpan.FromMinutes(3));
                     try
                     {
-                        if (!package.IsCoherencePackage && await IsAlreadyUploadedAsync(metadataResource, package.Identity))
+                        if (package.IsPartnerPackage && await IsAlreadyUploadedAsync(metadataResource, package.Identity))
                         {
                             Log.WriteInformation($"Skipping {package.Identity} since it is already published.");
                             return;

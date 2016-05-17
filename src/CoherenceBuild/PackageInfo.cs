@@ -7,11 +7,7 @@ namespace CoherenceBuild
 {
     public class PackageInfo
     {
-        public bool IsCoreCLRPackage { get; set; }
-
-        public bool IsCoherencePackage { get; set; }
-
-        public bool IsDnxPackage { get; set; }
+        public bool IsPartnerPackage { get; set; }
 
         public PackageIdentity Identity { get; set; }
 

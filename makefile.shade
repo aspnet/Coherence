@@ -18,6 +18,10 @@ default PACKAGE_DROP_SHARE='${Environment.GetEnvironmentVariable("PACKAGE_DROP_S
 default NUGET_PUBLISH_FEED='${Environment.GetEnvironmentVariable("NUGET_PUBLISH_FEED")}'
 default APIKEY='${Environment.GetEnvironmentVariable("APIKEY")}'
 default NATIVE_CACHE_VERSION = '${Environment.GetEnvironmentVariable("DOTNET_BUILD_VERSION")}'
+default UNIVERSECOHERENCE_BUILD = '${Environment.GetEnvironmentVariable("COHERENCE_UNIVERSECOHERENCE_BUILD_NUMBER")}'
+default CORECLR_BUILD = '${Environment.GetEnvironmentVariable("COHERENCE_CORECLR_BUILD_NUMBER")}'
+default DISABLE_PRODUCT_SANITYCHECK = '${Environment.GetEnvironmentVariable("DISABLE_COHERENCE_CHECK") == "true"}'
+default DISABLE_PARTNER_SANITYCHECK = '${Environment.GetEnvironmentVariable("DISABLE_PARTNER_COHERENCE_CHECK") == "true"}'
 
 use-standard-lifecycle
 
@@ -25,26 +29,33 @@ use-standard-lifecycle
   exec program='dotnet' commandline='restore --infer-runtimes src'
   exec program='dotnet' commandline='restore project.json --configfile ${BASE_DIR}/NuGet.config --packages ${TOOLS_DOWNLOAD_PATH} -v Minimal'
 
-#build-project target='compile'
-  exec program='dotnet' commandline='build -f net451' workingdir='${COHERENCE_BUILD_PROJ}'
-
 #copy-bits target='package'
+  var args = '--drop-folder ${BUILD_SHARE} --build-branch ${BUILD_BRANCH} --output-path ${TARGET_DIR} --universecoherence-build ${UNIVERSECOHERENCE_BUILD} --coreclr-build ${CORECLR_BUILD}'
   @{
-      if (String.IsNullOrEmpty(BUILD_SHARE))
-      {
-        Log.Warn("BUILD_SHARE environment varible is not set");
-        Environment.Exit(-1);
-        return;
-      }
-   }
+     if (DISABLE_PARTNER_SANITYCHECK)
+     {
+       args += " --disable-partner-package-verification";
+     }
 
-  var args = '--drop-folder ${BUILD_SHARE} --build-branch ${BUILD_BRANCH} --output-path ${TARGET_DIR} --nuget-publish-feed ${NUGET_PUBLISH_FEED} --apikey ${APIKEY}'
+     if (DISABLE_PRODUCT_SANITYCHECK)
+     {
+       args += " --disable-product-package-verification";
+     }
+
+     if (!string.IsNullOrEmpty(NUGET_PUBLISH_FEED))
+     {
+       args += string.Format("--nuget-publish-feed {0} --api-key {1}", NUGET_PUBLISH_FEED, APIKEY);
+     }
+  }
+
   exec program='dotnet' commandline='run -f net451 -- ${args}' workingdir='${COHERENCE_BUILD_PROJ}'
 
+#split-packages target='package'
   var splitPackagesExe = '${Directory.GetFiles(TOOLS_DOWNLOAD_PATH, "SplitPackages.exe", SearchOption.AllDirectories).First()}'
   var splitArgs = '--source ${BUILD_DIR} --csv ${SPLIT_CSV_PATH} --destination ${TARGET_DIR}'
   exec program='${splitPackagesExe}' commandline='${splitArgs}' workingdir='${COHERENCE_BUILD_PROJ}'
 
+#package-dependencies target='package'
   var dependenciesPackagerExe = '${Directory.GetFiles(TOOLS_DOWNLOAD_PATH, "DependenciesPackager.exe", SearchOption.AllDirectories).First()}'
   var dependenciesPackagerArgs = '--project ${TARGET_DIR}\ship\project.json --diagnostics-project ${TARGET_DIR}\ship\noimports.project.json --sources ${TARGET_DIR}\ship --sources ${TARGET_DIR}\ship-ext --sources ${TARGET_DIR}\ext --fallback https://api.nuget.org/v3/index.json --destination ${TARGET_DIR} --version ${NATIVE_CACHE_VERSION}'
   exec program='${dependenciesPackagerExe}' commandline='${dependenciesPackagerArgs}' workingdir='${COHERENCE_BUILD_PROJ}'

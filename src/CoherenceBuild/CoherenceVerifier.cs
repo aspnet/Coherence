@@ -1,19 +1,40 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Versioning;
 
 namespace CoherenceBuild
 {
     public class CoherenceVerifier
     {
-        public static bool VerifyAll(ProcessResult result)
+        private readonly IEnumerable<PackageInfo> _packages;
+        private readonly Dictionary<string, PackageInfo> _packageLookup;
+        private readonly CoherenceVerifyBehavior _verifyBehavior;
+
+        public CoherenceVerifier(
+            IEnumerable<PackageInfo> packages,
+            CoherenceVerifyBehavior verifyBehavior)
         {
-            foreach (var productPackageInfo in result.ProductPackages.Values)
+            _packages = packages;
+            _packageLookup = _packages.ToDictionary(p => p.Identity.Id, StringComparer.OrdinalIgnoreCase);
+            _verifyBehavior = verifyBehavior;
+        }
+
+        public bool VerifyAll()
+        {
+            if (_verifyBehavior == CoherenceVerifyBehavior.None)
             {
-                Visit(productPackageInfo, result);
+                // Disabled sanity check.
+                return true;
+            }
+
+            foreach (var packageInfo in _packages)
+            {
+                Visit(packageInfo);
             }
 
             var success = true;
-            foreach (var packageInfo in result.ProductPackages.Values)
+            foreach (var packageInfo in _packages)
             {
                 if (!packageInfo.Success)
                 {
@@ -42,17 +63,29 @@ namespace CoherenceBuild
             return success;
         }
 
-        private static void Visit(PackageInfo productPackageInfo, ProcessResult result)
+        private void Visit(PackageInfo packageInfo)
         {
-            if (!productPackageInfo.IsCoherencePackage)
+            if (packageInfo.IsPartnerPackage)
             {
-                // Only verify packages from UniverseCoherence.
-                return;
+                if ((_verifyBehavior & CoherenceVerifyBehavior.PartnerPackages) != CoherenceVerifyBehavior.PartnerPackages)
+                {
+                    Log.WriteInformation($"Skipping verification for {packageInfo.Identity}.");
+                    return;
+                }
+            }
+            else
+            {
+                if ((_verifyBehavior & CoherenceVerifyBehavior.ProductPackages) != CoherenceVerifyBehavior.ProductPackages)
+                {
+                    Log.WriteInformation($"Skipping verification for {packageInfo.Identity}.");
+                    return;
+                }
             }
 
+            Log.WriteInformation($"Processing package {packageInfo.Identity}");
             try
             {
-                foreach (var dependencySet in productPackageInfo.PackageDependencyGroups)
+                foreach (var dependencySet in packageInfo.PackageDependencyGroups)
                 {
                     // If the package doens't target any frameworks, just accept it
                     if (dependencySet.TargetFramework == null)
@@ -69,7 +102,7 @@ namespace CoherenceBuild
                     foreach (var dependency in dependencySet.Packages)
                     {
                         PackageInfo dependencyPackageInfo;
-                        if (!result.AllPackages.TryGetValue(dependency.Id, out dependencyPackageInfo))
+                        if (!_packageLookup.TryGetValue(dependency.Id, out dependencyPackageInfo))
                         {
                             // External dependency
                             continue;
@@ -83,17 +116,10 @@ namespace CoherenceBuild
 
                         if (dependencyPackageInfo.Identity.Version != dependency.VersionRange.MinVersion)
                         {
-                            PackageInfo dependencyInfo;
-                            if (result.AllPackages.TryGetValue(dependency.Id, out dependencyInfo) && dependencyInfo.IsDnxPackage)
-                            {
-                                // Ignore Dnx dependencies
-                                continue;
-                            }
-
                             // For any dependency in the universe
                             // Add a mismatch if the min version doesn't work out
                             // (we only really care about >= minVersion)
-                            productPackageInfo.DependencyMismatches.Add(new DependencyWithIssue
+                            packageInfo.DependencyMismatches.Add(new DependencyWithIssue
                             {
                                 Dependency = dependency,
                                 TargetFramework = dependencySet.TargetFramework,
@@ -101,16 +127,17 @@ namespace CoherenceBuild
                             });
                         }
 
-                        if (result.ProductPackages.ContainsKey(dependency.Id))
+                        PackageInfo dependencyInfo;
+                        if (_packageLookup.TryGetValue(dependency.Id, out dependencyInfo) && !dependencyInfo.IsPartnerPackage)
                         {
-                            productPackageInfo.ProductDependencies.Add(dependencyPackageInfo);
+                            packageInfo.ProductDependencies.Add(dependencyPackageInfo);
                         }
                     }
                 }
             }
             catch
             {
-                Log.WriteError($"Unable to verify package {productPackageInfo.Identity}");
+                Log.WriteError($"Unable to verify package {packageInfo.Identity}");
                 throw;
             }
         }
