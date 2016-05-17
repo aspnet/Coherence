@@ -203,3 +203,4 @@ PageGenerator,noship
 runtime.*,ext
 System.*,ext
 xunit.runner.*,noship
+Microsoft.Private.PackageBaseline,ext
