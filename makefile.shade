@@ -34,17 +34,17 @@ use-standard-lifecycle
   @{
      if (DISABLE_PARTNER_SANITYCHECK)
      {
-       args += " --disable-partner-package-verification";
+       args += " --disable-partner-package-verification ";
      }
 
      if (DISABLE_PRODUCT_SANITYCHECK)
      {
-       args += " --disable-product-package-verification";
+       args += " --disable-product-package-verification ";
      }
 
      if (!string.IsNullOrEmpty(NUGET_PUBLISH_FEED))
      {
-       args += string.Format("--nuget-publish-feed {0} --api-key {1}", NUGET_PUBLISH_FEED, APIKEY);
+       args += string.Format(" --nuget-publish-feed {0} --api-key {1}", NUGET_PUBLISH_FEED, APIKEY);
      }
   }
 
