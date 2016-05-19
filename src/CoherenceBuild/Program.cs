@@ -15,7 +15,7 @@ namespace CoherenceBuild
             var buildBranch = app.Option("--build-branch", "Build branch (dev \\ release)", CommandOptionType.SingleValue);
             var outputPath = app.Option("--output-path", "Output path", CommandOptionType.SingleValue);
             var nugetPublishFeed = app.Option("--nuget-publish-feed", "Feed to push packages to", CommandOptionType.SingleValue);
-            var apiKey = app.Option("--apikey", "NuGet API Key", CommandOptionType.SingleValue);
+            var apiKey = app.Option("--api-key", "NuGet API Key", CommandOptionType.SingleValue);
             var ciVolatileShare = app.Option("--ci-volatile-share", "CI Volatile share", CommandOptionType.SingleValue);
             var universeCoherenceDropDir = app.Option(
                 "--universecoherence-build",
