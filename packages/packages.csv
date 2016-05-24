@@ -44,7 +44,7 @@ Microsoft.AspNetCore.Http.Extensions,ship
 Microsoft.AspNetCore.Http.Features,ship
 Microsoft.AspNetCore.HttpOverrides,ship
 Microsoft.AspNetCore.Identity,ship
-Microsoft.AspNet.Identity.CoreCompat,ship
+Microsoft.AspNet.Identity.AspNetCoreCompat,ship
 Microsoft.AspNetCore.Identity.EntityFrameworkCore,ship
 Microsoft.AspNetCore.JsonPatch,ship
 Microsoft.AspNetCore.Localization,ship
