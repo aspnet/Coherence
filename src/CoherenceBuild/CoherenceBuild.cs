@@ -98,13 +98,6 @@ namespace CoherenceBuild
             Parallel.ForEach(Directory.GetFiles(packageSourceDir, "*.nupkg"), packagePath =>
             {
                 var packageFileName = Path.GetFileName(packagePath);
-                if (packagePath.EndsWith(".symbols.nupkg"))
-                {
-                    var targetPath = Path.Combine(symbolsTargetDir, packageFileName);
-                    File.Copy(packagePath, targetPath, overwrite: true);
-                    return;
-                }
-
                 var packageInfo = new PackageInfo
                 {
                     IsPartnerPackage = repo.Name == "CoreCLR",
@@ -124,8 +117,16 @@ namespace CoherenceBuild
                     return;
                 }
 
-                File.Copy(packagePath, packageInfo.PackagePath, overwrite: true);
-                processedPackages.Add(packageInfo);
+                if (packagePath.EndsWith(".symbols.nupkg"))
+                {
+                    var targetPath = Path.Combine(symbolsTargetDir, packageFileName);
+                    File.Copy(packagePath, targetPath, overwrite: true);
+                }
+                else
+                {
+                    File.Copy(packagePath, packageInfo.PackagePath, overwrite: true);
+                    processedPackages.Add(packageInfo);
+                }
             });
         }
 
