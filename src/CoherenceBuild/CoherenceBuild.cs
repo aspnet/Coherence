@@ -10,7 +10,7 @@ namespace CoherenceBuild
     public class CoherenceBuild
     {
         private const int SuccessExitCode = 0;
-        private const int FailureExitCode = 0;
+        private const int FailureExitCode = 1;
 
         private List<RepositoryInfo> _reposToProcess;
         private readonly string _dropFolder;
