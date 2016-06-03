@@ -163,6 +163,7 @@ Microsoft.Extensions.Process.Sources,noship
 Microsoft.Extensions.PropertyActivator.Sources,noship
 Microsoft.Extensions.PropertyHelper.Sources,noship
 Microsoft.Extensions.SecurityHelper.Sources,noship
+Microsoft.Extensions.StackTrace.Sources,noship
 Microsoft.Extensions.TypeNameHelper.Sources,noship
 Microsoft.Extensions.WebEncoders,ship
 Microsoft.Net.Http.Headers,ship
