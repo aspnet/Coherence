@@ -104,7 +104,7 @@ Microsoft.EntityFrameworkCore.Sqlite.Design,ship
 Microsoft.EntityFrameworkCore.SqlServer,ship
 Microsoft.EntityFrameworkCore.SqlServer.Design,ship
 Microsoft.EntityFrameworkCore.Tools,ship
-Microsoft.EntityFrameworkCore.Tools.Cli,ship
+Microsoft.EntityFrameworkCore.Design,ship
 Microsoft.EntityFrameworkCore.Tools.Core,ship
 Microsoft.Extensions.ActivatorUtilities.Sources,noship
 Microsoft.Extensions.Caching.Abstractions,ship
