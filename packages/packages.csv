@@ -4,7 +4,6 @@ Microsoft.VisualStudio.Web.CodeGeneration.Tools,ship
 Microsoft.Extensions.SecretManager.Tools,ship
 Microsoft.DotNet.Watcher.Tools,ship
 Microsoft.DotNet.Watcher.Core,ship
-Libuv,ship-ext
 Microsoft.AspNet.SignalR.Client.Cpp.v120.WinDesktop,noship
 Microsoft.AspNet.SignalR.Client.Cpp.v140.WinDesktop,noship
 Microsoft.AspNetCore.Antiforgery,ship
