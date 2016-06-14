@@ -92,6 +92,8 @@ Microsoft.AspNetCore.WebSockets.Server,ship
 Microsoft.AspNetCore.WebUtilities,ship
 Microsoft.Data.Sqlite,ship
 Microsoft.EntityFrameworkCore,ship
+Microsoft.EntityFrameworkCore.Design,ship
+Microsoft.EntityFrameworkCore.Design.Core,ship
 Microsoft.EntityFrameworkCore.InMemory,ship
 Microsoft.EntityFrameworkCore.Relational,ship
 Microsoft.EntityFrameworkCore.Relational.Design,ship
@@ -103,8 +105,6 @@ Microsoft.EntityFrameworkCore.Sqlite.Design,ship
 Microsoft.EntityFrameworkCore.SqlServer,ship
 Microsoft.EntityFrameworkCore.SqlServer.Design,ship
 Microsoft.EntityFrameworkCore.Tools,ship
-Microsoft.EntityFrameworkCore.Design,ship
-Microsoft.EntityFrameworkCore.Tools.Core,ship
 Microsoft.Extensions.ActivatorUtilities.Sources,noship
 Microsoft.Extensions.Caching.Abstractions,ship
 Microsoft.Extensions.Caching.Memory,ship
