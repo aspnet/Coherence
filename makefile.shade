@@ -63,5 +63,5 @@ use-standard-lifecycle
     }
   }
   var dependenciesPackagerExe = '${Directory.GetFiles(TOOLS_DOWNLOAD_PATH, "DependenciesPackager.exe", SearchOption.AllDirectories).First()}'
-  var dependenciesPackagerArgs = '--project ${TARGET_DIR}\ship\project.json --diagnostics-project ${TARGET_DIR}\ship\noimports.project.json --sources ${TARGET_DIR}\ship --sources ${TARGET_DIR}\ext --fallback https://api.nuget.org/v3/index.json --fallback https://www.myget.org/f/aspnetexternal${BUILD_BRANCH} --destination ${TARGET_DIR} --version ${NATIVE_CACHE_VERSION}'
+  var dependenciesPackagerArgs = '--project ${TARGET_DIR}\ship\project.json --diagnostics-project ${TARGET_DIR}\ship\noimports.project.json --sources ${TARGET_DIR}\ship --sources ${TARGET_DIR}\ext --fallback https://api.nuget.org/v3/index.json --fallback https://www.myget.org/f/aspnetexternal${BUILD_BRANCH} --destination ${TARGET_DIR} --version ${NATIVE_CACHE_VERSION} --prefix AspNetCore --runtime win7-x86 --runtime win7-x64'
   exec program='${dependenciesPackagerExe}' commandline='${dependenciesPackagerArgs}' workingdir='${COHERENCE_BUILD_PROJ}'
