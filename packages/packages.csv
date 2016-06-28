@@ -150,6 +150,7 @@ Microsoft.Extensions.Logging.Abstractions,ship,include
 Microsoft.Extensions.Logging.Console,ship,include
 Microsoft.Extensions.Logging.Debug,ship,include
 Microsoft.Extensions.Logging.EventLog,ship,exclude
+Microsoft.Extensions.Logging.EventSource,ship,exclude
 Microsoft.Extensions.Logging.Filter,ship,include
 Microsoft.Extensions.Logging.Testing,noship,exclude
 Microsoft.Extensions.Logging.TraceSource,ship,include
