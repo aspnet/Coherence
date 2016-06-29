@@ -1,4 +1,5 @@
 Package,Category,OptimizedCache
+Microsoft.AspNetCore.Razor.Design,ship,exclude
 Microsoft.AspNetCore.Razor.Tools,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Tools,ship,exclude
 Microsoft.Extensions.SecretManager.Tools,ship,exclude
