@@ -120,6 +120,7 @@ Microsoft.VisualStudio.Web.CodeGeneration.Templating,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Utils,ship,exclude
 Microsoft.VisualStudio.Web.CodeGenerators.Mvc,ship,exclude
 Microsoft.Extensions.CommandLineUtils,ship,exclude
+Microsoft.Extensions.CommandLineUtils.Sources,noship,exclude
 Microsoft.Extensions.Configuration,ship,include
 Microsoft.Extensions.Configuration.Abstractions,ship,include
 Microsoft.Extensions.Configuration.Binder,ship,include
