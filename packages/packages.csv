@@ -68,6 +68,7 @@ Microsoft.AspNetCore.Proxy,ship,include
 Microsoft.AspNetCore.Razor,ship,include
 Microsoft.AspNetCore.Razor.Runtime,ship,include
 Microsoft.AspNetCore.Razor.Test.Sources,noship,exclude
+Microsoft.AspNetCore.Rewrite,ship,include
 Microsoft.AspNetCore.Routing,ship,include
 Microsoft.AspNetCore.Routing.Abstractions,ship,include
 Microsoft.AspNetCore.Routing.DecisionTree.Sources,noship,exclude
