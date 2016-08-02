@@ -178,3 +178,4 @@ Microsoft.Net.Http.Server,ship,include
 Microsoft.Net.WebSockets.Server,ship,include
 Microsoft.Owin.Security.Interop,ship,exclude
 Microsoft.VisualStudio.Web.BrowserLink.Loader,ship,exclude
+RazorToolingTestApp.LibraryPackage,noship,exclude
