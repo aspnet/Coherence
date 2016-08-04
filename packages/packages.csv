@@ -89,9 +89,7 @@ Microsoft.AspNetCore.SignalR.SqlServer,noship,exclude
 Microsoft.AspNetCore.StaticFiles,ship,include
 Microsoft.AspNetCore.TestHost,ship,exclude
 Microsoft.AspNetCore.Testing,noship,exclude
-Microsoft.AspNetCore.WebSockets.Client,noship,exclude
-Microsoft.AspNetCore.WebSockets.Protocol,ship,include
-Microsoft.AspNetCore.WebSockets.Server,ship,include
+Microsoft.AspNetCore.WebSockets,ship,include
 Microsoft.AspNetCore.WebUtilities,ship,include
 Microsoft.Data.Sqlite,ship,include
 Microsoft.EntityFrameworkCore,ship,include
