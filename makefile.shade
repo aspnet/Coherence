@@ -55,13 +55,22 @@ use-standard-lifecycle
   var splitArgs = '--source ${BUILD_DIR} --csv ${SPLIT_CSV_PATH} --destination ${TARGET_DIR}'
   exec program='${splitPackagesExe}' commandline='${splitArgs}' workingdir='${COHERENCE_BUILD_PROJ}'
 
-#package-dependencies target='package'
+#run-test-restore target='package'
+  var restoreDirectory='${BASE_DIR}/.test-restore'
+  var restoreArgs = '${TARGET_DIR}/ship/project.json --source ${TARGET_DIR}/ship --source ${TARGET_DIR}/ext --fallbacksource https://api.nuget.org/v3/index.json --packages ${restoreDirectory}'
   @{
-    if (string.IsNullOrEmpty(BUILD_BRANCH))
+    try
     {
-      throw new Exception("BUILD_BRANCH not specified.");
+        Exec("dotnet", "restore " + restoreArgs);
+    }
+    finally
+    {
+        if (Directory.Exists(restoreDirectory))
+        {
+            Directory.Delete(restoreDirectory, recursive: true);
+        }
     }
   }
-  var dependenciesPackagerDll = '${Directory.GetFiles(TOOLS_DOWNLOAD_PATH, "DependenciesPackager.dll", SearchOption.AllDirectories).First()}'
-  var dependenciesPackagerArgs = '--project ${TARGET_DIR}\ship\project.json --diagnostics-project ${TARGET_DIR}\ship\noimports.project.json --sources ${TARGET_DIR}\ship --sources ${TARGET_DIR}\ext --fallback https://api.nuget.org/v3/index.json --fallback https://www.myget.org/f/aspnetexternal${BUILD_BRANCH} --destination ${TARGET_DIR} --version ${NATIVE_CACHE_VERSION} --prefix AspNetCore --runtime win7-x86 --runtime win7-x64'
-  exec program='dotnet' commandline='${dependenciesPackagerDll} ${dependenciesPackagerArgs}' workingdir='${COHERENCE_BUILD_PROJ}'
+
+macro name='Exec' program='string' commandline='string'
+    exec
