@@ -8,8 +8,8 @@ using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
+using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
-using NuGet.Protocol.Core.v3;
 
 namespace CoherenceBuild
 {
@@ -31,9 +31,7 @@ namespace CoherenceBuild
                         package.Identity,
                         expandDirectory,
                         NullLogger.Instance,
-                        fixNuspecIdCasing: true,
                         packageSaveMode: PackageSaveMode.Nupkg | PackageSaveMode.Nuspec,
-                        normalizeFileNames: false,
                         xmlDocFileSaveMode: XmlDocFileSaveMode.Skip);
 
                     PackageExtractor.InstallFromSourceAsync(
@@ -73,10 +71,11 @@ namespace CoherenceBuild
                             {
                                 await packageUpdateResource.Push(
                                     package.PackagePath,
-                                    symbolsSource: null,
+                                    symbolSource: null,
                                     timeoutInSecond: 30,
                                     disableBuffering: false,
                                     getApiKey: _ => apiKey,
+                                    getSymbolApiKey: _ => null,
                                     log: NullLogger.Instance);
                                 Log.WriteInformation($"Done publishing package {package.Identity}");
                                 return;
@@ -99,16 +98,7 @@ namespace CoherenceBuild
 
         private static SourceRepository CreateSourceRepository(string feed)
         {
-            var settings = Settings.LoadDefaultSettings(
-                Directory.GetCurrentDirectory(),
-                configFileName: null,
-                machineWideSettings: null);
-            var sourceRepositoryProvider = new SourceRepositoryProvider(
-                new PackageSourceProvider(settings),
-                FactoryExtensionsV2.GetCoreV3(Repository.Provider));
-
-            feed = feed.TrimEnd('/') + "/api/v3/index.json";
-            return sourceRepositoryProvider.CreateRepository(new PackageSource(feed));
+            return Repository.CreateSource(Repository.Provider.GetCoreV3(), feed);
         }
 
         private static async Task<bool> IsAlreadyUploadedAsync(MetadataResource resource, PackageIdentity packageId)
