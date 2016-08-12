@@ -55,7 +55,7 @@ use-standard-lifecycle
   var splitArgs = '--source ${BUILD_DIR} --csv ${SPLIT_CSV_PATH} --destination ${TARGET_DIR}'
   exec program='${splitPackagesExe}' commandline='${splitArgs}' workingdir='${COHERENCE_BUILD_PROJ}'
 
-#run-test-restore target='package'
+#run-test-restore
   var restoreDirectory='${BASE_DIR}/.test-restore'
   var restoreArgs = '${TARGET_DIR}/ship/project.json --source ${TARGET_DIR}/ship --source ${TARGET_DIR}/ext --fallbacksource https://api.nuget.org/v3/index.json --packages ${restoreDirectory}'
   @{
