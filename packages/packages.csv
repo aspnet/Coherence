@@ -77,7 +77,7 @@ Microsoft.AspNetCore.Server.IISIntegration,ship,include
 Microsoft.AspNetCore.Server.IISIntegration.Tools,ship,exclude
 Microsoft.AspNetCore.Server.Kestrel,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Https,ship,include
-Microsoft.AspNetCore.Server.Testing,noship,exclude
+Microsoft.AspNetCore.Server.IntegrationTesting,noship,exclude
 Microsoft.AspNetCore.Server.WebListener,ship,include
 Microsoft.AspNetCore.Session,ship,include
 Microsoft.AspNetCore.SignalR.Messaging,noship,exclude
