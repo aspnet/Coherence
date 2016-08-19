@@ -111,12 +111,6 @@ namespace CoherenceBuild
                     packageInfo.PackageDependencyGroups = reader.GetPackageDependencies();
                 }
 
-                if (repo.PackagesToSkip.Contains(packageInfo.Identity.Id))
-                {
-                    Log.WriteInformation($"Skipping package {packagePath}");
-                    return;
-                }
-
                 if (packagePath.EndsWith(".symbols.nupkg"))
                 {
                     var targetPath = Path.Combine(symbolsTargetDir, packageFileName);

@@ -53,11 +53,6 @@ namespace CoherenceBuild
                 {
                     new RepositoryInfo("UniverseCoherence", universeCoherenceDropDir.Value())
                     {
-                        PackagesToSkip =
-                        {
-                            "MusicStore",
-                            "MusicStore.StandAlone"
-                        },
                         FileSystemDependencies =
                         {
                             new FileDependency("commits") { Destination = "commits-universe" },
@@ -67,10 +62,6 @@ namespace CoherenceBuild
                     new RepositoryInfo("CoreCLR", coreCLRDropDir.Value())
                     {
                         PackageDestinationDir = "ext",
-                        FileSystemDependencies =
-                        {
-                            new FolderDependecy("netcoresdk") { Optional = true }
-                        },
                     },
                     new RepositoryInfo("SignalR-Client-Cpp", "latest")
                 };

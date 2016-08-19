@@ -1,5 +1,4 @@
 ﻿
-using System;
 using System.Collections.Generic;
 
 namespace CoherenceBuild
@@ -21,7 +20,5 @@ namespace CoherenceBuild
         public string PackageSourceDir { get; set; } = "build";
 
         public string PackageDestinationDir { get; set; } = "build";
-
-        public HashSet<string> PackagesToSkip { get; } = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     }
 }
