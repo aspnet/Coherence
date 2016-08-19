@@ -60,6 +60,8 @@ Microsoft.AspNetCore.Mvc.Formatters.Xml,ship,include
 Microsoft.AspNetCore.Mvc.Localization,ship,include
 Microsoft.AspNetCore.Mvc.Razor,ship,include
 Microsoft.AspNetCore.Mvc.Razor.Host,ship,include
+Microsoft.AspNetCore.Mvc.Razor.Precompilation.Tools,ship,include
+Microsoft.AspNetCore.Mvc.Razor.Precompilation.Design,ship,include
 Microsoft.AspNetCore.Mvc.TagHelpers,ship,include
 Microsoft.AspNetCore.Mvc.ViewFeatures,ship,include
 Microsoft.AspNetCore.Mvc.WebApiCompatShim,ship,include
