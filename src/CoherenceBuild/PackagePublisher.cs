@@ -5,10 +5,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
+using NuGet.Configuration;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
-using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
+using NuGet.Protocol.Core.v3;
 
 namespace CoherenceBuild
 {
@@ -30,7 +31,9 @@ namespace CoherenceBuild
                         package.Identity,
                         expandDirectory,
                         NullLogger.Instance,
+                        fixNuspecIdCasing: true,
                         packageSaveMode: PackageSaveMode.Nupkg | PackageSaveMode.Nuspec,
+                        normalizeFileNames: false,
                         xmlDocFileSaveMode: XmlDocFileSaveMode.Skip);
 
                     PackageExtractor.InstallFromSourceAsync(
@@ -70,11 +73,10 @@ namespace CoherenceBuild
                             {
                                 await packageUpdateResource.Push(
                                     package.PackagePath,
-                                    symbolSource: null,
+                                    symbolsSource: null,
                                     timeoutInSecond: 30,
                                     disableBuffering: false,
                                     getApiKey: _ => apiKey,
-                                    getSymbolApiKey: _ => null,
                                     log: NullLogger.Instance);
                                 Log.WriteInformation($"Done publishing package {package.Identity}");
                                 return;
