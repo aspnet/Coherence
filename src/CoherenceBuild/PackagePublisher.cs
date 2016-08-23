@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
-using NuGet.Configuration;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
@@ -22,7 +21,7 @@ namespace CoherenceBuild
 
         public static void ExpandPackageFiles(IEnumerable<PackageInfo> processedPackages, string expandDirectory)
         {
-            Parallel.ForEach (processedPackages, package =>
+            Parallel.ForEach(processedPackages, package =>
             {
                 Log.WriteInformation($"Expanding {package.Identity}.");
                 using (var inputStream = File.OpenRead(package.PackagePath))
@@ -46,54 +45,65 @@ namespace CoherenceBuild
 
         private static async Task PublishToFeedAsync(IEnumerable<PackageInfo> processedPackages, string feed, string apiKey)
         {
-            var packagesToPush = processedPackages.OrderBy(a => a.Degree);
             using (var semaphore = new SemaphoreSlim(4))
             {
                 var sourceRepository = CreateSourceRepository(feed);
 
                 var metadataResource = await sourceRepository.GetResourceAsync<MetadataResource>();
                 var packageUpdateResource = await sourceRepository.GetResourceAsync<PackageUpdateResource>();
-                var tasks = processedPackages.Select(async package =>
-                {
-                    await semaphore.WaitAsync(TimeSpan.FromMinutes(3));
-                    try
-                    {
-                        if (package.IsPartnerPackage && await IsAlreadyUploadedAsync(metadataResource, package.Identity))
-                        {
-                            Log.WriteInformation($"Skipping {package.Identity} since it is already published.");
-                            return;
-                        }
 
-                        var attempt = 0;
-                        while (attempt < 10)
+                // Group packages to push by degree.
+                var packageGroups = processedPackages.GroupBy(p => p.Degree).OrderBy(g => g.Key);
+ 
+                foreach (var packageGroup in packageGroups)
+                {
+                    var tasks = packageGroup.Select(async package =>
+                    {
+                        await semaphore.WaitAsync(TimeSpan.FromMinutes(3));
+                        try
                         {
-                            attempt++;
-                            Log.WriteInformation($"Attempting to publish package {package.Identity} (Attempt: {attempt})");
-                            try
+                            if (package.IsPartnerPackage && await IsAlreadyUploadedAsync(metadataResource, package.Identity))
                             {
-                                await packageUpdateResource.Push(
-                                    package.PackagePath,
-                                    symbolsSource: null,
-                                    timeoutInSecond: 30,
-                                    disableBuffering: false,
-                                    getApiKey: _ => apiKey,
-                                    log: NullLogger.Instance);
-                                Log.WriteInformation($"Done publishing package {package.Identity}");
+                                Log.WriteInformation($"Skipping {package.Identity} since it is already published.");
                                 return;
                             }
-                            catch (Exception ex) when (attempt < 9)
-                            {
-                                Log.WriteInformation($"Attempt {(10 - attempt)} failed.{Environment.NewLine}{ex}{Environment.NewLine}Retrying...");
-                            }
-                        }
-                    }
-                    finally
-                    {
-                        semaphore.Release();
-                    }
-                });
 
-                await Task.WhenAll(tasks);
+                            await PushPackage(packageUpdateResource, package, apiKey);
+                        }
+                        finally
+                        {
+                            semaphore.Release();
+                        }
+                    });
+
+                    await Task.WhenAll(tasks);
+                }
+            }
+        }
+
+        private static async Task PushPackage(PackageUpdateResource packageUpdateResource, PackageInfo package, string apiKey)
+        {
+            var attempt = 0;
+            while (attempt < 10)
+            {
+                attempt++;
+                Log.WriteInformation($"Attempting to publish package {package.Identity} (Attempt: {attempt})");
+                try
+                {
+                    await packageUpdateResource.Push(
+                        package.PackagePath,
+                        symbolsSource: null,
+                        timeoutInSecond: 30,
+                        disableBuffering: false,
+                        getApiKey: _ => apiKey,
+                        log: NullLogger.Instance);
+                    Log.WriteInformation($"Done publishing package {package.Identity}");
+                    return;
+                }
+                catch (Exception ex) when (attempt < 9)
+                {
+                    Log.WriteInformation($"Attempt {(10 - attempt)} failed.{Environment.NewLine}{ex}{Environment.NewLine}Retrying...");
+                }
             }
         }
 

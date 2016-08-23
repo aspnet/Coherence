@@ -26,7 +26,23 @@ namespace CoherenceBuild
 
         public IList<PackageInfo> ProductDependencies { get; } = new List<PackageInfo>();
 
-        public int Degree => ProductDependencies.Sum(d => 1 + d.Degree);
+        public int Degree
+        {
+            get
+            {
+                if (IsPartnerPackage)
+                {
+                    return 1;
+                }
+
+                if (ProductDependencies.Count == 0)
+                {
+                    return 2;
+                }
+
+                return ProductDependencies.Max(d => 1 + d.Degree);
+            }
+        }
 
         public IList<DependencyWithIssue> DependencyMismatches { get; private set; }
 
