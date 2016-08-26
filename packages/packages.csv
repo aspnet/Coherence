@@ -167,6 +167,7 @@ Microsoft.Extensions.Primitives,ship,include
 Microsoft.Extensions.Process.Sources,noship,exclude
 Microsoft.Extensions.PropertyActivator.Sources,noship,exclude
 Microsoft.Extensions.PropertyHelper.Sources,noship,exclude
+Microsoft.Extensions.RazorViews.Sources,noship,exclude
 Microsoft.Extensions.RuntimeEnvironment.Sources,noship,exclude
 Microsoft.Extensions.SecurityHelper.Sources,noship,exclude
 Microsoft.Extensions.StackTrace.Sources,noship,exclude
@@ -178,3 +179,4 @@ Microsoft.Net.Http.Server,ship,include
 Microsoft.Owin.Security.Interop,ship,exclude
 Microsoft.VisualStudio.Web.BrowserLink.Loader,ship,exclude
 RazorToolingTestApp.LibraryPackage,noship,exclude
+RazorPageGenerator,noship,exclude
