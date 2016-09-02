@@ -80,6 +80,12 @@ namespace CoherenceBuild
                     Log.WriteInformation($"Skipping verification for {packageInfo.Identity}.");
                     return;
                 }
+
+                if (string.Equals(packageInfo.Identity.Id, "Microsoft.VisualStudio.Web.BrowserLink", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Skip verification for BrowserLink
+                    return;
+                }
             }
 
             Log.WriteInformation($"Processing package {packageInfo.Identity}");
