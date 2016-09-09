@@ -78,7 +78,6 @@ Microsoft.AspNetCore.Routing,ship,include
 Microsoft.AspNetCore.Routing.Abstractions,ship,include
 Microsoft.AspNetCore.Routing.DecisionTree.Sources,noship,exclude
 Microsoft.AspNetCore.Server.IISIntegration,ship,include
-Microsoft.AspNetCore.Server.IISIntegration.Tools,ship,exclude
 Microsoft.AspNetCore.Server.Kestrel,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Https,ship,include
 Microsoft.AspNetCore.Server.IntegrationTesting,noship,exclude
