@@ -127,6 +127,7 @@ Microsoft.Extensions.CommandLineUtils,ship,exclude
 Microsoft.Extensions.CommandLineUtils.Sources,noship,exclude
 Microsoft.Extensions.Configuration,ship,include
 Microsoft.Extensions.Configuration.Abstractions,ship,include
+Microsoft.Extensions.Configuration.Azure.KeyVault,ship,include
 Microsoft.Extensions.Configuration.Binder,ship,include
 Microsoft.Extensions.Configuration.CommandLine,ship,include
 Microsoft.Extensions.Configuration.EnvironmentVariables,ship,include
