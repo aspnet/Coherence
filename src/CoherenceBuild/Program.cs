@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Microsoft.Extensions.CommandLineUtils;
@@ -10,6 +11,12 @@ namespace CoherenceBuild
     {
         static int Main(string[] args)
         {
+            if (args.Length > 0 && args[0] == "--debug")
+            {
+                args = args.Skip(1).ToArray();
+                System.Diagnostics.Debugger.Launch();
+            }
+
             var app = new CommandLineApplication();
             var dropFolder = app.Option("--drop-folder", "The CI drop share.", CommandOptionType.SingleValue);
             var buildBranch = app.Option("--build-branch", "Build branch (dev \\ release)", CommandOptionType.SingleValue);
@@ -87,7 +94,15 @@ namespace CoherenceBuild
                 return coherenceBuild.Execute();
             });
 
-            return app.Execute(args);
+            try
+            {
+                return app.Execute(args);
+            }
+            catch (Exception ex)
+            {
+                Log.WriteError(ex.ToString());
+                return 1;
+            }
         }
 
         public static void Retry(Action action)

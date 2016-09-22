@@ -16,7 +16,21 @@ namespace CoherenceBuild
             CoherenceVerifyBehavior verifyBehavior)
         {
             _packages = packages;
-            _packageLookup = _packages.ToDictionary(p => p.Identity.Id, StringComparer.OrdinalIgnoreCase);
+            _packageLookup = new Dictionary<string, PackageInfo>(StringComparer.OrdinalIgnoreCase);
+            foreach (var package in packages)
+            {
+                PackageInfo existingPackage;
+                if (_packageLookup.TryGetValue(package.Identity.Id, out existingPackage))
+                {
+                    throw new Exception("Multiple copies of the following package were found: " +
+                        Environment.NewLine +
+                        existingPackage +
+                        Environment.NewLine +
+                        package);
+                }
+
+                _packageLookup[package.Identity.Id] = package;
+            }
             _verifyBehavior = verifyBehavior;
         }
 

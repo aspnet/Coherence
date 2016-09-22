@@ -53,5 +53,10 @@ namespace CoherenceBuild
             DependencyMismatches = new List<DependencyWithIssue>();
             InvalidCoreCLRPackageReferences = new List<DependencyWithIssue>();
         }
+
+        public override string ToString()
+        {
+            return Identity.ToString();
+        }
     }
 }
