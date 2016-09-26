@@ -73,6 +73,7 @@ Microsoft.AspNetCore.Razor,ship,include
 Microsoft.AspNetCore.Razor.Runtime,ship,include
 Microsoft.AspNetCore.Razor.Test.Sources,noship,exclude
 Microsoft.AspNetCore.ResponseCaching,ship,include
+Microsoft.AspNetCore.ResponseCompression,ship,include
 Microsoft.AspNetCore.Rewrite,ship,include
 Microsoft.AspNetCore.Routing,ship,include
 Microsoft.AspNetCore.Routing.Abstractions,ship,include
