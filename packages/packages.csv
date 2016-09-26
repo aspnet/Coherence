@@ -18,6 +18,7 @@ Microsoft.AspNetCore.Authentication.OpenIdConnect,ship,include
 Microsoft.AspNetCore.Authentication.Twitter,ship,include
 Microsoft.AspNetCore.Authorization,ship,include
 Microsoft.AspNetCore.Buffering,ship,include
+Microsoft.AspNetCore.ChunkingCookieManager.Sources,noship,exclude
 Microsoft.AspNetCore.CookiePolicy,ship,include
 Microsoft.AspNetCore.Cors,ship,include
 Microsoft.AspNetCore.Cryptography.Internal,ship,include
@@ -107,8 +108,8 @@ Microsoft.EntityFrameworkCore.Sqlite,ship,include
 Microsoft.EntityFrameworkCore.Sqlite.Design,ship,exclude
 Microsoft.EntityFrameworkCore.SqlServer,ship,include
 Microsoft.EntityFrameworkCore.SqlServer.Design,ship,exclude
+Microsoft.EntityFrameworkCore.Tools,ship,exclude
 Microsoft.EntityFrameworkCore.Tools.DotNet,ship,exclude
-Microsoft.EntityFrameworkCore.Tools.VisualStudio,ship,exclude
 Microsoft.Extensions.ActivatorUtilities.Sources,noship,exclude
 Microsoft.Extensions.Caching.Abstractions,ship,include
 Microsoft.Extensions.Caching.Memory,ship,include
