@@ -4,7 +4,6 @@ Microsoft.AspNetCore.Razor.Tools,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Tools,ship,exclude
 Microsoft.Extensions.SecretManager.Tools,ship,exclude
 Microsoft.DotNet.Watcher.Tools,ship,exclude
-Microsoft.DotNet.Watcher.Core,ship,exclude
 Microsoft.AspNet.SignalR.Client.Cpp.v120.WinDesktop,noship,exclude
 Microsoft.AspNet.SignalR.Client.Cpp.v140.WinDesktop,noship,exclude
 Microsoft.AspNetCore.Antiforgery,ship,include
