@@ -155,7 +155,7 @@ Microsoft.Extensions.Localization,ship,include
 Microsoft.Extensions.Localization.Abstractions,ship,include
 Microsoft.Extensions.Logging,ship,include
 Microsoft.Extensions.Logging.Abstractions,ship,include
-Microsoft.Extensions.Logging.AzureWebAppDiagnostics,ship,include
+Microsoft.Extensions.Logging.Azure.AppServicesDiagnostics,ship,include
 Microsoft.Extensions.Logging.Console,ship,include
 Microsoft.Extensions.Logging.Debug,ship,include
 Microsoft.Extensions.Logging.EventLog,ship,exclude
