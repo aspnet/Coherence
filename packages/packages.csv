@@ -50,6 +50,7 @@ Microsoft.AspNet.Identity.AspNetCoreCompat,ship,exclude
 Microsoft.AspNetCore.Identity.EntityFrameworkCore,ship,include
 Microsoft.AspNetCore.JsonPatch,ship,include
 Microsoft.AspNetCore.Localization,ship,include
+Microsoft.AspNetCore.Localization.Routing,ship,include
 Microsoft.AspNetCore.MiddlewareAnalysis,ship,include
 Microsoft.AspNetCore.Mvc,ship,include
 Microsoft.AspNetCore.Mvc.Abstractions,ship,include
