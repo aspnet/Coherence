@@ -17,6 +17,7 @@ Microsoft.AspNetCore.Authentication.OAuth,ship,include
 Microsoft.AspNetCore.Authentication.OpenIdConnect,ship,include
 Microsoft.AspNetCore.Authentication.Twitter,ship,include
 Microsoft.AspNetCore.Authorization,ship,include
+Microsoft.AspNetCore.AzureAppServicesIntegration,ship,include
 Microsoft.AspNetCore.Buffering,ship,include
 Microsoft.AspNetCore.ChunkingCookieManager.Sources,noship,exclude
 Microsoft.AspNetCore.CookiePolicy,ship,include
@@ -25,7 +26,7 @@ Microsoft.AspNetCore.Cryptography.Internal,ship,include
 Microsoft.AspNetCore.Cryptography.KeyDerivation,ship,include
 Microsoft.AspNetCore.DataProtection,ship,include
 Microsoft.AspNetCore.DataProtection.Abstractions,ship,include
-Microsoft.AspNetCore.DataProtection.Azure.Storage,ship,include
+Microsoft.AspNetCore.DataProtection.AzureStorage,ship,include
 Microsoft.AspNetCore.DataProtection.Extensions,ship,include
 Microsoft.AspNetCore.DataProtection.Redis,ship,include
 Microsoft.AspNetCore.DataProtection.Sources,noship,exclude
@@ -128,7 +129,7 @@ Microsoft.Extensions.CommandLineUtils,ship,exclude
 Microsoft.Extensions.CommandLineUtils.Sources,noship,exclude
 Microsoft.Extensions.Configuration,ship,include
 Microsoft.Extensions.Configuration.Abstractions,ship,include
-Microsoft.Extensions.Configuration.Azure.KeyVault,ship,include
+Microsoft.Extensions.Configuration.AzureKeyVault,ship,include
 Microsoft.Extensions.Configuration.Binder,ship,include
 Microsoft.Extensions.Configuration.CommandLine,ship,include
 Microsoft.Extensions.Configuration.EnvironmentVariables,ship,include
@@ -155,7 +156,7 @@ Microsoft.Extensions.Localization,ship,include
 Microsoft.Extensions.Localization.Abstractions,ship,include
 Microsoft.Extensions.Logging,ship,include
 Microsoft.Extensions.Logging.Abstractions,ship,include
-Microsoft.Extensions.Logging.Azure.AppServicesDiagnostics,ship,include
+Microsoft.Extensions.Logging.AzureAppServices,ship,include
 Microsoft.Extensions.Logging.Console,ship,include
 Microsoft.Extensions.Logging.Debug,ship,include
 Microsoft.Extensions.Logging.EventLog,ship,exclude
