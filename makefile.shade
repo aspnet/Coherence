@@ -48,7 +48,7 @@ use-standard-lifecycle
      }
   }
 
-  exec program='dotnet' commandline='run -f net451 -- ${args}' workingdir='${COHERENCE_BUILD_PROJ}'
+  exec program='dotnet' commandline='run -- ${args}' workingdir='${COHERENCE_BUILD_PROJ}'
 
 #split-packages target='package'
   var splitPackagesExe = '${Directory.GetFiles(TOOLS_DOWNLOAD_PATH, "SplitPackages.exe", SearchOption.AllDirectories).First()}'
