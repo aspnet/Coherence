@@ -119,6 +119,7 @@ Microsoft.Extensions.Caching.Redis,ship,exclude
 Microsoft.Extensions.Caching.SqlConfig.Tools,ship,exclude
 Microsoft.Extensions.Caching.SqlServer,ship,include
 Microsoft.Extensions.ClosedGenericMatcher.Sources,noship,exclude
+Microsoft.Extensions.ProjectModel.Sources,noship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Core,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore,ship,exclude
