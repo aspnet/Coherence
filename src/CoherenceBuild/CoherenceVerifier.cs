@@ -95,7 +95,8 @@ namespace CoherenceBuild
                     return;
                 }
 
-                if (string.Equals(packageInfo.Identity.Id, "Microsoft.VisualStudio.Web.BrowserLink", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(packageInfo.Identity.Id, "Microsoft.VisualStudio.Web.BrowserLink", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(packageInfo.Identity.Id, "Microsoft.VisualStudio.Web.BrowserLink.Loader", StringComparison.OrdinalIgnoreCase))
                 {
                     // Skip verification for BrowserLink
                     return;
