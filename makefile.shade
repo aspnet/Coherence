@@ -27,7 +27,7 @@ use-standard-lifecycle
 
 #package-restore target='initialize'
   exec program='dotnet' commandline='restore --infer-runtimes src'
-  exec program='dotnet' commandline='restore project.json --configfile ${BASE_DIR}/NuGet.config --packages ${TOOLS_DOWNLOAD_PATH} -v Minimal'
+  exec program='dotnet' commandline='restore project.json --configfile ${BASE_DIR}/NuGet.config --packages ${TOOLS_DOWNLOAD_PATH} -v Minimal --no-cache'
 
 #copy-bits target='package'
   var args = '--drop-folder ${BUILD_SHARE} --build-branch ${BUILD_BRANCH} --output-path ${TARGET_DIR} --universecoherence-build ${UNIVERSECOHERENCE_BUILD} --coreclr-build ${CORECLR_BUILD}'
