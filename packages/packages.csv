@@ -2,6 +2,7 @@ Package,Category,OptimizedCache
 Microsoft.AspNet.Identity.AspNetCoreCompat,ship,exclude
 Microsoft.AspNet.SignalR.Client.Cpp.v120.WinDesktop,noship,exclude
 Microsoft.AspNet.SignalR.Client.Cpp.v140.WinDesktop,noship,exclude
+Microsoft.AspNetCore,ship,exclude
 Microsoft.AspNetCore.Antiforgery,ship,include
 Microsoft.AspNetCore.Authentication,ship,include
 Microsoft.AspNetCore.Authentication.Cookies,ship,include
