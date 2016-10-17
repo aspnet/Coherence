@@ -11,6 +11,14 @@ namespace CoherenceBuild
         private readonly Dictionary<string, PackageInfo> _packageLookup;
         private readonly CoherenceVerifyBehavior _verifyBehavior;
 
+        private readonly HashSet<string> PackagesToSkipVerification = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "Microsoft.VisualStudio.Web.BrowserLink",
+            "Microsoft.VisualStudio.Web.BrowserLink.Loader",
+            "Microsoft.EntityFrameworkCore.Tools",
+            "Microsoft.EntityFrameworkCore.Tools.DotNet",
+        };
+
         public CoherenceVerifier(
             IEnumerable<PackageInfo> packages,
             CoherenceVerifyBehavior verifyBehavior)
@@ -95,10 +103,8 @@ namespace CoherenceBuild
                     return;
                 }
 
-                if (string.Equals(packageInfo.Identity.Id, "Microsoft.VisualStudio.Web.BrowserLink", StringComparison.OrdinalIgnoreCase) ||
-                    string.Equals(packageInfo.Identity.Id, "Microsoft.VisualStudio.Web.BrowserLink.Loader", StringComparison.OrdinalIgnoreCase))
+                if (PackagesToSkipVerification.Contains(packageInfo.Identity.Id))
                 {
-                    // Skip verification for BrowserLink
                     return;
                 }
             }
