@@ -61,7 +61,7 @@ Microsoft.AspNetCore.Mvc.Localization,ship,include
 Microsoft.AspNetCore.Mvc.Razor,ship,include
 Microsoft.AspNetCore.Mvc.Razor.Host,ship,include
 Microsoft.AspNetCore.Mvc.Razor.Precompilation.Design,ship,include
-Microsoft.AspNetCore.Mvc.Razor.Precompilation.Tools,ship,include
+Microsoft.AspNetCore.Mvc.Razor.Precompilation.Tools,ship,exclude
 Microsoft.AspNetCore.Mvc.TagHelpers,ship,include
 Microsoft.AspNetCore.Mvc.ViewFeatures,ship,include
 Microsoft.AspNetCore.Mvc.WebApiCompatShim,ship,include
@@ -80,6 +80,7 @@ Microsoft.AspNetCore.Routing,ship,include
 Microsoft.AspNetCore.Routing.Abstractions,ship,include
 Microsoft.AspNetCore.Routing.DecisionTree.Sources,noship,exclude
 Microsoft.AspNetCore.Server.IISIntegration,ship,include
+Microsoft.AspNetCore.Server.IISIntegration.Tools,ship,exclude
 Microsoft.AspNetCore.Server.IntegrationTesting,noship,exclude
 Microsoft.AspNetCore.Server.Kestrel,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Https,ship,include
