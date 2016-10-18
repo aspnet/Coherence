@@ -164,9 +164,6 @@ Microsoft.Extensions.Options.ConfigurationExtensions,ship,include
 Microsoft.Extensions.PlatformAbstractions,ship,include
 Microsoft.Extensions.Primitives,ship,include
 Microsoft.Extensions.Process.Sources,noship,exclude
-Microsoft.Extensions.ProjectModel.Abstractions.Sources,noship,exclude
-Microsoft.Extensions.ProjectModel.DotNet.Sources,noship,exclude
-Microsoft.Extensions.ProjectModel.MsBuild.Sources,noship,exclude
 Microsoft.Extensions.PropertyActivator.Sources,noship,exclude
 Microsoft.Extensions.PropertyHelper.Sources,noship,exclude
 Microsoft.Extensions.RazorViews.Sources,noship,exclude
