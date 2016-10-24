@@ -2,7 +2,7 @@ Package,Category,OptimizedCache
 Microsoft.AspNet.Identity.AspNetCoreCompat,ship,exclude
 Microsoft.AspNet.SignalR.Client.Cpp.v120.WinDesktop,noship,exclude
 Microsoft.AspNet.SignalR.Client.Cpp.v140.WinDesktop,noship,exclude
-Microsoft.AspNetCore,ship,exclude
+Microsoft.AspNetCore,noship,exclude
 Microsoft.AspNetCore.Antiforgery,ship,include
 Microsoft.AspNetCore.Authentication,ship,include
 Microsoft.AspNetCore.Authentication.Cookies,ship,include
@@ -154,7 +154,7 @@ Microsoft.Extensions.Logging.AzureAppServices,ship,include
 Microsoft.Extensions.Logging.Console,ship,include
 Microsoft.Extensions.Logging.Debug,ship,include
 Microsoft.Extensions.Logging.EventLog,ship,exclude
-Microsoft.Extensions.Logging.EventSource,ship,exclude
+Microsoft.Extensions.Logging.EventSource,noship,exclude
 Microsoft.Extensions.Logging.Filter,ship,include
 Microsoft.Extensions.Logging.Testing,noship,exclude
 Microsoft.Extensions.Logging.TraceSource,ship,include
