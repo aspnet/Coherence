@@ -19,7 +19,8 @@ namespace CoherenceBuild
             "Microsoft.EntityFrameworkCore.Tools.DotNet",
             "Microsoft.AspNetCore.Razor.Design",
             "Microsoft.AspNetCore.Razor.Tools",
-            "Microsoft.Extensions.DotnetToolDispatcher.Sources"
+            "Microsoft.Extensions.DotnetToolDispatcher.Sources",
+            "RazorToolingTestApp.LibraryPackage"
         };
 
         public CoherenceVerifier(
