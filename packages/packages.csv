@@ -70,7 +70,7 @@ Microsoft.AspNetCore.Proxy,ship,include
 Microsoft.AspNetCore.Razor,ship,include
 Microsoft.AspNetCore.Razor.Design,ship,exclude
 Microsoft.AspNetCore.Razor.Runtime,ship,include
-Microsoft.AspNetCore.Razor.Test.Sources,noship,exclude
+Microsoft.AspNetCore.Razor.TagHelpers.Testing.Sources,noship,exclude
 Microsoft.AspNetCore.Razor.Tools,ship,exclude
 Microsoft.AspNetCore.ResponseCaching,ship,include
 Microsoft.AspNetCore.ResponseCaching.Abstractions,ship,include
