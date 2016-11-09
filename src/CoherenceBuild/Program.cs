@@ -70,7 +70,6 @@ namespace CoherenceBuild
                     {
                         PackageDestinationDir = "ext",
                     },
-                    new RepositoryInfo("SignalR-Client-Cpp", "latest")
                 };
 
                 var coherenceBuild = new CoherenceBuild(
