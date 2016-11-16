@@ -67,6 +67,7 @@ Microsoft.AspNetCore.Owin,ship,include
 Microsoft.AspNetCore.Proxy,ship,include
 Microsoft.AspNetCore.Razor,ship,include
 Microsoft.AspNetCore.Razor.Design,ship,exclude
+Microsoft.AspNetCore.Razor.Evolution,ship,include
 Microsoft.AspNetCore.Razor.Runtime,ship,include
 Microsoft.AspNetCore.Razor.TagHelpers.Testing.Sources,noship,exclude
 Microsoft.AspNetCore.Razor.Tools,ship,exclude
