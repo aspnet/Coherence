@@ -43,6 +43,7 @@ Microsoft.AspNetCore.Http.Features,ship,include
 Microsoft.AspNetCore.HttpOverrides,ship,include
 Microsoft.AspNetCore.Identity,ship,include
 Microsoft.AspNetCore.Identity.EntityFrameworkCore,ship,include
+Microsoft.AspNetCore.Identity.Specification.Tests,ship,exclude
 Microsoft.AspNetCore.JsonPatch,ship,include
 Microsoft.AspNetCore.Localization,ship,include
 Microsoft.AspNetCore.Localization.Routing,ship,include
