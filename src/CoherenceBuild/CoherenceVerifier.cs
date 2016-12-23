@@ -26,6 +26,8 @@ namespace CoherenceBuild
             "Microsoft.Extensions.Caching.SqlConfig.Tools",
             "Microsoft.Extensions.SecretManager.Tools",
             // end aspnet/DotNetTools
+            "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools",
+            "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Design",
         };
 
         public CoherenceVerifier(
