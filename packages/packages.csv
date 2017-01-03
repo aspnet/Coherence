@@ -81,11 +81,11 @@ Microsoft.AspNetCore.Routing,ship,include
 Microsoft.AspNetCore.Routing.Abstractions,ship,include
 Microsoft.AspNetCore.Routing.DecisionTree.Sources,noship,exclude
 Microsoft.AspNetCore.Sockets,ship,include
+Microsoft.AspNetCore.Server.HttpSys,ship,include
 Microsoft.AspNetCore.Server.IISIntegration,ship,include
 Microsoft.AspNetCore.Server.IntegrationTesting,noship,exclude
 Microsoft.AspNetCore.Server.Kestrel,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Https,ship,include
-Microsoft.AspNetCore.Server.WebListener,ship,include
 Microsoft.AspNetCore.Session,ship,include
 Microsoft.AspNetCore.SignalR.Client,ship,include
 Microsoft.AspNetCore.SignalR.Common,ship,include
@@ -178,7 +178,6 @@ Microsoft.Extensions.WebEncoders,ship,include
 Microsoft.Extensions.WebEncoders.Sources,noship,exclude
 Microsoft.Extensions.WebSockets.Internal,noship,exclude
 Microsoft.Net.Http.Headers,ship,include
-Microsoft.Net.Http.Server,ship,include
 Microsoft.Owin.Security.Interop,ship,exclude
 Microsoft.VisualStudio.Web.BrowserLink,ship,exclude
 Microsoft.VisualStudio.Web.BrowserLink.Loader,ship,exclude
