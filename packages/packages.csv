@@ -24,7 +24,6 @@ Microsoft.AspNetCore.DataProtection.Abstractions,ship,include
 Microsoft.AspNetCore.DataProtection.AzureStorage,ship,include
 Microsoft.AspNetCore.DataProtection.Extensions,ship,include
 Microsoft.AspNetCore.DataProtection.Redis,ship,include
-Microsoft.AspNetCore.DataProtection.Sources,noship,exclude
 Microsoft.AspNetCore.DataProtection.SystemWeb,ship,exclude
 Microsoft.AspNetCore.Diagnostics,ship,include
 Microsoft.AspNetCore.Diagnostics.Abstractions,ship,include
