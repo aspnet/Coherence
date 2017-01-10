@@ -96,8 +96,8 @@ Microsoft.AspNetCore.Testing,noship,exclude
 Microsoft.AspNetCore.WebSockets,ship,include
 Microsoft.AspNetCore.WebSockets.Internal,noship,exclude
 Microsoft.AspNetCore.WebUtilities,ship,include
-Microsoft.CodeAnalysis.Razor.Workspaces,noship,exclude
-Microsoft.CodeAnalysis.Remote.Razor,noship,exclude
+Microsoft.CodeAnalysis.Razor.Workspaces,ship,include
+Microsoft.CodeAnalysis.Remote.Razor,ship,exclude
 Microsoft.Data.Sqlite,ship,include
 Microsoft.DotNet.Watcher.Tools,ship,exclude
 Microsoft.EntityFrameworkCore,ship,include
