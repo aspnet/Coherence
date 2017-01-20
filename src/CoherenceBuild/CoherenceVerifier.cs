@@ -36,6 +36,9 @@ namespace CoherenceBuild
             "Microsoft.VisualStudio.Web.CodeGeneration.Core",
             "Microsoft.VisualStudio.Web.CodeGeneration.Tools",
             "Microsoft.VisualStudio.Web.CodeGeneration.Templating",
+            // Temporary workarounds
+            "Microsoft.AspNetCore.Authentication.OpenIdConnect",
+            "Microsoft.AspNetCore.Authentication.JwtBearer",
         };
 
         public CoherenceVerifier(
