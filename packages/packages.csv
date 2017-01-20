@@ -66,11 +66,9 @@ Microsoft.AspNetCore.Mvc.WebApiCompatShim,ship,include
 Microsoft.AspNetCore.Owin,ship,include
 Microsoft.AspNetCore.Proxy,ship,include
 Microsoft.AspNetCore.Razor,ship,include
-Microsoft.AspNetCore.Razor.Design,ship,exclude
 Microsoft.AspNetCore.Razor.Evolution,ship,include
 Microsoft.AspNetCore.Razor.Runtime,ship,include
 Microsoft.AspNetCore.Razor.TagHelpers.Testing.Sources,noship,exclude
-Microsoft.AspNetCore.Razor.Tools,ship,exclude
 Microsoft.AspNetCore.ResponseCaching,ship,include
 Microsoft.AspNetCore.ResponseCaching.Abstractions,ship,include
 Microsoft.AspNetCore.ResponseCompression,ship,include
@@ -189,4 +187,3 @@ Microsoft.VisualStudio.Web.CodeGeneration.Tools,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Utils,ship,exclude
 Microsoft.VisualStudio.Web.CodeGenerators.Mvc,ship,exclude
 RazorPageGenerator,noship,exclude
-RazorToolingTestApp.LibraryPackage,noship,exclude

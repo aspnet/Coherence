@@ -20,7 +20,6 @@ namespace CoherenceBuild
             "Microsoft.AspNetCore.Razor.Design",
             "Microsoft.AspNetCore.Razor.Tools",
             "Microsoft.Extensions.DotnetToolDispatcher.Sources",
-            "RazorToolingTestApp.LibraryPackage",
             // begin aspnet/DotNetTools - these build against .NET Core 1.0
             "Microsoft.DotNet.Watcher.Tools",
             "Microsoft.Extensions.Caching.SqlConfig.Tools",
