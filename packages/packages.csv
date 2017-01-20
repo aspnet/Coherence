@@ -181,9 +181,11 @@ Microsoft.VisualStudio.Web.BrowserLink,ship,exclude
 Microsoft.VisualStudio.Web.BrowserLink.Loader,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Core,ship,exclude
+Microsoft.VisualStudio.Web.CodeGeneration.Design,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Templating,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Tools,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Utils,ship,exclude
+Microsoft.VisualStudio.Web.CodeGeneration.Msbuild,ship,exclude
 Microsoft.VisualStudio.Web.CodeGenerators.Mvc,ship,exclude
 RazorPageGenerator,noship,exclude
