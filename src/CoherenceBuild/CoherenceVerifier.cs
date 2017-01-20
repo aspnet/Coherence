@@ -25,9 +25,17 @@ namespace CoherenceBuild
             "Microsoft.DotNet.Watcher.Tools",
             "Microsoft.Extensions.Caching.SqlConfig.Tools",
             "Microsoft.Extensions.SecretManager.Tools",
-            // end aspnet/DotNetTools
+            // Mvc ViewCompilation
             "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools",
             "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Design",
+            // Scaffolding
+            "Microsoft.VisualStudio.Web.CodeGeneration",
+            "Microsoft.VisualStudio.Web.CodeGeneration.Utils",
+            "Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore",
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design",
+            "Microsoft.VisualStudio.Web.CodeGeneration.Core",
+            "Microsoft.VisualStudio.Web.CodeGeneration.Tools",
+            "Microsoft.VisualStudio.Web.CodeGeneration.Templating",
         };
 
         public CoherenceVerifier(
