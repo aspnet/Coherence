@@ -58,8 +58,7 @@ Microsoft.AspNetCore.Mvc.Localization,ship,include
 Microsoft.AspNetCore.Mvc.Razor,ship,include
 Microsoft.AspNetCore.Mvc.Razor.Host,ship,include
 Microsoft.AspNetCore.Mvc.RazorPages,ship,include
-Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Design,ship,exclude
-Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools,ship,exclude
+Microsoft.AspNetCore.Mvc.Razor.ViewCompilation,ship,exclude
 Microsoft.AspNetCore.Mvc.TagHelpers,ship,include
 Microsoft.AspNetCore.Mvc.ViewFeatures,ship,include
 Microsoft.AspNetCore.Mvc.WebApiCompatShim,ship,include
