@@ -17,16 +17,11 @@ namespace CoherenceBuild
             "Microsoft.VisualStudio.Web.BrowserLink.Loader",
             "Microsoft.EntityFrameworkCore.Tools",
             "Microsoft.EntityFrameworkCore.Tools.DotNet",
-            "Microsoft.AspNetCore.Razor.Design",
-            "Microsoft.AspNetCore.Razor.Tools",
             "Microsoft.Extensions.DotnetToolDispatcher.Sources",
             // begin aspnet/DotNetTools - these build against .NET Core 1.0
             "Microsoft.DotNet.Watcher.Tools",
             "Microsoft.Extensions.Caching.SqlConfig.Tools",
             "Microsoft.Extensions.SecretManager.Tools",
-            // Mvc ViewCompilation
-            "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Tools",
-            "Microsoft.AspNetCore.Mvc.Razor.ViewCompilation.Design",
             // Scaffolding
             "Microsoft.VisualStudio.Web.CodeGeneration",
             "Microsoft.VisualStudio.Web.CodeGeneration.Utils",
