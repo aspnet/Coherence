@@ -87,6 +87,7 @@ Microsoft.AspNetCore.SignalR.Common,ship,include
 Microsoft.AspNetCore.SignalR.Redis,ship,include
 Microsoft.AspNetCore.SignalR,ship,include
 Microsoft.AspNetCore.Sockets.Client,ship,include
+Microsoft.AspNetCore.Sockets.Common,ship,include
 Microsoft.AspNetCore.StaticFiles,ship,include
 Microsoft.AspNetCore.TestHost,ship,exclude
 Microsoft.AspNetCore.Testing,noship,exclude
