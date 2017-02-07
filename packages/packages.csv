@@ -181,7 +181,6 @@ Microsoft.Net.Http.Headers,ship,include
 Microsoft.Owin.Security.Interop,ship,exclude
 Microsoft.VisualStudio.LanguageServices.Razor,noship,exclude
 Microsoft.VisualStudio.Web.BrowserLink,ship,exclude
-Microsoft.VisualStudio.Web.BrowserLink.Loader,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Core,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Design,ship,exclude
