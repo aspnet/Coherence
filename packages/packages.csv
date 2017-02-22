@@ -45,7 +45,7 @@ Microsoft.AspNetCore.Identity.Specification.Tests,ship,exclude
 Microsoft.AspNetCore.Identity.Service.Core,noship,exclude
 Microsoft.AspNetCore.Identity.Service.Abstractions,noship,exclude
 Microsoft.AspNetCore.Identity.Service,noship,exclude
-Microsoft.AspNetCore.Identity.Service.EntityFramework,noship,exclude
+Microsoft.AspNetCore.Identity.Service.EntityFrameworkCore,noship,exclude
 Microsoft.AspNetCore.Identity.Service.Mvc,noship,exclude
 Microsoft.AspNetCore.JsonPatch,ship,include
 Microsoft.AspNetCore.Localization,ship,include
