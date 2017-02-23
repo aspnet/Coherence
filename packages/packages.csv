@@ -114,6 +114,7 @@ Microsoft.EntityFrameworkCore.Relational.Design.Specification.Tests,ship,exclude
 Microsoft.EntityFrameworkCore.Relational.Specification.Tests,ship,exclude
 Microsoft.EntityFrameworkCore.Specification.Tests,ship,exclude
 Microsoft.EntityFrameworkCore.Sqlite,ship,include
+Microsoft.EntityFrameworkCore.Sqlite.Core,ship,include
 Microsoft.EntityFrameworkCore.Sqlite.Design,ship,exclude
 Microsoft.EntityFrameworkCore.SqlServer,ship,include
 Microsoft.EntityFrameworkCore.SqlServer.Design,ship,exclude
