@@ -14,7 +14,7 @@
     
     <ItemGroup>
       <VerifierArgsList Include="
-          --drop-folder &quot;$(BUILD_SHARE)&quot;;
+          --drop-folder &quot;$(BUILD_SHARE) &quot;;
           --build-branch $(BUILD_BRANCH);
           --output-path &quot;$(ArtifactsDir) &quot;;
           --universecoherence-build $(COHERENCE_UNIVERSECOHERENCE_BUILD_NUMBER);
