@@ -74,9 +74,9 @@ namespace CoherenceBuild
 
                 var coherenceBuild = new CoherenceBuild(
                     repoInfos,
-                    dropFolder.Value(),
+                    dropFolder.Value().Trim(),
                     buildBranch.Value(),
-                    outputPath.Value(),
+                    outputPath.Value().Trim(),
                     nugetPublishFeed.Value(),
                     apiKey.Value());
 

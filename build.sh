@@ -2,7 +2,8 @@
 repoFolder="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd $repoFolder
 
-koreBuildZip="https://github.com/aspnet/KoreBuild/archive/dev.zip"
+koreBuildVersion=$(cat $repoFolder/KoreBuildVersion.txt)
+koreBuildZip="https://github.com/aspnet/KoreBuild/archive/$koreBuildVersion.zip"
 if [ ! -z $KOREBUILD_ZIP ]; then
     koreBuildZip=$KOREBUILD_ZIP
 fi
@@ -38,7 +39,7 @@ if test ! -d $buildFolder; then
     chmod +x $buildFile
     
     # Cleanup
-    if test ! -d $tempFolder; then
+    if test -d $tempFolder; then
         rm -rf $tempFolder  
     fi
 fi

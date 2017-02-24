@@ -6,9 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using NuGet.Common;
 using NuGet.Packaging;
-using NuGet.Packaging.Core;
+using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
-using NuGet.Protocol.Core.v3;
 
 namespace CoherenceBuild
 {
@@ -30,9 +29,7 @@ namespace CoherenceBuild
                         package.Identity,
                         expandDirectory,
                         NullLogger.Instance,
-                        fixNuspecIdCasing: true,
                         packageSaveMode: PackageSaveMode.Nupkg | PackageSaveMode.Nuspec,
-                        normalizeFileNames: false,
                         xmlDocFileSaveMode: XmlDocFileSaveMode.Skip);
 
                     PackageExtractor.InstallFromSourceAsync(
@@ -62,12 +59,6 @@ namespace CoherenceBuild
                         await semaphore.WaitAsync(TimeSpan.FromMinutes(3));
                         try
                         {
-                            if (package.IsPartnerPackage && await IsAlreadyUploadedAsync(metadataResource, package.Identity))
-                            {
-                                Log.WriteInformation($"Skipping {package.Identity} since it is already published.");
-                                return;
-                            }
-
                             await PushPackage(packageUpdateResource, package, apiKey);
                         }
                         finally
@@ -92,10 +83,11 @@ namespace CoherenceBuild
                 {
                     await packageUpdateResource.Push(
                         package.PackagePath,
-                        symbolsSource: null,
+                        symbolSource: null,
                         timeoutInSecond: 30,
                         disableBuffering: false,
                         getApiKey: _ => apiKey,
+                        getSymbolApiKey: _ => null,
                         log: NullLogger.Instance);
                     Log.WriteInformation($"Done publishing package {package.Identity}");
                     return;
@@ -109,28 +101,7 @@ namespace CoherenceBuild
 
         private static SourceRepository CreateSourceRepository(string feed)
         {
-            return Repository.CreateSource(Repository.Provider.GetCoreV3(), feed);
-        }
-
-        private static async Task<bool> IsAlreadyUploadedAsync(MetadataResource resource, PackageIdentity packageId)
-        {
-            if (resource == null)
-            {
-                // If we couldn't locate the v3 feed, republish the packages
-                return false;
-            }
-
-            try
-            {
-                return await resource.Exists(packageId, NullLogger.Instance, default(CancellationToken));
-            }
-            catch (Exception ex)
-            {
-                // If we can't read feed info, republish the packages
-                var exceptionMessage = (ex?.InnerException ?? ex.GetBaseException()).Message;
-                Log.WriteInformation($"Failed to read package existence {Environment.NewLine}{exceptionMessage}.");
-                return false;
-            }
+            return Repository.Factory.GetCoreV3(feed, FeedType.HttpV3);
         }
     }
 }

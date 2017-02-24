@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CoherenceBuild", "src\CoherenceBuild\CoherenceBuild.xproj", "{182ACF9E-135C-42D5-A19C-A6C9FCF0529F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoherenceBuild", "src\CoherenceBuild\CoherenceBuild.csproj", "{182ACF9E-135C-42D5-A19C-A6C9FCF0529F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
