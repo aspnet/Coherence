@@ -1,4 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <NuGetPublishFeed>https://dotnet.myget.org/f/aspnetcore-ci-dev</NuGetPublishFeed>
+  </PropertyGroup>
   
   <Target Name="Package" DependsOnTargets="RunVerifier;RunSplitPackages" />
 
@@ -22,6 +25,11 @@
       
       <VerifierArgsList Include="--disable-product-package-verification" Condition="'$(DISABLE_COHERENCE_CHECK)'=='true'"/>
       <VerifierArgsList Include="--disable-partner-package-verification" Condition="'$(DISABLE_PARTNER_COHERENCE_CHECK)'=='true'"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(APIKEY)'!=''">
+      <VerifierArgsList Include="--nuget-publish-feed $(NuGetPublishFeed)" />
+      <VerifierArgsList Include="--api-key $(APIKEY)" />
     </ItemGroup>
     
     <PropertyGroup>
