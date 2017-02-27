@@ -194,6 +194,5 @@ Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Templating,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Tools,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Utils,ship,exclude
-Microsoft.VisualStudio.Web.CodeGeneration.Msbuild,ship,exclude
 Microsoft.VisualStudio.Web.CodeGenerators.Mvc,ship,exclude
 RazorPageGenerator,noship,exclude
