@@ -30,6 +30,8 @@ namespace CoherenceBuild
             "Microsoft.VisualStudio.Web.CodeGeneration.Core",
             "Microsoft.VisualStudio.Web.CodeGeneration.Tools",
             "Microsoft.VisualStudio.Web.CodeGeneration.Templating",
+            // Non-shipping tools
+            "RazorPageGenerator",
         };
 
         public CoherenceVerifier(
