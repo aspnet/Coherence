@@ -146,7 +146,6 @@ Microsoft.Extensions.DependencyInjection,ship,include
 Microsoft.Extensions.DependencyInjection.Abstractions,ship,include
 Microsoft.Extensions.DependencyInjection.Specification.Tests,ship,exclude
 Microsoft.Extensions.DiagnosticAdapter,ship,include
-Microsoft.Extensions.DotnetToolDispatcher.Sources,noship,exclude
 Microsoft.Extensions.FileProviders.Abstractions,ship,include
 Microsoft.Extensions.FileProviders.Composite,ship,include
 Microsoft.Extensions.FileProviders.Embedded,ship,include
