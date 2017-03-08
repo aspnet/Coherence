@@ -1,10 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <NuGetPublishFeed>https://dotnet.myget.org/f/aspnetcore-ci-dev</NuGetPublishFeed>
+    <BuildDependsOn>$(BuildDependsOn);RunVerifier;RunSplitPackages</BuildDependsOn>
   </PropertyGroup>
   
-  <Target Name="Package" DependsOnTargets="RunVerifier;RunSplitPackages" />
-
   <Target Name="RunVerifier">
     <Error Text="BUILD_SHARE not specified." Condition="'$(BUILD_SHARE)'==''" />
     
@@ -33,7 +32,7 @@
     </ItemGroup>
     
     <PropertyGroup>
-      <VerifierProjectDirectory>$(RepositoryRoot)src\CoherenceBuild\</VerifierProjectDirectory>
+      <VerifierProjectDirectory>$(RepositoryRoot)tools\CoherenceBuild\</VerifierProjectDirectory>
       <VerifierArgs>@(VerifierArgsList, ' ')</VerifierArgs>
     </PropertyGroup>
 
