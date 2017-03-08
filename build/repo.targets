@@ -34,7 +34,6 @@
     
     <PropertyGroup>
       <VerifierProjectDirectory>$(RepositoryRoot)src\CoherenceBuild\</VerifierProjectDirectory>
-      <NuGetPublishFeed>https://dotnet.myget.org/f/aspnetcore-ci-dev</NuGetPublishFeed>
       <VerifierArgs>@(VerifierArgsList, ' ')</VerifierArgs>
     </PropertyGroup>
 
@@ -46,12 +45,15 @@
       <SplitPackagePath Include="%(PackageDefinitions.ResolvedPath)" Condition="'%(PackageDefinitions.Name)'=='SplitPackages'" />
     </ItemGroup>
     <PropertyGroup>
+      <ProductPackagesSource>$(ArtifactsDir)product-packages</ProductPackagesSource>
       <SplitPackagesCsv>$(RepositoryRoot)packages\packages.csv</SplitPackagesCsv>
       <SplitPackagesBinary>@(SplitPackagePath)\SplitPackages.exe</SplitPackagesBinary>
-      <SplitPackagesArgs>--source $(BuildDir) --csv $(SplitPackagesCsv) --destination $(ArtifactsDir)</SplitPackagesArgs>
+      <SplitPackagesArgs>--source $(ProductPackagesSource) --csv $(SplitPackagesCsv) --destination $(ArtifactsDir)</SplitPackagesArgs>
     </PropertyGroup>
 
     <Exec Command="$(SplitPackagesBinary) $(SplitPackagesArgs)" />
+
+    <RemoveDir Directories="$(ProductPackagesSource)" />
   </Target>
 
 </Project>

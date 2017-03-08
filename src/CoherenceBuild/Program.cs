@@ -60,15 +60,11 @@ namespace CoherenceBuild
                 {
                     new RepositoryInfo("UniverseCoherence", universeCoherenceDropDir.Value())
                     {
-                        FileSystemDependencies =
-                        {
-                            new FileDependency("commits") { Destination = "commits-universe" },
-                            new FolderDependecy(".build"),
-                        },
+                        PackagesDestinationDirectory = "product-packages",
                     },
                     new RepositoryInfo("CoreCLR", coreCLRDropDir.Value())
                     {
-                        PackageDestinationDir = "ext",
+                        PackagesDestinationDirectory = "ext",
                     },
                 };
 

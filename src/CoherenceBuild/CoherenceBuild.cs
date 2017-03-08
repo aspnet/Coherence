@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,11 +67,6 @@ namespace CoherenceBuild
                 PackagePublisher.PublishToFeed(processedPackages, _nugetPublishFeed, _apiKey);
             }
 
-            var expandDirectory = Path.Combine(_outputPath, "packages-expanded");
-            Log.WriteInformation($"Expanding packages to {expandDirectory}");
-            Directory.CreateDirectory(expandDirectory);
-            PackagePublisher.ExpandPackageFiles(processedPackages, expandDirectory);
-
             return SuccessExitCode;
         }
 
@@ -83,52 +79,49 @@ namespace CoherenceBuild
             }
 
             repoDirectory = Path.Combine(repoDirectory, repo.BuildNumber);
-            foreach (var dependency in repo.FileSystemDependencies)
-            {
-                dependency.Copy(repoDirectory, _outputPath);
-            }
 
-            var packageSourceDir = Path.Combine(repoDirectory, repo.PackageSourceDir);
-
-            var packageTargetDir = Path.Combine(_outputPath, repo.PackageDestinationDir);
+            var buildDirectory = Path.Combine(repoDirectory, repo.BuildDirectory);
+            var packageTargetDir = Path.Combine(_outputPath, repo.PackagesDestinationDirectory);
             var symbolsTargetDir = Path.Combine(_outputPath, "symbols");
+            var buildTargetDirectory = Path.Combine(_outputPath, "build");
+
             Directory.CreateDirectory(symbolsTargetDir);
             Directory.CreateDirectory(packageTargetDir);
+            Directory.CreateDirectory(buildTargetDirectory);
 
-            Parallel.ForEach(Directory.GetFiles(packageSourceDir, "*.nupkg"), packagePath =>
+            Parallel.ForEach(Directory.GetFiles(buildDirectory, "*"), file =>
             {
-                var packageFileName = Path.GetFileName(packagePath);
-                var packageInfo = new PackageInfo
-                {
-                    IsPartnerPackage = repo.Name == "CoreCLR",
-                    PackagePath = Path.Combine(packageTargetDir, packageFileName),
-                };
+                var fileName = Path.GetFileName(file);
 
-                using (var fileStream = File.OpenRead(packagePath))
-                using (var reader = new PackageArchiveReader(fileStream))
+                if (file.EndsWith(".symbols.nupkg", StringComparison.OrdinalIgnoreCase))
                 {
-                    packageInfo.Identity = reader.GetIdentity();
-                    packageInfo.PackageDependencyGroups = reader.GetPackageDependencies();
+                    var targetPath = Path.Combine(symbolsTargetDir, fileName);
+                    File.Copy(file, targetPath, overwrite: true);
+                    return;
                 }
 
-                if (packagePath.EndsWith(".symbols.nupkg"))
+                var buildTargetPath = Path.Combine(buildTargetDirectory, fileName);
+                File.Copy(file, buildTargetPath, overwrite: true);
+                if (file.EndsWith(".nupkg", StringComparison.OrdinalIgnoreCase))
                 {
-                    var targetPath = Path.Combine(symbolsTargetDir, packageFileName);
-                    File.Copy(packagePath, targetPath, overwrite: true);
-                }
-                else
-                {
-                    File.Copy(packagePath, packageInfo.PackagePath, overwrite: true);
+                    var targetPath = Path.Combine(packageTargetDir, fileName);
+                    File.Copy(file, targetPath, overwrite: true);
+
+                    var packageInfo = new PackageInfo
+                    {
+                        IsPartnerPackage = repo.Name == "CoreCLR",
+                        PackagePath = targetPath,
+                    };
+                    using (var fileStream = File.OpenRead(packageInfo.PackagePath))
+                    using (var reader = new PackageArchiveReader(fileStream))
+                    {
+                        packageInfo.Identity = reader.GetIdentity();
+                        packageInfo.PackageDependencyGroups = reader.GetPackageDependencies();
+                    }
+
                     processedPackages.Add(packageInfo);
                 }
             });
-        }
-
-        private void WriteReposUsedFile()
-        {
-            var filePath = Path.Combine(_outputPath, "packages-sources");
-            var fileContent = string.Join("\n", _reposToProcess.Select(r => $"{r.Name}: {r.BuildNumber}"));
-            File.WriteAllText(filePath, fileContent);
         }
 
         private static string FindLatest(string repoDirectory)

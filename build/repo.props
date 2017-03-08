@@ -1,10 +1,5 @@
 <Project>
-  <PropertyGroup>
-    <LifecycleType>Standard</LifecycleType>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="SplitPackages" Version="1.0.1-*" />
   </ItemGroup>
-
 </Project>

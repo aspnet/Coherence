@@ -1,7 +1,4 @@
-﻿
-using System.Collections.Generic;
-
-namespace CoherenceBuild
+﻿namespace CoherenceBuild
 {
     public class RepositoryInfo
     {
@@ -15,10 +12,8 @@ namespace CoherenceBuild
 
         public string BuildNumber { get; set; }
 
-        public List<FileSystemDependency> FileSystemDependencies { get; } = new List<FileSystemDependency>();
+        public string BuildDirectory { get; set; } = "build";
 
-        public string PackageSourceDir { get; set; } = "build";
-
-        public string PackageDestinationDir { get; set; } = "build";
+        public string PackagesDestinationDirectory { get; set; }
     }
 }
