@@ -187,6 +187,7 @@ Microsoft.Owin.Security.Interop,ship,exclude
 Microsoft.VisualStudio.LanguageServices.Razor,noship,exclude
 Microsoft.VisualStudio.Web.BrowserLink,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration,ship,exclude
+Microsoft.VisualStudio.Web.CodeGeneration.Contracts,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Core,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Design,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore,ship,exclude
