@@ -2,7 +2,7 @@
   <PropertyGroup>
     <NuGetPublishFeed>https://dotnet.myget.org/f/aspnetcore-ci-dev</NuGetPublishFeed>
     <NpmRegistry>$(NuGetPublishFeed)/npm/</NpmRegistry>
-    <BuildDependsOn>$(BuildDependsOn);RunVerifier;RunSplitPackages;PublishNpmModules</BuildDependsOn>
+    <BuildDependsOn>$(BuildDependsOn);RunVerifier;RunSplitPackages</BuildDependsOn>
   </PropertyGroup>
   
   <Target Name="RunVerifier">
