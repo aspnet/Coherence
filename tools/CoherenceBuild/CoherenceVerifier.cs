@@ -71,30 +71,44 @@ namespace CoherenceBuild
             }
 
             var success = true;
+            var warnings = new List<string>();
+            var errors = new List<string>();
+
             foreach (var packageInfo in _packages)
             {
-                if (!packageInfo.Success)
+                foreach (var mismatch in packageInfo.DependencyMismatches)
                 {
-                    if (packageInfo.InvalidCoreCLRPackageReferences.Count > 0)
+                    var message = $"{packageInfo.Identity} depends on {mismatch.Dependency.Id} " +
+                        $"v{mismatch.Dependency.VersionRange} ({mismatch.TargetFramework}) when the latest build is v{mismatch.Info.Identity.Version}.";
+
+                    if ((mismatch.Info.IsPartnerPackage && !_verifyBehavior.HasFlag(CoherenceVerifyBehavior.PartnerPackages)) ||
+                        (!mismatch.Info.IsPartnerPackage && !_verifyBehavior.HasFlag(CoherenceVerifyBehavior.ProductPackages)))
                     {
-                        Log.WriteError("{0} has invalid package references:", packageInfo.Identity);
-
-                        foreach (var invalidReference in packageInfo.InvalidCoreCLRPackageReferences)
-                        {
-                            Log.WriteError("Reference {0}({1}) must be changed to be a frameworkAssembly.",
-                                invalidReference.Dependency,
-                                invalidReference.TargetFramework);
-                        }
+                        warnings.Add(message);
                     }
-
-                    foreach (var mismatch in packageInfo.DependencyMismatches)
+                    else
                     {
-                        Log.WriteError($"{packageInfo.Identity} depends on {mismatch.Dependency.Id} " +
-                            $"v{mismatch.Dependency.VersionRange} ({mismatch.TargetFramework}) when the latest build is v{mismatch.Info.Identity.Version}.");
+                        errors.Add(message);
                     }
-
-                    success = false;
                 }
+            }
+
+            if (warnings.Any())
+            {
+                Console.WriteLine("Following packages have mismatches but are not failures due to disabled verifications:");
+                foreach (var warning in warnings)
+                {
+                    Log.WriteWarning(warning);
+                }
+            }
+
+            if (errors.Any())
+            {
+                foreach (var error in errors)
+                {
+                    Log.WriteError(error);
+                }
+                success = false;
             }
 
             return success;
@@ -104,24 +118,13 @@ namespace CoherenceBuild
         {
             if (packageInfo.IsPartnerPackage)
             {
-                if ((_verifyBehavior & CoherenceVerifyBehavior.PartnerPackages) != CoherenceVerifyBehavior.PartnerPackages)
-                {
-                    Log.WriteInformation($"Skipping verification for {packageInfo.Identity}.");
-                    return;
-                }
+                Log.WriteInformation($"Skipping verification for external package {packageInfo.Identity}.");
+                return;
             }
-            else
+            else if (PackagesToSkipVerification.Contains(packageInfo.Identity.Id))
             {
-                if ((_verifyBehavior & CoherenceVerifyBehavior.ProductPackages) != CoherenceVerifyBehavior.ProductPackages)
-                {
-                    Log.WriteInformation($"Skipping verification for {packageInfo.Identity}.");
-                    return;
-                }
-
-                if (PackagesToSkipVerification.Contains(packageInfo.Identity.Id))
-                {
-                    return;
-                }
+                Log.WriteWarning($"Skipping verification for package {packageInfo.Identity} because it is in ignore list.");
+                return;
             }
 
             Log.WriteInformation($"Processing package {packageInfo.Identity}");
@@ -147,12 +150,6 @@ namespace CoherenceBuild
                         if (!_packageLookup.TryGetValue(dependency.Id, out dependencyPackageInfo))
                         {
                             // External dependency
-                            continue;
-                        }
-
-                        if (string.Equals(dependencySet.TargetFramework.Framework, ".NETCore", StringComparison.OrdinalIgnoreCase))
-                        {
-                            // Skip netcore50 since it references RTM package versions.
                             continue;
                         }
 

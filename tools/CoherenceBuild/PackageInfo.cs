@@ -21,7 +21,7 @@ namespace CoherenceBuild
 
         public bool Success
         {
-            get { return DependencyMismatches.Count == 0 && InvalidCoreCLRPackageReferences.Count == 0; }
+            get { return DependencyMismatches.Count == 0; }
         }
 
         public IList<PackageInfo> ProductDependencies { get; } = new List<PackageInfo>();
@@ -46,12 +46,9 @@ namespace CoherenceBuild
 
         public IList<DependencyWithIssue> DependencyMismatches { get; private set; }
 
-        public IList<DependencyWithIssue> InvalidCoreCLRPackageReferences { get; private set; }
-
         public PackageInfo()
         {
             DependencyMismatches = new List<DependencyWithIssue>();
-            InvalidCoreCLRPackageReferences = new List<DependencyWithIssue>();
         }
 
         public override string ToString()
