@@ -56,7 +56,7 @@
     <RemoveDir Directories="$(ProductPackagesSource)" />
   </Target>
 
-  <Target Name="PublishNpmModules">
+  <Target Name="PublishNpmModules" Condition="'$(APIKEY)' != ''">
     <PropertyGroup>
       <AuthTokenSetting>$(NpmRegistry.Replace("https:", "")):_authToken</AuthTokenSetting>
     </PropertyGroup>
