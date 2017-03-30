@@ -86,7 +86,9 @@ Microsoft.AspNetCore.Server.HttpSys,ship,include
 Microsoft.AspNetCore.Server.IISIntegration,ship,include
 Microsoft.AspNetCore.Server.IntegrationTesting,noship,exclude
 Microsoft.AspNetCore.Server.Kestrel,ship,include
+Microsoft.AspNetCore.Server.Kestrel.Core,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Https,ship,include
+Microsoft.AspNetCore.Server.Kestrel.Transport.Libuv,ship,include
 Microsoft.AspNetCore.Session,ship,include
 Microsoft.AspNetCore.SignalR.Client,ship,include
 Microsoft.AspNetCore.SignalR.Common,ship,include
