@@ -3,7 +3,9 @@ Microsoft.AspNet.Identity.AspNetCoreCompat,ship,exclude
 Microsoft.AspNetCore,ship,exclude
 Microsoft.AspNetCore.Antiforgery,ship,include
 Microsoft.AspNetCore.Authentication,ship,include
+Microsoft.AspNetCore.Authentication.Abstractions,ship,include
 Microsoft.AspNetCore.Authentication.Cookies,ship,include
+Microsoft.AspNetCore.Authentication.Core,ship,include
 Microsoft.AspNetCore.Authentication.Facebook,ship,include
 Microsoft.AspNetCore.Authentication.Google,ship,include
 Microsoft.AspNetCore.Authentication.JwtBearer,ship,include
