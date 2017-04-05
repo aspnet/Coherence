@@ -2,7 +2,7 @@ Package,Category,OptimizedCache
 Microsoft.AspNet.Identity.AspNetCoreCompat,ship,exclude
 Microsoft.AspNetCore,ship,exclude
 Microsoft.AspNetCore.Antiforgery,ship,include
-Microsoft.AspNetCore.ApplicationInsightsLightup,ship,include
+Microsoft.AspNetCore.ApplicationInsights.HostingStartup,ship,include
 Microsoft.AspNetCore.Authentication,ship,include
 Microsoft.AspNetCore.Authentication.Abstractions,ship,include
 Microsoft.AspNetCore.Authentication.Cookies,ship,include
@@ -16,7 +16,7 @@ Microsoft.AspNetCore.Authentication.OpenIdConnect,ship,include
 Microsoft.AspNetCore.Authentication.Twitter,ship,include
 Microsoft.AspNetCore.Authorization,ship,include
 Microsoft.AspNetCore.AzureAppServicesIntegration,ship,include
-Microsoft.AspNetCore.AzureLightup,ship,include 
+Microsoft.AspNetCore.AzureAppServices.HostingStartup,ship,include 
 Microsoft.AspNetCore.Buffering,ship,include
 Microsoft.AspNetCore.ChunkingCookieManager.Sources,noship,exclude
 Microsoft.AspNetCore.CookiePolicy,ship,include
