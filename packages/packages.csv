@@ -1,6 +1,7 @@
 Package,Category,OptimizedCache
 Microsoft.AspNet.Identity.AspNetCoreCompat,ship,exclude
 Microsoft.AspNetCore,ship,exclude
+Microsoft.AspNetCore.All,ship,exclude
 Microsoft.AspNetCore.Antiforgery,ship,include
 Microsoft.AspNetCore.ApplicationInsights.HostingStartup,ship,include
 Microsoft.AspNetCore.Authentication,ship,include
