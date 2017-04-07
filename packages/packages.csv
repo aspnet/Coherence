@@ -74,6 +74,7 @@ Microsoft.AspNetCore.Mvc.ViewFeatures,ship,include
 Microsoft.AspNetCore.Mvc.WebApiCompatShim,ship,include
 Microsoft.AspNetCore.Owin,ship,include
 Microsoft.AspNetCore.Proxy,noship,exclude
+Microsoft.AspNetCore.RangeHelper.Sources,noship,exclude
 Microsoft.AspNetCore.Razor,ship,include
 Microsoft.AspNetCore.Razor.Evolution,ship,include
 Microsoft.AspNetCore.Razor.Runtime,ship,include
