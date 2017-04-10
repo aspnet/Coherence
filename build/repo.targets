@@ -40,18 +40,18 @@
     <Exec Command="dotnet run $(VerifierArgs)" WorkingDirectory="$(VerifierProjectDirectory)" />
   </Target>
 
-  <Target Name="RunSplitPackages" DependsOnTargets="RunResolvePackageDependencies">
+  <Target Name="RunSplitPackages" DependsOnTargets="RunResolvePackageDependencies;_FindDotNetPath">
     <ItemGroup>
       <SplitPackagePath Include="%(PackageDefinitions.ResolvedPath)" Condition="'%(PackageDefinitions.Name)'=='SplitPackages'" />
     </ItemGroup>
     <PropertyGroup>
       <ProductPackagesSource>$(ArtifactsDir)product-packages</ProductPackagesSource>
       <SplitPackagesCsv>$(RepositoryRoot)packages\packages.csv</SplitPackagesCsv>
-      <SplitPackagesBinary>@(SplitPackagePath)\SplitPackages.exe</SplitPackagesBinary>
+      <SplitPackagesBinary>@(SplitPackagePath)\SplitPackages.dll</SplitPackagesBinary>
       <SplitPackagesArgs>--source $(ProductPackagesSource) --csv $(SplitPackagesCsv) --destination $(ArtifactsDir)</SplitPackagesArgs>
     </PropertyGroup>
 
-    <Exec Command="$(SplitPackagesBinary) $(SplitPackagesArgs)" />
+    <Exec Command="&quot;$(DotNetPath)&quot; &quot;$(SplitPackagesBinary)&quot; $(SplitPackagesArgs)" />
 
     <RemoveDir Directories="$(ProductPackagesSource)" />
   </Target>
@@ -71,5 +71,11 @@
     </Exec>
     <Exec Command="npm config delete $(AuthTokenSetting)" />
     <Error Text="Publishing npm modules failed" Condition="%(ExitCodes.Identity) > 0"/>
+  </Target>
+
+  <Target Name="_FindDotNetPath">
+    <GetDotNetHost>
+      <Output TaskParameter="ExecutablePath" PropertyName="DotNetPath" />
+    </GetDotNetHost>
   </Target>
 </Project>
