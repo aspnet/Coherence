@@ -171,7 +171,6 @@ Microsoft.Extensions.Logging.Console,ship,include
 Microsoft.Extensions.Logging.Debug,ship,include
 Microsoft.Extensions.Logging.EventLog,ship,include
 Microsoft.Extensions.Logging.EventSource,ship,include
-Microsoft.Extensions.Logging.Filter,ship,include
 Microsoft.Extensions.Logging.Testing,noship,exclude
 Microsoft.Extensions.Logging.TraceSource,ship,include
 Microsoft.Extensions.ObjectPool,ship,include
