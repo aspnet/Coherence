@@ -35,7 +35,7 @@ Microsoft.AspNetCore.Diagnostics,ship,include
 Microsoft.AspNetCore.Diagnostics.Abstractions,ship,include
 Microsoft.AspNetCore.Diagnostics.Elm,noship,exclude
 Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore,ship,include
-Microsoft.AspNetCore.Diagnostics.Identity.Service,noship,exclude
+Microsoft.AspNetCore.Diagnostics.Identity.Service,ship,include
 Microsoft.AspNetCore.Hosting,ship,include
 Microsoft.AspNetCore.Hosting.Abstractions,ship,include
 Microsoft.AspNetCore.Hosting.Server.Abstractions,ship,include
@@ -49,12 +49,12 @@ Microsoft.AspNetCore.HttpOverrides,ship,include
 Microsoft.AspNetCore.Identity,ship,include
 Microsoft.AspNetCore.Identity.EntityFrameworkCore,ship,include
 Microsoft.AspNetCore.Identity.Specification.Tests,ship,exclude
-Microsoft.AspNetCore.Identity.Service.Core,noship,exclude
-Microsoft.AspNetCore.Identity.Service.Abstractions,noship,exclude
-Microsoft.AspNetCore.Identity.Service,noship,exclude
-Microsoft.AspNetCore.Identity.Service.EntityFrameworkCore,noship,exclude
-Microsoft.AspNetCore.Identity.Service.IntegratedWebClient,noship,exclude
-Microsoft.AspNetCore.Identity.Service.Mvc,noship,exclude
+Microsoft.AspNetCore.Identity.Service.Core,ship,include
+Microsoft.AspNetCore.Identity.Service.Abstractions,ship,include
+Microsoft.AspNetCore.Identity.Service,ship,include
+Microsoft.AspNetCore.Identity.Service.EntityFrameworkCore,ship,include
+Microsoft.AspNetCore.Identity.Service.IntegratedWebClient,ship,include
+Microsoft.AspNetCore.Identity.Service.Mvc,ship,include
 Microsoft.AspNetCore.JsonPatch,ship,include
 Microsoft.AspNetCore.Localization,ship,include
 Microsoft.AspNetCore.Localization.Routing,ship,include
