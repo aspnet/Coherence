@@ -89,7 +89,6 @@ Microsoft.AspNetCore.Rewrite,ship,include
 Microsoft.AspNetCore.Routing,ship,include
 Microsoft.AspNetCore.Routing.Abstractions,ship,include
 Microsoft.AspNetCore.Routing.DecisionTree.Sources,noship,exclude
-Microsoft.AspNetCore.Sockets,ship,include
 Microsoft.AspNetCore.Server.HttpSys,ship,include
 Microsoft.AspNetCore.Server.IISIntegration,ship,include
 Microsoft.AspNetCore.Server.IntegrationTesting,noship,exclude
@@ -100,12 +99,13 @@ Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Transport.Libuv,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets,ship,include
 Microsoft.AspNetCore.Session,ship,include
-Microsoft.AspNetCore.SignalR.Client,ship,include
-Microsoft.AspNetCore.SignalR.Common,ship,include
-Microsoft.AspNetCore.SignalR.Redis,ship,include
-Microsoft.AspNetCore.SignalR,ship,include
-Microsoft.AspNetCore.Sockets.Client,ship,include
-Microsoft.AspNetCore.Sockets.Common,ship,include
+Microsoft.AspNetCore.SignalR.Client,noship,exclude
+Microsoft.AspNetCore.SignalR.Common,noship,exclude
+Microsoft.AspNetCore.SignalR.Redis,noship,exclude
+Microsoft.AspNetCore.SignalR,noship,exclude
+Microsoft.AspNetCore.Sockets,noship,exclude
+Microsoft.AspNetCore.Sockets.Client,noship,exclude
+Microsoft.AspNetCore.Sockets.Common,noship,exclude
 Microsoft.AspNetCore.StaticFiles,ship,include
 Microsoft.AspNetCore.TestHost,ship,exclude
 Microsoft.AspNetCore.Testing,noship,exclude
