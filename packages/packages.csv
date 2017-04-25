@@ -178,7 +178,6 @@ Microsoft.Extensions.Logging.TraceSource,ship,include
 Microsoft.Extensions.ObjectPool,ship,include
 Microsoft.Extensions.Options,ship,include
 Microsoft.Extensions.Options.ConfigurationExtensions,ship,include
-Microsoft.Extensions.PlatformAbstractions,ship,include
 Microsoft.Extensions.Primitives,ship,include
 Microsoft.Extensions.Process.Sources,noship,exclude
 Microsoft.Extensions.PropertyActivator.Sources,noship,exclude
