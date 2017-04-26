@@ -164,6 +164,7 @@ Microsoft.Extensions.FileProviders.Embedded,ship,include
 Microsoft.Extensions.FileProviders.Physical,ship,include
 Microsoft.Extensions.FileSystemGlobbing,ship,include
 Microsoft.Extensions.HashCodeCombiner.Sources,noship,exclude
+Microsoft.Extensions.Hosting.Abstractions,ship,include
 Microsoft.Extensions.Localization,ship,include
 Microsoft.Extensions.Localization.Abstractions,ship,include
 Microsoft.Extensions.Logging,ship,include
