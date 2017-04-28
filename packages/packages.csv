@@ -17,7 +17,7 @@ Microsoft.AspNetCore.Authentication.OpenIdConnect,ship,include
 Microsoft.AspNetCore.Authentication.Twitter,ship,include
 Microsoft.AspNetCore.Authorization,ship,include
 Microsoft.AspNetCore.AzureAppServicesIntegration,ship,include
-Microsoft.AspNetCore.AzureAppServices.HostingStartup,ship,include 
+Microsoft.AspNetCore.AzureAppServices.HostingStartup,ship,include
 Microsoft.AspNetCore.AzureAppServices.SiteExtension,noship,exclude
 Microsoft.AspNetCore.Buffering,noship,exclude
 Microsoft.AspNetCore.ChunkingCookieManager.Sources,noship,exclude
@@ -74,7 +74,7 @@ Microsoft.AspNetCore.Mvc.RazorPages,ship,include
 Microsoft.AspNetCore.Mvc.Razor.ViewCompilation,ship,include
 Microsoft.AspNetCore.Mvc.TagHelpers,ship,include
 Microsoft.AspNetCore.Mvc.ViewFeatures,ship,include
-Microsoft.AspNetCore.Mvc.WebApiCompatShim,ship,include
+Microsoft.AspNetCore.Mvc.WebApiCompatShim,ship,exclude
 Microsoft.AspNetCore.Owin,ship,include
 Microsoft.AspNetCore.Proxy,noship,exclude
 Microsoft.AspNetCore.RangeHelper.Sources,noship,exclude
@@ -131,7 +131,7 @@ Microsoft.EntityFrameworkCore.Sqlite.Core,ship,include
 Microsoft.EntityFrameworkCore.Sqlite.Design,ship,include
 Microsoft.EntityFrameworkCore.SqlServer,ship,include
 Microsoft.EntityFrameworkCore.SqlServer.Design,ship,include
-Microsoft.EntityFrameworkCore.Tools,ship,exclude
+Microsoft.EntityFrameworkCore.Tools,ship,include
 Microsoft.EntityFrameworkCore.Tools.DotNet,ship,exclude
 Microsoft.Extensions.ActivatorUtilities.Sources,noship,exclude
 Microsoft.Extensions.Caching.Abstractions,ship,include
@@ -172,7 +172,7 @@ Microsoft.Extensions.Logging.Abstractions,ship,include
 Microsoft.Extensions.Logging.AzureAppServices,ship,include
 Microsoft.Extensions.Logging.Console,ship,include
 Microsoft.Extensions.Logging.Debug,ship,include
-Microsoft.Extensions.Logging.EventLog,ship,include
+Microsoft.Extensions.Logging.EventLog,ship,exclude
 Microsoft.Extensions.Logging.EventSource,ship,include
 Microsoft.Extensions.Logging.Testing,noship,exclude
 Microsoft.Extensions.Logging.TraceSource,ship,include
