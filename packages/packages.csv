@@ -18,7 +18,7 @@ Microsoft.AspNetCore.Authentication.Twitter,ship,include
 Microsoft.AspNetCore.Authorization,ship,include
 Microsoft.AspNetCore.AzureAppServicesIntegration,ship,include
 Microsoft.AspNetCore.AzureAppServices.HostingStartup,ship,include
-Microsoft.AspNetCore.AzureAppServices.SiteExtension,noship,exclude
+Microsoft.AspNetCore.AzureAppServices.SiteExtension,shipoob,exclude
 Microsoft.AspNetCore.Buffering,noship,exclude
 Microsoft.AspNetCore.ChunkingCookieManager.Sources,noship,exclude
 Microsoft.AspNetCore.CookiePolicy,ship,include
@@ -205,5 +205,5 @@ Microsoft.VisualStudio.Web.CodeGeneration.Templating,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Tools,ship,exclude
 Microsoft.VisualStudio.Web.CodeGeneration.Utils,ship,exclude
 Microsoft.VisualStudio.Web.CodeGenerators.Mvc,ship,exclude
-Microsoft.Web.Xdt.Extensions,noship,exclude
+Microsoft.Web.Xdt.Extensions,shipoob,exclude
 RazorPageGenerator,noship,exclude
