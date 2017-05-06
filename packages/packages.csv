@@ -39,7 +39,6 @@ Microsoft.AspNetCore.Diagnostics.Identity.Service,ship,include
 Microsoft.AspNetCore.Hosting,ship,include
 Microsoft.AspNetCore.Hosting.Abstractions,ship,include
 Microsoft.AspNetCore.Hosting.Server.Abstractions,ship,include
-Microsoft.AspNetCore.Hosting.WindowsServices,ship,exclude
 Microsoft.AspNetCore.Html.Abstractions,ship,include
 Microsoft.AspNetCore.Http,ship,include
 Microsoft.AspNetCore.Http.Abstractions,ship,include
