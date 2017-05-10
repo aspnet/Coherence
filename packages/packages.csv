@@ -184,7 +184,6 @@ Microsoft.Extensions.Process.Sources,noship,exclude
 Microsoft.Extensions.PropertyActivator.Sources,noship,exclude
 Microsoft.Extensions.PropertyHelper.Sources,noship,exclude
 Microsoft.Extensions.RazorViews.Sources,noship,exclude
-Microsoft.Extensions.RuntimeEnvironment.Sources,noship,exclude
 Microsoft.Extensions.SecretManager.Tools,ship,exclude
 Microsoft.Extensions.SecurityHelper.Sources,noship,exclude
 Microsoft.Extensions.StackTrace.Sources,noship,exclude
