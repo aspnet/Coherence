@@ -54,6 +54,7 @@ Microsoft.AspNetCore.Identity.Service,ship,include
 Microsoft.AspNetCore.Identity.Service.EntityFrameworkCore,ship,include
 Microsoft.AspNetCore.Identity.Service.IntegratedWebClient,ship,include
 Microsoft.AspNetCore.Identity.Service.Mvc,ship,include
+Microsoft.AspNetCore.Identity.Service.Specification.Tests,ship,exclude
 Microsoft.AspNetCore.JsonPatch,ship,include
 Microsoft.AspNetCore.Localization,ship,include
 Microsoft.AspNetCore.Localization.Routing,ship,include
