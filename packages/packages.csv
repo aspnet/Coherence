@@ -55,7 +55,6 @@ Microsoft.AspNetCore.Identity.Service.EntityFrameworkCore,ship,include
 Microsoft.AspNetCore.Identity.Service.IntegratedWebClient,ship,include
 Microsoft.AspNetCore.Identity.Service.Mvc,ship,include
 Microsoft.AspNetCore.Identity.Service.Specification.Tests,ship,exclude
-Microsoft.AspNetCore.JavaScriptServices,ship,include
 Microsoft.AspNetCore.JsonPatch,ship,include
 Microsoft.AspNetCore.Localization,ship,include
 Microsoft.AspNetCore.Localization.Routing,ship,include
@@ -76,6 +75,7 @@ Microsoft.AspNetCore.Mvc.Razor.ViewCompilation,ship,include
 Microsoft.AspNetCore.Mvc.TagHelpers,ship,include
 Microsoft.AspNetCore.Mvc.ViewFeatures,ship,include
 Microsoft.AspNetCore.Mvc.WebApiCompatShim,ship,exclude
+Microsoft.AspNetCore.NodeServices,ship,include
 Microsoft.AspNetCore.Owin,ship,include
 Microsoft.AspNetCore.Proxy,noship,exclude
 Microsoft.AspNetCore.RangeHelper.Sources,noship,exclude
@@ -107,6 +107,7 @@ Microsoft.AspNetCore.SignalR,noship,exclude
 Microsoft.AspNetCore.Sockets,noship,exclude
 Microsoft.AspNetCore.Sockets.Client,noship,exclude
 Microsoft.AspNetCore.Sockets.Common,noship,exclude
+Microsoft.AspNetCore.SpaServices,ship,include
 Microsoft.AspNetCore.StaticFiles,ship,include
 Microsoft.AspNetCore.TestHost,ship,exclude
 Microsoft.AspNetCore.Testing,noship,exclude
