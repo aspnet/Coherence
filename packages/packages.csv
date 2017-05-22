@@ -16,6 +16,7 @@ Microsoft.AspNetCore.Authentication.OAuth,ship,include
 Microsoft.AspNetCore.Authentication.OpenIdConnect,ship,include
 Microsoft.AspNetCore.Authentication.Twitter,ship,include
 Microsoft.AspNetCore.Authorization,ship,include
+Microsoft.AspNetCore.Authorization.Policy,ship,include
 Microsoft.AspNetCore.AzureAppServicesIntegration,ship,include
 Microsoft.AspNetCore.AzureAppServices.HostingStartup,ship,include
 Microsoft.AspNetCore.AzureAppServices.SiteExtension,shipoob,exclude
@@ -170,6 +171,8 @@ Microsoft.Extensions.FileProviders.Physical,ship,include
 Microsoft.Extensions.FileSystemGlobbing,ship,include
 Microsoft.Extensions.HashCodeCombiner.Sources,noship,exclude
 Microsoft.Extensions.Hosting.Abstractions,ship,include
+Microsoft.Extensions.Identity.Core,ship,include
+Microsoft.Extensions.Identity.Stores,ship,include
 Microsoft.Extensions.Localization,ship,include
 Microsoft.Extensions.Localization.Abstractions,ship,include
 Microsoft.Extensions.Logging,ship,include
