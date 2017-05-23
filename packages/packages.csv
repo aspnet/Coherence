@@ -107,6 +107,7 @@ Microsoft.AspNetCore.SignalR.Common,noship,exclude
 Microsoft.AspNetCore.SignalR.Redis,noship,exclude
 Microsoft.AspNetCore.SignalR,noship,exclude
 Microsoft.AspNetCore.Sockets,noship,exclude
+Microsoft.AspNetCore.Sockets.Abstractions,noship,exclude
 Microsoft.AspNetCore.Sockets.Client,noship,exclude
 Microsoft.AspNetCore.Sockets.Common,noship,exclude
 Microsoft.AspNetCore.SpaServices,ship,include
