@@ -20,6 +20,7 @@ Microsoft.AspNetCore.AzureAppServicesIntegration,ship,include
 Microsoft.AspNetCore.AzureAppServices.HostingStartup,ship,include
 Microsoft.AspNetCore.AzureAppServices.SiteExtension,shipoob,exclude
 Microsoft.AspNetCore.Buffering,noship,exclude
+Microsoft.AspNetCore.CertificateGeneration.Task,ship,exclude
 Microsoft.AspNetCore.ChunkingCookieManager.Sources,noship,exclude
 Microsoft.AspNetCore.CookiePolicy,ship,include
 Microsoft.AspNetCore.Cors,ship,include
