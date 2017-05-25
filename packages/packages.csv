@@ -205,6 +205,7 @@ Microsoft.Extensions.WebEncoders,ship,include
 Microsoft.Extensions.WebEncoders.Sources,noship,exclude
 Microsoft.Extensions.WebSockets.Internal,noship,exclude
 Microsoft.Net.Http.Headers,ship,include
+Microsoft.Owin.Security.Interop,ship,exclude
 Microsoft.VisualStudio.LanguageServices.Razor,noship,exclude
 Microsoft.VisualStudio.Web.BrowserLink,ship,include
 Microsoft.VisualStudio.Web.CodeGeneration,ship,exclude
