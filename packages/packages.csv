@@ -156,7 +156,7 @@ Microsoft.Extensions.Configuration.Abstractions,ship,include
 Microsoft.Extensions.Configuration.AzureKeyVault,ship,include
 Microsoft.Extensions.Configuration.Binder,ship,include
 Microsoft.Extensions.Configuration.CommandLine,ship,include
-Microsoft.Extensions.Configuration.DockerSecrets,ship,include
+Microsoft.Extensions.Configuration.DockerSecrets,noship,include
 Microsoft.Extensions.Configuration.EnvironmentVariables,ship,include
 Microsoft.Extensions.Configuration.FileExtensions,ship,include
 Microsoft.Extensions.Configuration.Ini,ship,include
