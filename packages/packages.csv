@@ -53,6 +53,7 @@ Microsoft.AspNetCore.Identity.EntityFrameworkCore,ship,include
 Microsoft.AspNetCore.Identity.Specification.Tests,ship,exclude
 Microsoft.AspNetCore.Identity.Service.Core,ship,include
 Microsoft.AspNetCore.Identity.Service.Abstractions,ship,include
+Microsoft.AspNetCore.Identity.Service.AzureKeyVault,ship,include
 Microsoft.AspNetCore.Identity.Service,ship,include
 Microsoft.AspNetCore.Identity.Service.EntityFrameworkCore,ship,include
 Microsoft.AspNetCore.Identity.Service.IntegratedWebClient,ship,include
