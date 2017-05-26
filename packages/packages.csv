@@ -129,7 +129,7 @@ Microsoft.Data.Sqlite,ship,include
 Microsoft.Data.Sqlite.Core,ship,include
 Microsoft.DotNet.Watcher.Tools,ship,exclude
 Microsoft.EntityFrameworkCore,ship,include
-Microsoft.EntityFrameworkCore.ApplicationInsights,ship,include
+Microsoft.EntityFrameworkCore.ApplicationInsights,noship,exclude
 Microsoft.EntityFrameworkCore.Design,ship,include
 Microsoft.EntityFrameworkCore.InMemory,ship,include
 Microsoft.EntityFrameworkCore.Relational,ship,include
