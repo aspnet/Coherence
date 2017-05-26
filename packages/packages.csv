@@ -16,6 +16,7 @@ Microsoft.AspNetCore.Authentication.OAuth,ship,include
 Microsoft.AspNetCore.Authentication.OpenIdConnect,ship,include
 Microsoft.AspNetCore.Authentication.Twitter,ship,include
 Microsoft.AspNetCore.Authorization,ship,include
+Microsoft.AspNetCore.Authorization.Policy,ship,include
 Microsoft.AspNetCore.AzureAppServicesIntegration,ship,include
 Microsoft.AspNetCore.AzureAppServices.HostingStartup,ship,include
 Microsoft.AspNetCore.AzureAppServices.SiteExtension,shipoob,exclude
