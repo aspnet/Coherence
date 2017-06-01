@@ -2,7 +2,7 @@
   <PropertyGroup>
     <NuGetPublishFeed>https://dotnet.myget.org/f/aspnetcore-ci-release</NuGetPublishFeed>
     <NpmRegistry>$(NuGetPublishFeed)/npm/</NpmRegistry>
-    <BuildDependsOn>$(BuildDependsOn);RunVerifier;RunSplitPackages;PublishNpmModules</BuildDependsOn>
+    <BuildDependsOn>$(BuildDependsOn);RunVerifier;_UpdateDependenciesFileInKorebuild;RunSplitPackages;PublishNpmModules</BuildDependsOn>
   </PropertyGroup>
   
   <Target Name="RunVerifier">
@@ -77,5 +77,43 @@
     <GetDotNetHost>
       <Output TaskParameter="ExecutablePath" PropertyName="DotNetPath" />
     </GetDotNetHost>
+  </Target>
+
+  <Target Name="_UpdateDependenciesFileInKorebuild">
+    <PropertyGroup>
+      <KoreBuildRepo>git@github.com:aspnet/KoreBuild.git</KoreBuildRepo>
+      <KoreBuildBranch>rel/2.0.0-preview2</KoreBuildBranch>
+      <KoreBuildCloneDirectory>$(RepositoryRoot).korebuild\</KoreBuildCloneDirectory>
+      <GitUser>ASP.NET Push Bot</GitUser>
+      <GitEmail>asplab@microsoft.com</GitEmail>
+      <GitAuthor>$(GitUser) &lt;$(GitEmail)&gt;</GitAuthor>
+      <GitConfigurationOptions>-c user.name=&quot;$(GitUser)&quot; -c user.email=&quot;$(GitEmail)&quot;</GitConfigurationOptions>
+      <SourceDependenciesFilePath>$(ArtifactsDir)dependencies.props</SourceDependenciesFilePath>
+      <KorebuildDependenciesFilePath>$(KoreBuildCloneDirectory)build\dependencies.props</KorebuildDependenciesFilePath>
+    </PropertyGroup>
+    
+    <RemoveDir Directories="$(KoreBuildCloneDirectory)" Condition="Exists('$(KoreBuildCloneDirectory)')" />
+    <Exec Command="git clone $(KoreBuildRepo) -b $(KoreBuildBranch) $(KoreBuildCloneDirectory)" />
+    
+    <Error Condition="!Exists('$(SourceDependenciesFilePath)')"
+      Text="Could not find dependencies file: '$(SourceDependenciesFilePath)''" />
+    
+    <Copy SourceFiles="$(SourceDependenciesFilePath)" DestinationFolder="$(KoreBuildCloneDirectory)build" />
+    
+    <Exec
+      Command="git $(GitConfigurationOptions) add $(KorebuildDependenciesFilePath)"
+      WorkingDirectory="$(KoreBuildCloneDirectory)" />
+
+    <Exec
+      Command="git $(GitConfigurationOptions) commit -q --author=&quot;$(GitAuthor)&quot; -m &quot;Updated dependencies&quot;"
+      IgnoreExitCode="true"
+      WorkingDirectory="$(KoreBuildCloneDirectory)">
+      <Output TaskParameter="ExitCode" PropertyName="CommitExitCode"/>
+    </Exec>
+
+    <Exec
+      Command="git $(GitConfigurationOptions) push -q $(KoreBuildRepo) $(KoreBuildBranch):$(KoreBuildBranch)"
+      WorkingDirectory="$(KoreBuildCloneDirectory)"
+      Condition="'$(CommitExitCode)'=='0'" />
   </Target>
 </Project>

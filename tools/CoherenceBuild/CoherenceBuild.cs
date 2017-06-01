@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using NuGet.Packaging;
 
 namespace CoherenceBuild
@@ -66,6 +67,8 @@ namespace CoherenceBuild
             {
                 PackagePublisher.PublishToFeed(processedPackages, _nugetPublishFeed, _apiKey);
             }
+
+            GenerateDependenciesFile();
 
             return SuccessExitCode;
         }
@@ -152,5 +155,62 @@ namespace CoherenceBuild
                 .FirstOrDefault();
         }
 
+        private void GenerateDependenciesFile()
+        {
+            var project = new XElement("Project");
+            var propertyGroup = new XElement("PropertyGroup");
+            project.Add(propertyGroup);
+
+            var universeCoherence = _reposToProcess.First(repo => string.Equals(repo.Name, "UniverseCoherence", StringComparison.OrdinalIgnoreCase));
+            var buildDirectory = GetBuildDirectory(universeCoherence);
+            foreach (var nugetPackageFile in Directory.GetFiles(buildDirectory, "microsoft.aspnetcore.mvc.core*.nupkg"))
+            {
+                if (!nugetPackageFile.EndsWith(".symbols.nupkg", StringComparison.OrdinalIgnoreCase))
+                {
+                    var packageInfo = GetPackageIdAndVersion(nugetPackageFile);
+                    var element = new XElement("AspNetCoreVersion", packageInfo.Item2);
+                    propertyGroup.Add(element);
+                    break;
+                }
+            }
+
+            var coreClr = _reposToProcess.First(repo => string.Equals(repo.Name, "CoreCLR", StringComparison.OrdinalIgnoreCase));
+            buildDirectory = GetBuildDirectory(coreClr);
+            foreach (var nugetPackageFile in Directory.GetFiles(buildDirectory, "*.nupkg"))
+            {
+                if (!nugetPackageFile.EndsWith(".symbols.nupkg", StringComparison.OrdinalIgnoreCase))
+                {
+                    var packageInfo = GetPackageIdAndVersion(nugetPackageFile);
+                    var element = new XElement(packageInfo.Item1, packageInfo.Item2);
+                    propertyGroup.Add(element);
+                }
+            }
+
+            using (var streamWriter = new StreamWriter(File.Create(Path.Combine(_outputPath, "dependencies.props"))))
+            {
+                streamWriter.WriteLine(project.ToString());
+            }
+        }
+
+        private string GetBuildDirectory(RepositoryInfo repo)
+        {
+            var repoDirectory = Path.Combine(_dropFolder, repo.Name, _buildBranch);
+            if (string.IsNullOrEmpty(repo.BuildNumber))
+            {
+                repo.BuildNumber = FindLatest(repoDirectory);
+            }
+            repoDirectory = Path.Combine(repoDirectory, repo.BuildNumber);
+            return Path.Combine(repoDirectory, repo.BuildDirectory);
+        }
+
+        private Tuple<string, string> GetPackageIdAndVersion(string nugetPackageFile)
+        {
+            using (var fileStream = File.OpenRead(nugetPackageFile))
+            using (var reader = new PackageArchiveReader(fileStream))
+            {
+                var packageIdentity = reader.GetIdentity();
+                return new Tuple<string, string>(packageIdentity.Id, packageIdentity.Version.ToNormalizedString());
+            }
+        }
     }
 }
