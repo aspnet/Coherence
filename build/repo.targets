@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <NuGetPublishFeed>https://dotnet.myget.org/f/aspnetcore-ci-dev</NuGetPublishFeed>
+    <NuGetPublishFeed>https://dotnet.myget.org/f/aspnetcore-ci-release</NuGetPublishFeed>
     <NpmRegistry>$(NuGetPublishFeed)/npm/</NpmRegistry>
     <BuildDependsOn>$(BuildDependsOn);RunVerifier;RunSplitPackages;PublishNpmModules</BuildDependsOn>
   </PropertyGroup>
@@ -9,7 +9,7 @@
     <Error Text="BUILD_SHARE not specified." Condition="'$(BUILD_SHARE)'==''" />
     
     <PropertyGroup>
-      <BUILD_BRANCH Condition="'$(BUILD_BRANCH)'==''">dev</BUILD_BRANCH>
+      <BUILD_BRANCH Condition="'$(BUILD_BRANCH)'==''">2.0.0-preview2</BUILD_BRANCH>
       <COHERENCE_UNIVERSECOHERENCE_BUILD_NUMBER Condition="'$(COHERENCE_UNIVERSECOHERENCE_BUILD_NUMBER)'==''">Latest</COHERENCE_UNIVERSECOHERENCE_BUILD_NUMBER>
       <COHERENCE_CORECLR_BUILD_NUMBER Condition="'$(COHERENCE_CORECLR_BUILD_NUMBER)'==''">Latest</COHERENCE_CORECLR_BUILD_NUMBER>
       <DISABLE_PARTNER_COHERENCE_CHECK Condition="'$(DISABLE_PARTNER_COHERENCE_CHECK)'==''">false</DISABLE_PARTNER_COHERENCE_CHECK>
