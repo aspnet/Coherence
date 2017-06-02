@@ -78,12 +78,12 @@ namespace CoherenceBuild
 
                 if (disableProductPackageVerification.HasValue())
                 {
-                   coherenceBuild.VerifyBehavior &= CoherenceVerifyBehavior.All ^ CoherenceVerifyBehavior.ProductPackages;
+                    coherenceBuild.VerifyBehavior &= CoherenceVerifyBehavior.All ^ CoherenceVerifyBehavior.ProductPackages;
                 }
 
                 if (disablePartnerPackageVerification.HasValue())
                 {
-                   coherenceBuild.VerifyBehavior &= CoherenceVerifyBehavior.All ^ CoherenceVerifyBehavior.PartnerPackages;
+                    coherenceBuild.VerifyBehavior &= CoherenceVerifyBehavior.All ^ CoherenceVerifyBehavior.PartnerPackages;
                 }
 
                 return coherenceBuild.Execute();
