@@ -181,7 +181,11 @@ namespace CoherenceBuild
                 if (!nugetPackageFile.EndsWith(".symbols.nupkg", StringComparison.OrdinalIgnoreCase))
                 {
                     var packageInfo = GetPackageIdAndVersion(nugetPackageFile);
-                    var element = new XElement(packageInfo.Item1, packageInfo.Item2);
+
+                    // Even though having a '.' is valid in an xml element, dotnet restore does not like it, so
+                    // replace it.
+                    var elementName = packageInfo.Item1.Replace(".", "-");
+                    var element = new XElement(elementName, packageInfo.Item2);
                     propertyGroup.Add(element);
                 }
             }
