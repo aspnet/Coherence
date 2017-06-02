@@ -134,15 +134,12 @@ Microsoft.EntityFrameworkCore.ApplicationInsights,noship,exclude
 Microsoft.EntityFrameworkCore.Design,ship,include
 Microsoft.EntityFrameworkCore.InMemory,ship,include
 Microsoft.EntityFrameworkCore.Relational,ship,include
-Microsoft.EntityFrameworkCore.Relational.Design,ship,include
 Microsoft.EntityFrameworkCore.Relational.Design.Specification.Tests,ship,exclude
 Microsoft.EntityFrameworkCore.Relational.Specification.Tests,ship,exclude
 Microsoft.EntityFrameworkCore.Specification.Tests,ship,exclude
 Microsoft.EntityFrameworkCore.Sqlite,ship,include
 Microsoft.EntityFrameworkCore.Sqlite.Core,ship,include
-Microsoft.EntityFrameworkCore.Sqlite.Design,ship,include
 Microsoft.EntityFrameworkCore.SqlServer,ship,include
-Microsoft.EntityFrameworkCore.SqlServer.Design,ship,include
 Microsoft.EntityFrameworkCore.Tools,ship,include
 Microsoft.EntityFrameworkCore.Tools.DotNet,ship,exclude
 Microsoft.Extensions.ActivatorUtilities.Sources,noship,exclude
