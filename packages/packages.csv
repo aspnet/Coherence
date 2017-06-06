@@ -121,7 +121,6 @@ Microsoft.AspNetCore.StaticFiles,ship,include
 Microsoft.AspNetCore.TestHost,ship,exclude
 Microsoft.AspNetCore.Testing,noship,exclude
 Microsoft.AspNetCore.WebSockets,ship,include
-Microsoft.AspNetCore.WebSockets.Internal,noship,exclude
 Microsoft.AspNetCore.WebUtilities,ship,include
 Microsoft.CodeAnalysis.Razor,ship,include
 Microsoft.CodeAnalysis.Razor.Workspaces,ship,exclude
@@ -203,7 +202,6 @@ Microsoft.Extensions.TaskCache.Sources,noship,exclude
 Microsoft.Extensions.TypeNameHelper.Sources,noship,exclude
 Microsoft.Extensions.WebEncoders,ship,include
 Microsoft.Extensions.WebEncoders.Sources,noship,exclude
-Microsoft.Extensions.WebSockets.Internal,noship,exclude
 Microsoft.Net.Http.Headers,ship,include
 Microsoft.Owin.Security.Interop,ship,exclude
 Microsoft.VisualStudio.LanguageServices.Razor,noship,exclude
