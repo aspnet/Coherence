@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project>
   <PropertyGroup>
     <NuGetPublishFeed>https://dotnet.myget.org/f/aspnetcore-ci-release</NuGetPublishFeed>
     <NpmRegistry>$(NuGetPublishFeed)/npm/</NpmRegistry>
@@ -40,14 +40,14 @@
     <Exec Command="dotnet run $(VerifierArgs)" WorkingDirectory="$(VerifierProjectDirectory)" />
   </Target>
 
-  <Target Name="RunSplitPackages" DependsOnTargets="RunResolvePackageDependencies;_FindDotNetPath">
-    <ItemGroup>
-      <SplitPackagePath Include="%(PackageDefinitions.ResolvedPath)" Condition="'%(PackageDefinitions.Name)'=='SplitPackages'" />
-    </ItemGroup>
+  <Target Name="RunSplitPackages" DependsOnTargets="_FindDotNetPath">
+    <PropertyGroup>
+      <SplitPackagePath>$([MSBuild]::EnsureTrailingSlash('$(NuGetPackageRoot)'))splitpackages\$(SplitPackagesVersion)</SplitPackagePath>
+    </PropertyGroup>
     <PropertyGroup>
       <ProductPackagesSource>$(ArtifactsDir)product-packages</ProductPackagesSource>
       <SplitPackagesCsv>$(RepositoryRoot)packages\packages.csv</SplitPackagesCsv>
-      <SplitPackagesBinary>@(SplitPackagePath)\SplitPackages.dll</SplitPackagesBinary>
+      <SplitPackagesBinary>$(SplitPackagePath)\SplitPackages.dll</SplitPackagesBinary>
       <SplitPackagesArgs>--source $(ProductPackagesSource) --csv $(SplitPackagesCsv) --destination $(ArtifactsDir)</SplitPackagesArgs>
     </PropertyGroup>
 
