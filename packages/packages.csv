@@ -180,6 +180,7 @@ Microsoft.Extensions.Localization.Abstractions,ship,include
 Microsoft.Extensions.Logging,ship,include
 Microsoft.Extensions.Logging.Abstractions,ship,include
 Microsoft.Extensions.Logging.AzureAppServices,ship,include
+Microsoft.Extensions.Logging.Configuration,ship,include
 Microsoft.Extensions.Logging.Console,ship,include
 Microsoft.Extensions.Logging.Debug,ship,include
 Microsoft.Extensions.Logging.EventLog,ship,exclude
