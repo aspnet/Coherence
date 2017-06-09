@@ -199,7 +199,6 @@ Microsoft.Extensions.RazorViews.Sources,noship,exclude
 Microsoft.Extensions.SecretManager.Tools,ship,exclude
 Microsoft.Extensions.SecurityHelper.Sources,noship,exclude
 Microsoft.Extensions.StackTrace.Sources,noship,exclude
-Microsoft.Extensions.TaskCache.Sources,noship,exclude
 Microsoft.Extensions.TypeNameHelper.Sources,noship,exclude
 Microsoft.Extensions.WebEncoders,ship,include
 Microsoft.Extensions.WebEncoders.Sources,noship,exclude
