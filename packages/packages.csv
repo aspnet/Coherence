@@ -107,14 +107,14 @@ Microsoft.AspNetCore.Server.Kestrel.Transport.Libuv,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets,ship,include
 Microsoft.AspNetCore.Session,ship,include
 Microsoft.AspNetCore.SignalR.Client,noship,exclude
-Microsoft.AspNetCore.SignalR.Common.Http,noship,exclude
+Microsoft.AspNetCore.SignalR.Common,noship,exclude
 Microsoft.AspNetCore.SignalR.Http,noship,exclude
 Microsoft.AspNetCore.SignalR.Redis,noship,exclude
 Microsoft.AspNetCore.SignalR,noship,exclude
 Microsoft.AspNetCore.Sockets,noship,exclude
 Microsoft.AspNetCore.Sockets.Abstractions,noship,exclude
 Microsoft.AspNetCore.Sockets.Client.Http,noship,exclude
-Microsoft.AspNetCore.Sockets.Common,noship,exclude
+Microsoft.AspNetCore.Sockets.Common.Http,noship,exclude
 Microsoft.AspNetCore.Sockets.Http,noship,exclude
 Microsoft.AspNetCore.SpaServices,ship,include
 Microsoft.AspNetCore.StaticFiles,ship,include
