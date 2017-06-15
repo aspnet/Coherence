@@ -1,8 +1,5 @@
 <Project>
-  <PropertyGroup>
-    <SplitPackagesVersion>1.0.2-rc2-15276</SplitPackagesVersion>
-  </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SplitPackages" Version="$(SplitPackagesVersion)" />
+    <PackageReference Include="SplitPackages" Version="1.0.3-*" />
   </ItemGroup>
 </Project>

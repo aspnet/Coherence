@@ -4,17 +4,17 @@
     <NpmRegistry>$(NuGetPublishFeed)/npm/</NpmRegistry>
     <BuildDependsOn>$(BuildDependsOn);RunVerifier;RunSplitPackages;PublishNpmModules</BuildDependsOn>
   </PropertyGroup>
-  
+
   <Target Name="RunVerifier">
     <Error Text="BUILD_SHARE not specified." Condition="'$(BUILD_SHARE)'==''" />
-    
+
     <PropertyGroup>
       <BUILD_BRANCH Condition="'$(BUILD_BRANCH)'==''">dev</BUILD_BRANCH>
       <COHERENCE_UNIVERSECOHERENCE_BUILD_NUMBER Condition="'$(COHERENCE_UNIVERSECOHERENCE_BUILD_NUMBER)'==''">Latest</COHERENCE_UNIVERSECOHERENCE_BUILD_NUMBER>
       <COHERENCE_CORECLR_BUILD_NUMBER Condition="'$(COHERENCE_CORECLR_BUILD_NUMBER)'==''">Latest</COHERENCE_CORECLR_BUILD_NUMBER>
       <DISABLE_PARTNER_COHERENCE_CHECK Condition="'$(DISABLE_PARTNER_COHERENCE_CHECK)'==''">false</DISABLE_PARTNER_COHERENCE_CHECK>
     </PropertyGroup>
-    
+
     <ItemGroup>
       <VerifierArgsList Include="
           --drop-folder &quot;$(BUILD_SHARE) &quot;;
@@ -22,7 +22,7 @@
           --output-path &quot;$(ArtifactsDir) &quot;;
           --universecoherence-build $(COHERENCE_UNIVERSECOHERENCE_BUILD_NUMBER);
           --coreclr-build $(COHERENCE_CORECLR_BUILD_NUMBER)"/>
-      
+
       <VerifierArgsList Include="--disable-product-package-verification" Condition="'$(DISABLE_COHERENCE_CHECK)'=='true'"/>
       <VerifierArgsList Include="--disable-partner-package-verification" Condition="'$(DISABLE_PARTNER_COHERENCE_CHECK)'=='true'"/>
     </ItemGroup>
@@ -31,7 +31,7 @@
       <VerifierArgsList Include="--nuget-publish-feed $(NuGetPublishFeed)" />
       <VerifierArgsList Include="--api-key $(APIKEY)" />
     </ItemGroup>
-    
+
     <PropertyGroup>
       <VerifierProjectDirectory>$(RepositoryRoot)tools\CoherenceBuild\</VerifierProjectDirectory>
       <VerifierArgs>@(VerifierArgsList, ' ')</VerifierArgs>
@@ -42,16 +42,12 @@
 
   <Target Name="RunSplitPackages" DependsOnTargets="_FindDotNetPath">
     <PropertyGroup>
-      <SplitPackagePath>$([MSBuild]::EnsureTrailingSlash('$(NuGetPackageRoot)'))splitpackages\$(SplitPackagesVersion)</SplitPackagePath>
-    </PropertyGroup>
-    <PropertyGroup>
       <ProductPackagesSource>$(ArtifactsDir)product-packages</ProductPackagesSource>
       <SplitPackagesCsv>$(RepositoryRoot)packages\packages.csv</SplitPackagesCsv>
-      <SplitPackagesBinary>$(SplitPackagePath)\SplitPackages.dll</SplitPackagesBinary>
       <SplitPackagesArgs>--source $(ProductPackagesSource) --csv $(SplitPackagesCsv) --destination $(ArtifactsDir)</SplitPackagesArgs>
     </PropertyGroup>
 
-    <Exec Command="&quot;$(DotNetPath)&quot; &quot;$(SplitPackagesBinary)&quot; $(SplitPackagesArgs)" />
+    <Exec Command="&quot;$(DotNetPath)&quot; &quot;$(SplitPackagesNetCoreAppPath)&quot; $(SplitPackagesArgs)" />
 
     <RemoveDir Directories="$(ProductPackagesSource)" />
   </Target>
@@ -60,11 +56,11 @@
     <PropertyGroup>
       <AuthTokenSetting>$(NpmRegistry.Replace("https:", "")):_authToken</AuthTokenSetting>
     </PropertyGroup>
-    
+
     <ItemGroup>
       <NpmModule Include="$(ArtifactsDir)build\*.tgz" />
     </ItemGroup>
-    
+
     <Exec Command="npm config set &quot;$(AuthTokenSetting)&quot; $(APIKEY)" />
     <Exec Command="npm publish --registry $(NpmRegistry) &quot;%(NpmModule.Identity)&quot;" ContinueOnError="true">
       <Output TaskParameter="ExitCode" ItemName="ExitCodes" />

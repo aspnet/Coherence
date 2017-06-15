@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-      "SplitPackages": "1.0.1-*",
-      "DependenciesPackager": "1.0.1-*"
-  },
-  "frameworks": {
-    "net451": { }
-  }
-}
