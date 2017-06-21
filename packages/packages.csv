@@ -104,7 +104,7 @@ Microsoft.AspNetCore.Server.Kestrel.Core,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Https,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Transport.Libuv,ship,include
-Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets,ship,include
+Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets,noship,exclude
 Microsoft.AspNetCore.Session,ship,include
 Microsoft.AspNetCore.SignalR.Client,noship,exclude
 Microsoft.AspNetCore.SignalR.Common,noship,exclude
