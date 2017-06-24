@@ -78,6 +78,8 @@ Microsoft.AspNetCore.Mvc.Razor.Extensions,ship,include
 Microsoft.AspNetCore.Mvc.RazorPages,ship,include
 Microsoft.AspNetCore.Mvc.Razor.ViewCompilation,ship,include
 Microsoft.AspNetCore.Mvc.TagHelpers,ship,include
+Microsoft.AspNetCore.Mvc.Testing,noship,exclude
+Microsoft.AspNetCore.Mvc.Testing.Xunit,noship,exclude
 Microsoft.AspNetCore.Mvc.ViewFeatures,ship,include
 Microsoft.AspNetCore.Mvc.WebApiCompatShim,ship,exclude
 Microsoft.AspNetCore.NodeServices,ship,include
