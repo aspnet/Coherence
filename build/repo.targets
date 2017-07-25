@@ -2,7 +2,7 @@
   <PropertyGroup>
     <NuGetPublishFeed>https://dotnet.myget.org/f/aspnetcore-ci-dev</NuGetPublishFeed>
     <NpmRegistry>$(NuGetPublishFeed)/npm/</NpmRegistry>
-    <BuildDependsOn>$(BuildDependsOn);RunVerifier;RunSplitPackages;PublishNpmModules</BuildDependsOn>
+    <BuildDependsOn>$(BuildDependsOn);RunVerifier;SplitPackages;PublishNpmModules</BuildDependsOn>
   </PropertyGroup>
 
   <Target Name="RunVerifier">
@@ -27,11 +27,6 @@
       <VerifierArgsList Include="--disable-partner-package-verification" Condition="'$(DISABLE_PARTNER_COHERENCE_CHECK)'=='true'"/>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(APIKEY)'!=''">
-      <VerifierArgsList Include="--nuget-publish-feed $(NuGetPublishFeed)" />
-      <VerifierArgsList Include="--api-key $(APIKEY)" />
-    </ItemGroup>
-
     <PropertyGroup>
       <VerifierProjectDirectory>$(RepositoryRoot)tools\CoherenceBuild\</VerifierProjectDirectory>
       <VerifierArgs>@(VerifierArgsList, ' ')</VerifierArgs>
@@ -40,14 +35,19 @@
     <Exec Command="dotnet run $(VerifierArgs)" WorkingDirectory="$(VerifierProjectDirectory)" />
   </Target>
 
-  <Target Name="RunSplitPackages" DependsOnTargets="_FindDotNetPath">
+  <Target Name="SplitPackages">
     <PropertyGroup>
-      <ProductPackagesSource>$(ArtifactsDir)product-packages</ProductPackagesSource>
-      <SplitPackagesCsv>$(RepositoryRoot)packages\packages.csv</SplitPackagesCsv>
-      <SplitPackagesArgs>--source $(ProductPackagesSource) --csv $(SplitPackagesCsv) --destination $(ArtifactsDir)</SplitPackagesArgs>
+      <ProductPackagesSource>$(ArtifactsDir)product-packages\</ProductPackagesSource>
     </PropertyGroup>
 
-    <Exec Command="&quot;$(DotNetPath)&quot; &quot;$(SplitPackagesNetCoreAppPath)&quot; $(SplitPackagesArgs)" />
+    <ItemGroup>
+      <_PackagesToCopy Include="$(ProductPackagesSource)*.nupkg" />
+    </ItemGroup>
+
+    <RepoTasks.CopyPackagesToSplitFolders
+      Packages="@(_PackagesToCopy)"
+      CsvFile="$(RepositoryRoot)packages\packages.csv"
+      DestinationFolder="$(ArtifactsDir)" />
 
     <RemoveDir Directories="$(ProductPackagesSource)" />
   </Target>
@@ -67,11 +67,5 @@
     </Exec>
     <Exec Command="npm config delete $(AuthTokenSetting)" />
     <Error Text="Publishing npm modules failed" Condition="%(ExitCodes.Identity) > 0"/>
-  </Target>
-
-  <Target Name="_FindDotNetPath">
-    <GetDotNetHost>
-      <Output TaskParameter="ExecutablePath" PropertyName="DotNetPath" />
-    </GetDotNetHost>
   </Target>
 </Project>

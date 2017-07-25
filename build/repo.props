@@ -1,5 +1,0 @@
-<Project>
-  <ItemGroup>
-    <PackageReference Include="SplitPackages" Version="1.0.3-*" />
-  </ItemGroup>
-</Project>

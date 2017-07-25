@@ -1,9 +1,22 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26206.0
+VisualStudioVersion = 15.0.26621.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoherenceBuild", "tools\CoherenceBuild\CoherenceBuild.csproj", "{182ACF9E-135C-42D5-A19C-A6C9FCF0529F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{DBFB488A-D866-4FD2-BADF-D760DDF114E0}"
+	ProjectSection(SolutionItems) = preProject
+		build\repo.props = build\repo.props
+		build\repo.targets = build\repo.targets
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RepoTasks", "build\tasks\RepoTasks.csproj", "{2DF1B138-D369-4701-82FA-187B9C90D7E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1C53F28D-BEF5-4DD4-9766-895C17FE2A09}"
+	ProjectSection(SolutionItems) = preProject
+		packages\packages.csv = packages\packages.csv
+		packages\packages.key.txt = packages\packages.key.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +28,16 @@ Global
 		{182ACF9E-135C-42D5-A19C-A6C9FCF0529F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{182ACF9E-135C-42D5-A19C-A6C9FCF0529F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{182ACF9E-135C-42D5-A19C-A6C9FCF0529F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DF1B138-D369-4701-82FA-187B9C90D7E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DF1B138-D369-4701-82FA-187B9C90D7E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2DF1B138-D369-4701-82FA-187B9C90D7E8} = {DBFB488A-D866-4FD2-BADF-D760DDF114E0}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E8514249-D06D-486A-83DB-ABDE80756DEA}
 	EndGlobalSection
 EndGlobal

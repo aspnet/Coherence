@@ -2,7 +2,6 @@
 [Bb]in/
 TestResults/
 .nuget/
-.build/
 .testPublish/
 *.sln.ide/
 _ReSharper.*/
@@ -37,3 +36,4 @@ node_modules
 **/[Cc]ompiler/[Rr]esources/**/*.js
 *launchSettings.json
 global.json
+korebuild-lock.txt
