@@ -75,6 +75,7 @@ Microsoft.AspNetCore.Mvc.Formatters.Xml,ship,include
 Microsoft.AspNetCore.Mvc.Localization,ship,include
 Microsoft.AspNetCore.Mvc.Razor,ship,include
 Microsoft.AspNetCore.Mvc.Razor.Extensions,ship,include
+Microsoft.AspNetCore.Mvc.Razor.Extensions.Version1_X,ship,include
 Microsoft.AspNetCore.Mvc.RazorPages,ship,include
 Microsoft.AspNetCore.Mvc.Razor.ViewCompilation,ship,include
 Microsoft.AspNetCore.Mvc.TagHelpers,ship,include
