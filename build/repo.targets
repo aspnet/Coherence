@@ -26,6 +26,11 @@
       <VerifierArgsList Include="--disable-product-package-verification" Condition="'$(DISABLE_COHERENCE_CHECK)'=='true'"/>
       <VerifierArgsList Include="--disable-partner-package-verification" Condition="'$(DISABLE_PARTNER_COHERENCE_CHECK)'=='true'"/>
     </ItemGroup>
+    
+    <ItemGroup Condition="'$(APIKEY)'!=''">
+      <VerifierArgsList Include="--nuget-publish-feed $(NuGetPublishFeed)" />
+      <VerifierArgsList Include="--api-key $(APIKEY)" />
+    </ItemGroup>
 
     <PropertyGroup>
       <VerifierProjectDirectory>$(RepositoryRoot)tools\CoherenceBuild\</VerifierProjectDirectory>
