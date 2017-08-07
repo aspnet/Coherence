@@ -134,7 +134,6 @@ Microsoft.EntityFrameworkCore,ship,include
 Microsoft.EntityFrameworkCore.Design,ship,include
 Microsoft.EntityFrameworkCore.InMemory,ship,include
 Microsoft.EntityFrameworkCore.Relational,ship,include
-Microsoft.EntityFrameworkCore.Relational.Design.Specification.Tests,ship,exclude
 Microsoft.EntityFrameworkCore.Relational.Specification.Tests,ship,exclude
 Microsoft.EntityFrameworkCore.Specification.Tests,ship,exclude
 Microsoft.EntityFrameworkCore.Sqlite,ship,include
