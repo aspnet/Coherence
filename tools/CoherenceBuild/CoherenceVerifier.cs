@@ -121,6 +121,11 @@ namespace CoherenceBuild
                 Log.WriteInformation($"Skipping verification for external package {packageInfo.Identity}.");
                 return;
             }
+            else if (packageInfo.IsLineupPackage)
+            {
+                Log.WriteInformation($"Skipping verification for lineup package {packageInfo.Identity}.");
+                return;
+            }
             else if (PackagesToSkipVerification.Contains(packageInfo.Identity.Id))
             {
                 Log.WriteWarning($"Skipping verification for package {packageInfo.Identity} because it is in ignore list.");

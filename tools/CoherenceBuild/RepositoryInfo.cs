@@ -14,6 +14,8 @@
 
         public string BuildDirectory { get; set; } = "build";
 
+        public string LineupPackageDirectory { get; set; } = "lineups";
+
         public string PackagesDestinationDirectory { get; set; }
     }
 }

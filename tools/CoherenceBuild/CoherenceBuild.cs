@@ -81,13 +81,16 @@ namespace CoherenceBuild
             repoDirectory = Path.Combine(repoDirectory, repo.BuildNumber);
 
             var buildDirectory = Path.Combine(repoDirectory, repo.BuildDirectory);
+            var lineupPackageDirectory = Path.Combine(repoDirectory, repo.LineupPackageDirectory);
             var packageTargetDir = Path.Combine(_outputPath, repo.PackagesDestinationDirectory);
             var symbolsTargetDir = Path.Combine(_outputPath, "symbols");
             var buildTargetDirectory = Path.Combine(_outputPath, "build");
+            var lineupTargetDirectory = Path.Combine(_outputPath, "lineups");
 
             Directory.CreateDirectory(symbolsTargetDir);
             Directory.CreateDirectory(packageTargetDir);
             Directory.CreateDirectory(buildTargetDirectory);
+            Directory.CreateDirectory(lineupTargetDirectory);
 
             Parallel.ForEach(Directory.GetFiles(buildDirectory, "*"), file =>
             {
@@ -122,6 +125,31 @@ namespace CoherenceBuild
                     processedPackages.Add(packageInfo);
                 }
             });
+
+            if (Directory.Exists(lineupPackageDirectory))
+            {
+                Parallel.ForEach(Directory.GetFiles(lineupPackageDirectory, "*.nupkg"), file =>
+                {
+                    var fileName = Path.GetFileName(file);
+                    var targetPath = Path.Combine(lineupTargetDirectory, fileName);
+                    File.Copy(file, targetPath, overwrite: true);
+
+                    var packageInfo = new PackageInfo
+                    {
+                        IsLineupPackage = true,
+                        PackagePath = targetPath,
+                    };
+
+                    using (var fileStream = File.OpenRead(packageInfo.PackagePath))
+                    using (var reader = new PackageArchiveReader(fileStream))
+                    {
+                        packageInfo.Identity = reader.GetIdentity();
+                        packageInfo.PackageDependencyGroups = reader.GetPackageDependencies();
+                    }
+
+                    processedPackages.Add(packageInfo);
+                });
+            }
         }
 
         private static string FindLatest(string repoDirectory)

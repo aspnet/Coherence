@@ -9,6 +9,8 @@ namespace CoherenceBuild
     {
         public bool IsPartnerPackage { get; set; }
 
+        public bool IsLineupPackage { get; set; }
+
         public PackageIdentity Identity { get; set; }
 
         public IEnumerable<PackageDependencyGroup> PackageDependencyGroups { get; set; }
@@ -32,7 +34,14 @@ namespace CoherenceBuild
             {
                 if (IsPartnerPackage)
                 {
+                    // these should be pushed first
                     return 1;
+                }
+
+                if (IsLineupPackage)
+                {
+                    // these should be pushed last
+                    return int.MaxValue;
                 }
 
                 if (ProductDependencies.Count == 0)
