@@ -85,6 +85,7 @@ Microsoft.AspNetCore.Mvc.WebApiCompatShim,ship,exclude
 Microsoft.AspNetCore.NodeServices,ship,include
 Microsoft.AspNetCore.NodeServices.Sockets,noship,exclude
 Microsoft.AspNetCore.Owin,ship,include
+Microsoft.AspNetCore.Protocols.Abstractions,ship,include
 Microsoft.AspNetCore.Proxy,noship,exclude
 Microsoft.AspNetCore.RangeHelper.Sources,noship,exclude
 Microsoft.AspNetCore.Razor,ship,include
