@@ -105,7 +105,6 @@ Microsoft.AspNetCore.Server.IntegrationTesting,noship,exclude
 Microsoft.AspNetCore.Server.Kestrel,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Core,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Https,ship,include
-Microsoft.AspNetCore.Server.Kestrel.Tls,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Transport.Abstractions,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Transport.Libuv,ship,include
 Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets,noship,exclude
