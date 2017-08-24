@@ -1,0 +1,5 @@
+<Project>
+  <ItemGroup>
+    <DotNetCoreRuntime Include="1.0.5" />
+  </ItemGroup>
+</Project>
