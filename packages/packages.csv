@@ -111,8 +111,9 @@ Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets,noship,exclude
 Microsoft.AspNetCore.Session,ship,include
 Microsoft.AspNetCore.SignalR,noship,exclude
 Microsoft.AspNetCore.SignalR.Client,noship,exclude
+Microsoft.AspNetCore.SignalR.Client.Core,noship,exclude
 Microsoft.AspNetCore.SignalR.Common,noship,exclude
-Microsoft.AspNetCore.SignalR.Http,noship,exclude
+Microsoft.AspNetCore.SignalR.Core,noship,exclude
 Microsoft.AspNetCore.SignalR.Redis,noship,exclude
 Microsoft.AspNetCore.Sockets,noship,exclude
 Microsoft.AspNetCore.Sockets.Abstractions,noship,exclude
