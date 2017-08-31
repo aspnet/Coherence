@@ -64,7 +64,8 @@ namespace CoherenceBuild
 
             if (!string.IsNullOrEmpty(_nugetPublishFeed))
             {
-                PackagePublisher.PublishToFeed(processedPackages, _nugetPublishFeed, _apiKey);
+                // Disabling publishing packages to myget feed for this patch
+                // PackagePublisher.PublishToFeed(processedPackages, _nugetPublishFeed, _apiKey);
             }
 
             return SuccessExitCode;
