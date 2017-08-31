@@ -39,6 +39,8 @@ Microsoft.AspNetCore.Diagnostics.Abstractions,ship,include
 Microsoft.AspNetCore.Diagnostics.Elm,noship,exclude
 Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore,ship,include
 Microsoft.AspNetCore.Diagnostics.Identity.Service,noship,exclude
+Microsoft.AspNetCore.Dispatcher,noship,exclude
+Microsoft.AspNetCore.Dispatcher.Abstractions,noship,exclude
 Microsoft.AspNetCore.Hosting,ship,include
 Microsoft.AspNetCore.Hosting.Abstractions,ship,include
 Microsoft.AspNetCore.Hosting.Server.Abstractions,ship,include
