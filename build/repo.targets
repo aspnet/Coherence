@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <NuGetPublishFeed>https://dotnet.myget.org/f/aspnetcore-ci-release</NuGetPublishFeed>
+    <NuGetPublishFeed>https://dotnet.myget.org/F/aspnet-2-0-2-october2017-patch</NuGetPublishFeed>
     <NpmRegistry>$(NuGetPublishFeed)/npm/</NpmRegistry>
     <BuildDependsOn>$(BuildDependsOn);RunVerifier;RunSplitPackages</BuildDependsOn>
   </PropertyGroup>
