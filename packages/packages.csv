@@ -53,6 +53,7 @@ Microsoft.AspNetCore.Http.Abstractions,ship,include
 Microsoft.AspNetCore.Http.Extensions,ship,include
 Microsoft.AspNetCore.Http.Features,ship,include
 Microsoft.AspNetCore.HttpOverrides,ship,include
+Microsoft.AspNetCore.HttpSys.Sources,noship,exclude
 Microsoft.AspNetCore.Identity,ship,include
 Microsoft.AspNetCore.Identity.EntityFrameworkCore,ship,include
 Microsoft.AspNetCore.Identity.Service,ship,include
